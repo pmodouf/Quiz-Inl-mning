@@ -55,7 +55,11 @@ public class ClientHandler extends Thread {
     private GamePackage waitCheck(GamePackage gp){
 
         long startTime = System.currentTimeMillis();
-        while(protocol.waitForCategory || (System.currentTimeMillis()-startTime) < 20000);
+        while(protocol.waitForCategory){
+            if ((System.currentTimeMillis()-startTime) < 20000){
+                break;
+            }
+        }
         return protocol.update(gp);
     }
 }
