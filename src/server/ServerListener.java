@@ -1,5 +1,7 @@
 package server;
 
+import client.ClientProtocol;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,6 +21,7 @@ public class ServerListener {
             throw new RuntimeException(e);
         }
     }
+
     private void connectClient(ServerSocket server) throws IOException {
         Socket client = server.accept();
         count++;
@@ -26,12 +29,18 @@ public class ServerListener {
             //Clienthandler obj = new clienthandler
             //Server protocoll obj = new Server protocoll
         }else{
+
             //server handler 1 = new server handler
             //server handler 2 = new server handler
             //1.start
             //2.start
             count = 0;
         }
+    }
+
+    public static void main(String[] args) {
+      new ServerListener();
+
     }
 }
 
