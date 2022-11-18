@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 
 public class PropertiesTest {
 
-    Properties t = new Properties("src/resources/properties.xml");
+    Properties t = new Properties();
 
     @Test
     public void testProperties(){
