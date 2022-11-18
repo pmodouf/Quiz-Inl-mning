@@ -1,4 +1,4 @@
-package GamePackage;
+package gamepackage;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;

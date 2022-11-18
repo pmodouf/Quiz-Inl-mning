@@ -1,6 +1,6 @@
 package client;
 
-import GamePackage.GamePackage;
+import gamepackage.GamePackage;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

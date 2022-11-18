@@ -1,6 +1,6 @@
 package server;
 
-import GamePackage.GamePackage;
+import gamepackage.GamePackage;
 
 public class ServerProtocol {
     GamePackage player1;
