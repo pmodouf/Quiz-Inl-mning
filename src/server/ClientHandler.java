@@ -36,11 +36,11 @@ public class ClientHandler extends Thread {
                     if (gameStarted) {
                         send.writeObject(waitCheck(g));
                         send.flush();
-                        System.out.println(g);
+                        System.out.println(g.toString());
                     } else {
                         g.setID(id);
                         gameStarted = true;
-                        System.out.println(g);
+                        System.out.println(g.toString());
                         send.writeObject(g);
                         send.flush();
                     }
