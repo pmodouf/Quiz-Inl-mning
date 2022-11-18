@@ -1,5 +1,7 @@
 package client;
 
+import GamePackage.GamePackage;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -14,11 +16,14 @@ public class Client {
     ObjectOutputStream objectOutputStream;
     ObjectInputStream objectInputStream;
 
+    public Client() {
+        //this.gf = new GameFrame();
+    }
+
     public void connect(){
         try(Socket socket = new Socket(ip, port)) {
             this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-            //this.gf = new GameFrame();
             //this.protocol = new ClientSideProtocol();
         }catch (Exception e){
             e.printStackTrace();
@@ -32,14 +37,14 @@ public class Client {
             objectOutputStream.flush();
             Object object;
             while((object = objectInputStream.readObject()) != null){
-            if(object instanceof String) {
-                System.out.println(object);
-                break;
-//            } else if (object instanceof GamePackage gamePackage){
-//                System.out.println(gamePackage.getMessage());
-//                break;
-            } else {
-                System.out.println("Hit skulle du inte komma");
+                if(object instanceof String) {
+                    System.out.println(object);
+                    break;
+                } else if (object instanceof GamePackage gamePackage){
+                    System.out.println(gamePackage.getMessage());
+                    break;
+                } else {
+                    System.out.println("Hit skulle du inte komma");
             }
         }
         }catch(Exception e){
