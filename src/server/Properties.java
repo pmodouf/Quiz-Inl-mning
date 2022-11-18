@@ -2,18 +2,17 @@ package server;
 
 import java.io.FileInputStream;
 
-public class properties {
+public class Properties {
 
     java.util.Properties properties;
     int rounds;
     int questions;
 
-    public properties(String file) {
+    public Properties(String file) {
         this.properties = new java.util.Properties();
         try{
             properties.loadFromXML(new FileInputStream(file));
-        }
-        catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
         rounds = Integer.parseInt(properties.getProperty("rounds"));

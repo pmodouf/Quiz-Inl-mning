@@ -1,11 +1,11 @@
 import org.junit.Test;
-import server.properties;
+import server.Properties;
 
 import static org.junit.Assert.*;
 
 public class PropertiesTest {
 
-    properties t = new properties("src/resources/properties.xml");
+    Properties t = new Properties("src/resources/properties.xml");
 
     @Test
     public void testProperties(){
