@@ -15,8 +15,8 @@ public class Properties {
         } catch (Exception e){
             e.printStackTrace();
         }
-        rounds = Integer.parseInt(properties.getProperty("rounds"));
-        questions = Integer.parseInt((properties.getProperty("questions")));
+        this.rounds = Integer.parseInt(properties.getProperty("rounds"));
+        this.questions = Integer.parseInt((properties.getProperty("questions")));
     }
 
     public int getRounds() {
