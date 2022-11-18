@@ -1,12 +1,15 @@
 package server;
 
 import gamepackage.GamePackage;
+import properties.Properties;
 
 public class ServerProtocol {
     GamePackage player1;
     GamePackage player2;
 
-    public boolean gameStarted = false;
+    private boolean gameStarted = false;
+
+    public boolean waitForCategory = false;
 
     //QA obj
 
