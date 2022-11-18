@@ -7,19 +7,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ServerHandler extends Thread {
+public class ClientHandler extends Thread {
     private final Socket socket;
     private ServerProtocol protocol;
-    private GamePackage gp;
+    //private GamePackage gp;
+
+    int id;
 
     private boolean gameStarted = false;
 
 
-    public ServerHandler(Socket socket, ServerProtocol protocol, int id) {
+    public ClientHandler(Socket socket, ServerProtocol protocol, int id) {
         this.socket = socket;
         this.protocol = protocol;
-        gp = new GamePackage();
-        gp.setID(id);
+        this.id = id;
 
     }
 
@@ -33,15 +34,14 @@ public class ServerHandler extends Thread {
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
                     if (gameStarted) {
-                        gp = g;
-                        send.writeObject(waitCheck(gp));
+                        send.writeObject(waitCheck(g));
                         send.flush();
-                        System.out.println(gp.toString());
+                        System.out.println(g);
                     } else {
-                        gp.setName(g.getName());
+                        g.setID(id);
                         gameStarted = true;
-                        System.out.println(gp.toString());
-                        send.writeObject(gp);
+                        System.out.println(g);
+                        send.writeObject(g);
                         send.flush();
                     }
                 }
