@@ -8,7 +8,8 @@ public class Properties {
     int rounds;
     int questions;
 
-    public Properties(String file) {
+    public Properties() {
+        String file = "src/resources/properties.xml";
         this.properties = new java.util.Properties();
         try{
             properties.loadFromXML(new FileInputStream(file));
