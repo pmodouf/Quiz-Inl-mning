@@ -2,6 +2,7 @@ package gamepackage;
 
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class GamePackage implements Serializable {
     GamePackage opponent;
@@ -115,5 +116,23 @@ public class GamePackage implements Serializable {
 
     public void setTotalScore(int totalScore) {
         this.totalScore = totalScore;
+    }
+
+    @Override
+    public String toString() {
+        return "GamePackage{" +
+                "opponent=" + opponent +
+                ", image=" + image +
+                ", name='" + name + '\'' +
+                ", message='" + message + '\'' +
+                ", ID=" + ID +
+                ", categoryID=" + categoryID +
+                ", QA=" + Arrays.toString(QA) +
+                ", gameStart=" + gameStart +
+                ", gameState=" + gameState +
+                ", waiting=" + waiting +
+                ", answers=" + Arrays.toString(answers) +
+                ", totalScore=" + totalScore +
+                '}';
     }
 }

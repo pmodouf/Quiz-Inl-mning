@@ -60,7 +60,7 @@ public class Client {
             while((object = input.readObject()) != null){
                 if(object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
-                    System.out.println(gp);
+                    System.out.println(gp.toString());
                     break;
                 } else if (object instanceof String){
                     System.out.println(object);
