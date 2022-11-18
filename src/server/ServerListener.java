@@ -7,8 +7,8 @@ import java.net.Socket;
 public class ServerListener {
     final private int port = 12345;
     int count = 0;
-    //Clienthandler obj
-    //Server protocoll obj
+    ServerProtocol spHolder;
+    ClientHandler chHolder;
 
     ServerListener() {
         try (ServerSocket server = new ServerSocket(port)) {
@@ -24,21 +24,19 @@ public class ServerListener {
         Socket client = server.accept();
         count++;
         if(count ==1){
-            //Clienthandler obj = new clienthandler
-            //Server protocoll obj = new Server protocoll
+            spHolder = new ServerProtocol();
+            chHolder = new ClientHandler(client, spHolder, count);
         }else{
-
-            //server handler 1 = new server handler
-            //server handler 2 = new server handler
-            //1.start
-            //2.start
+            ClientHandler client1 = chHolder;
+            ClientHandler client2 = new ClientHandler(client, spHolder, count);
+            client1.start();
+            client2.start();
             count = 0;
         }
     }
 
     public static void main(String[] args) {
       new ServerListener();
-
     }
 }
 
