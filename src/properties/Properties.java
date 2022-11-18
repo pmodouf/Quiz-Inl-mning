@@ -1,4 +1,4 @@
-package server;
+package properties;
 
 import java.io.FileInputStream;
 

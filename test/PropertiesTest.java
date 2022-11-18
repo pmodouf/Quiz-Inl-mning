@@ -1,5 +1,5 @@
 import org.junit.Test;
-import server.Properties;
+import properties.Properties;
 
 import static org.junit.Assert.*;
 
