@@ -33,14 +33,15 @@ public class ServerProtocol {
     }
 
     public GamePackage update(GamePackage gp){
-        setOpponent(gp);
-        System.out.println(player1.toString());
-        System.out.println(player2.toString());
+        setGamePackage(gp);
+        //setOpponent(gp);
+//        System.out.println(player1.toString());
+//        System.out.println(player2.toString());
 
         gp.setMessage("Hej det här är från protokollet");
 
-        System.out.println(player1.toString());
-        System.out.println(player2.toString());
+//        System.out.println(player1.toString());
+//        System.out.println(player2.toString());
         setGamePackage(gp);
         return gp;
     }

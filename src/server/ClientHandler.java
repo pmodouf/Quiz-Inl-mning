@@ -41,12 +41,14 @@ public class ClientHandler extends Thread {
                         g.setID(id);
                         gameStarted = true;
                         System.out.println(g.toString());
-                        send.writeObject(g);
+                        //send.writeObject(g);
+                        send.writeObject(waitCheck(g));
                         send.flush();
                     }
                 }
             }
         } catch (IOException e) {
+            System.out.println("hejhopp!");
             System.out.println(e.getClass());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
