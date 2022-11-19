@@ -12,9 +12,10 @@ public class Client {
     private static final int port = 12345;
 
     public GamePackage gp = new GamePackage();
+    //ClientSideProtocol protocol = new ClientSideProtocol();
 
     //GameFrame gf;
-    //ClientSideProtocol protocol;         //this.protocol = new ClientSideProtocol();
+
     ObjectOutputStream output;
     ObjectInputStream input;
 
@@ -60,7 +61,7 @@ public class Client {
             while((object = input.readObject()) != null){
                 if(object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
-                    System.out.println(gp.toString());
+                    System.out.println(gp);
                     break;
                 } else if (object instanceof String){
                     System.out.println(object);
@@ -75,9 +76,8 @@ public class Client {
     }
 
     public static void main(String[] args) {
-
         Client client = new Client();
-       client.connect();
+        client.connect();
         //client.sendAndReceive();
     }
 }

@@ -21,7 +21,6 @@ public class ClientHandler extends Thread {
         this.socket = socket;
         this.protocol = protocol;
         this.id = id;
-
     }
 
     public void run(){
@@ -31,16 +30,16 @@ public class ClientHandler extends Thread {
 
             Object clientRequest;
 
-            while ((clientRequest = receive.readObject()) != null){
+            while ((clientRequest = receive.readObject()) != null) {
                 if (clientRequest instanceof GamePackage g) {
                     if (gameStarted) {
                         send.writeObject(waitCheck(g));
                         send.flush();
-                        System.out.println(g.toString());
+                        System.out.println(g);
                     } else {
                         g.setID(id);
                         gameStarted = true;
-                        System.out.println(g.toString());
+                        System.out.println(g);
                         send.writeObject(g);
                         send.flush();
                     }
