@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class ClientHandler extends Thread {
     private final Socket socket;
-    private ServerProtocol protocol;
+    private final ServerProtocol protocol;
     //private GamePackage gp;
 
     int id;
@@ -33,6 +33,11 @@ public class ClientHandler extends Thread {
 
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
+                    send.writeObject(protocol.update(g));
+                    send.flush();
+
+
+                    /*
                     if (gameStarted) {
                         send.writeObject(waitCheck(g));
                         send.flush();
@@ -45,6 +50,8 @@ public class ClientHandler extends Thread {
                         send.writeObject(waitCheck(g));
                         send.flush();
                     }
+
+                     */
                 }
             }
         } catch (IOException e) {
@@ -54,14 +61,5 @@ public class ClientHandler extends Thread {
             throw new RuntimeException(e);
         }
     }
-    private GamePackage waitCheck(GamePackage gp){
 
-        long startTime = System.currentTimeMillis();
-        while(protocol.waitForCategory){
-            if ((System.currentTimeMillis()-startTime) < 20000){
-                break;
-            }
-        }
-        return protocol.update(gp);
-    }
 }
