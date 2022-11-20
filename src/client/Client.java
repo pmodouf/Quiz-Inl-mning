@@ -1,7 +1,7 @@
 package client;
+
 import gamepackage.GamePackage;
 
-import javax.swing.*;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -56,14 +56,6 @@ public class Client {
             while((object = input.readObject()) != null){
                 if(object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
-                    //skicka vidare till ClientProtocol
-                    // gp = protocol.update(gamePackage);
-
-
-                    //TEMP
-
-                    //System.out.println(gp.getMessage());
-
                     break;
                 }
             }
@@ -81,14 +73,10 @@ public class Client {
             while((object = input.readObject()) != null){
                 if(object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
-                    //skicka vidare till ClientProtocol
-                   // gp = protocol.update(gamePackage);
-                   protocol.update();
+                    protocol.update();
 
                     //TEMP
-
                     System.out.println(gp.getMessage());
-
                     break;
                 } else if (object instanceof String){
                     System.out.println(object);

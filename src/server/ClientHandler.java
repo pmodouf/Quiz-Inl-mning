@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ClientHandler extends Thread {
     private final Socket socket;
@@ -47,7 +48,7 @@ public class ClientHandler extends Thread {
                     }
                 }
             }
-        } catch (EOFException e){
+        } catch (EOFException | SocketException e){
             System.out.println("Abrupt end of package to " + getName() + " due to disconnect from " + socket.getInetAddress().getHostName());
         } catch (IOException e) {
             System.out.println("hejhopp!");
