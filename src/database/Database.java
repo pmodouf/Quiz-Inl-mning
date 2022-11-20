@@ -17,37 +17,36 @@ public class Database {
 
     public User getUser(String name) {
         String userLine = "";
-        try(Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))){
+        try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
             userLine = stream.filter(line -> line.startsWith(name)).toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (userLine.equals("")){
+        if (userLine.equals("")) {
             return null;
         }
-        //gustav.123.0.2022-11-19.p1
         String[] userSplit = userLine.split("/");
         return new User(userSplit[0], Integer.parseInt(userSplit[2]),
                 LocalDate.parse(userSplit[3]),
                 loadImage(userSplit[4]));
     }
 
-    public boolean validateUser(String name, String password){
+    public boolean validateUser(String name, String password) {
         String userLine = "";
-        try(Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))){
+        try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
             userLine = stream.filter(line -> line.startsWith(name)).toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (userLine.equals("")){
+        if (userLine.equals("")) {
             return false;
         }
         String[] userSplit = userLine.split("/");
         return userSplit[1].equals(password);
     }
 
-    public boolean createUser(String name, String password, String avatarID){
-        if (userDoesNotExist(name)){
+    public boolean createUser(String name, String password, String avatarID) {
+        if (userDoesNotExist(name)) {
             String userLine = name + "/" + password + "/" + LocalDate.now() + "/" + avatarID;
             addUserToFile(userLine);
             return true;
@@ -55,8 +54,8 @@ public class Database {
         return false;
     }
 
-    public boolean createUser(String name, String password, BufferedImage image){
-        if (userDoesNotExist(name)){
+    public boolean createUser(String name, String password, BufferedImage image) {
+        if (userDoesNotExist(name)) {
             String pngID = newPngID(image);
             String userLine = name + "/" + password + "/" + LocalDate.now() + "/" + pngID;
             addUserToFile(userLine);
@@ -65,7 +64,7 @@ public class Database {
         return false;
     }
 
-    public void updateWins(String name){
+    public void updateWins(String name) {
         List<String> lines = Collections.emptyList();
         try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
             lines = processLines(stream, name);
@@ -89,7 +88,7 @@ public class Database {
                 .toList();
     }
 
-    private void addUserToFile(String userLine){
+    private void addUserToFile(String userLine) {
         try (FileWriter fw = new FileWriter(Paths.get("src/resources/users/users.txt").toFile(), true);
              BufferedWriter bw = new BufferedWriter(fw)) {
 
@@ -101,9 +100,9 @@ public class Database {
         }
     }
 
-    private boolean userDoesNotExist(String name){
+    private boolean userDoesNotExist(String name) {
         String userLine = "";
-        try(Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))){
+        try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
             userLine = stream.filter(line -> line.startsWith(name)).toString();
         } catch (IOException e) {
             e.printStackTrace();
@@ -111,34 +110,34 @@ public class Database {
         return userLine.equals("");
     }
 
-    private String newPngID(BufferedImage image){
+    private String newPngID(BufferedImage image) {
         int fileCount = 0;
-        try(DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("src/resources/images/profile-pictures"),"*.{png}")){
-            for (Path file: stream) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("src/resources/images/profile-pictures"), "*.{png}")) {
+            for (Path ignored : stream) {
                 fileCount++;
             }
-        }catch (IOException | DirectoryIteratorException e){
+        } catch (IOException | DirectoryIteratorException e) {
             e.printStackTrace();
         }
         fileCount++;
         String pngID = String.valueOf(fileCount);
-        try{
+        try {
             File newFile = File.createTempFile(pngID, "png");
             ImageIO.write(image, "png", newFile);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return String.valueOf(fileCount);
     }
 
-    private BufferedImage loadImage(String pngID){
+    private BufferedImage loadImage(String pngID) {
 
         BufferedImage bi;
-        if(pngID.startsWith("p")){
+        if (pngID.startsWith("p")) {
             try {
                 bi = ImageIO.read(new File("src/resources/images/profile-pictures/" + pngID + ".png"));
                 return scaleImage(bi);
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             return null;
@@ -146,26 +145,17 @@ public class Database {
         try {
             bi = ImageIO.read(new File("src/resources/images/avatar/" + pngID + ".png"));
             return bi;
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private void saveImage(BufferedImage image){
-
-    }
-
-    private BufferedImage scaleImage(BufferedImage original){
+    private BufferedImage scaleImage(BufferedImage original) {
         BufferedImage scaledImage = new BufferedImage(96, 96, original.getType());
         Graphics2D g2 = scaledImage.createGraphics();
         g2.drawImage(original, 0, 0, 96, 96, null);
         g2.dispose();
         return scaledImage;
-    }
-
-    public static void main(String[] args) {
-        Database b = new Database();
-        b.updateWins("gustav");
     }
 }
