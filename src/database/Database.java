@@ -71,6 +71,18 @@ public class Database {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try (FileWriter fw = new FileWriter(Paths.get("src/resources/users/users.txt").toFile(), true);
+             BufferedWriter bw = new BufferedWriter(fw)) {
+            for (String s :
+                    lines) {
+                bw.write(s + "\n");
+            }
+            bw.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<String> processLines(Stream<String> lines, String name) {
