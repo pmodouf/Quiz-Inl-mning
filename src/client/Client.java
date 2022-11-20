@@ -12,10 +12,10 @@ public class Client {
     private static final int port = 12345;
 
     public GamePackage gp = new GamePackage();
-    //ClientSideProtocol protocol = new ClientSideProtocol();
+    ClientProtocol protocol = new ClientProtocol(this);
 
     //GameFrame gf;
-
+    Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
 
@@ -45,10 +45,28 @@ public class Client {
 
     //Connect function för att connecta till servern och skapa upp Protocol (kanske ändras var vi skapar upp protocol).
     public void connect(){
-        try(Socket socket = new Socket(ip, port)) {
+
+        try {
+            socket = new Socket(ip, port);
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
-            sendAndReceive();
+            output.writeObject(gp);
+            output.flush();
+            Object object;
+            while((object = input.readObject()) != null){
+                if(object instanceof GamePackage gamePackage) {
+                    gp = gamePackage;
+                    //skicka vidare till ClientProtocol
+                    // gp = protocol.update(gamePackage);
+
+
+                    //TEMP
+
+                    //System.out.println(gp.getMessage());
+
+                    break;
+                }
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -62,12 +80,13 @@ public class Client {
             Object object;
             while((object = input.readObject()) != null){
                 if(object instanceof GamePackage gamePackage) {
-
+                    gp = gamePackage;
                     //skicka vidare till ClientProtocol
-                    ///gp = protocol.update(gamePackage);
+                   // gp = protocol.update(gamePackage);
+                   protocol.update();
 
                     //TEMP
-                    gp = gamePackage;
+
                     System.out.println(gp.getMessage());
 
                     break;
@@ -86,6 +105,8 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
         client.connect();
-        //client.sendAndReceive();
+        System.out.println(client.gp);
+        client.sendAndReceive();
+        System.out.println(client.gp);
     }
 }
