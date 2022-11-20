@@ -5,7 +5,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerListener {
+
     final private int port = 12345;
+
     int count = 0;
     ServerProtocol spHolder;
     ClientHandler chHolder;
