@@ -59,6 +59,7 @@ public class ServerProtocol {
         gp.setMessage("Hej det här är från protokollet");
 
         setGamePackage(gp);
+        //setOpponent(gp);
         return gp;
     }
 

@@ -65,7 +65,7 @@ public class ClientHandler extends Thread {
                 break;
             }
         }
-        return gp;
+        return protocol.update(gp);
     }
 
 }
