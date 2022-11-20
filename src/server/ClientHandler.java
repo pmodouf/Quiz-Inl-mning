@@ -33,25 +33,21 @@ public class ClientHandler extends Thread {
 
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
-                    send.writeObject(protocol.update(g));
-                    send.flush();
-
-
-                    /*
                     if (gameStarted) {
                         send.writeObject(waitCheck(g));
                         send.flush();
-                        System.out.println(g.toString());
+
+                        //TEMP
+                        System.out.println(g);
                     } else {
                         g.setID(id);
                         gameStarted = true;
-                        System.out.println(g.toString());
-                        //send.writeObject(g);
                         send.writeObject(waitCheck(g));
                         send.flush();
-                    }
 
-                     */
+                        //TEMP
+                        System.out.println(g);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -60,6 +56,16 @@ public class ClientHandler extends Thread {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+    private GamePackage waitCheck(GamePackage gp){
+
+        long startTime = System.currentTimeMillis();
+        while(protocol.waitForCategory){
+            if ((System.currentTimeMillis()-startTime) < 20000){
+                break;
+            }
+        }
+        return gp;
     }
 
 }

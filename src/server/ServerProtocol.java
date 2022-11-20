@@ -41,8 +41,6 @@ public class ServerProtocol {
         setGamePackage(gp);
         //setOpponent(gp);
         if(gp.getGameState() == FIRST_INIT){
-            waitCheck(gp);
-
             //metod för att fylla in all grundinfo i GamePackage
             //kanske kolla om det är en befintlig user eller en ny också
             gp.setGameState(GAME_ACTIVE);
@@ -78,15 +76,5 @@ public class ServerProtocol {
         } else {
             player2 = gp;
         }
-    }
-    private GamePackage waitCheck(GamePackage gp){
-
-        long startTime = System.currentTimeMillis();
-        while(waitForCategory){
-            if ((System.currentTimeMillis()-startTime) < 20000){
-                break;
-            }
-        }
-        return gp;
     }
 }
