@@ -51,8 +51,9 @@ public class ServerProtocol {
             //avsluta spelet?
         } else if (gp.getGameState() == REPEAT_REQUEST) {
             //metod för att skicka tillbaka båda spelarna om båda svarat ja till en rematch.
-
-            gp.setGameState(GAME_ACTIVE);
+            if(player1.getGameState() == REPEAT_REQUEST && player2.getGameState() == REPEAT_REQUEST){
+                gp.setGameState(GAME_ACTIVE);
+            }
         }
 
 
