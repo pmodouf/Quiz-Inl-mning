@@ -34,14 +34,17 @@ public class ClientHandler extends Thread {
 
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
-                    if (!gameStarted) {
+                    if (gameStarted) {
+                        send.writeObject(waitCheck(g));
+                        send.flush();
+                        //TEMP
+                        System.out.println(g);
+                    } else {
                         g.setID(id);
                         gameStarted = true;
+                        send.writeObject(g);
+                        send.flush();
                     }
-                    send.writeObject(waitCheck(g));
-                    send.flush();
-                    //TEMP
-                    System.out.println(g);
                 }
             }
         } catch (EOFException e){
