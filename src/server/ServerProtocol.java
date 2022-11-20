@@ -7,6 +7,11 @@ public class ServerProtocol {
     GamePackage player1;
     GamePackage player2;
 
+    private static final int FIRST_INIT = 0;
+    private static final int GAME_ACTIVE = 1;
+    private static final int END_GAME = 2;
+    private static final int REPEAT_REQUEST = 3;
+
     private boolean gameStarted = false;
 
     public boolean waitForCategory = false;
@@ -35,13 +40,27 @@ public class ServerProtocol {
     public GamePackage update(GamePackage gp){
         setGamePackage(gp);
         //setOpponent(gp);
-//        System.out.println(player1.toString());
-//        System.out.println(player2.toString());
+        if(gp.getGameState() == FIRST_INIT){
+            //metod för att fylla in all grundinfo i GamePackage
+            //kanske kolla om det är en befintlig user eller en ny också
+            setupBaseGamePackage(gp);
+            gp.setGameState(GAME_ACTIVE);
+        } else if (gp.getGameState() == GAME_ACTIVE) {
+            //metod för att skicka tillbaka gp medans gamet är aktivt
 
-        gp.setMessage("Hej det här är från protokollet");
+        } else if (gp.getGameState() == END_GAME) {
+            //avsluta spelet?
+        } else if (gp.getGameState() == REPEAT_REQUEST) {
+            //gp.setWaiting(true);
+            //metod för att skicka tillbaka båda spelarna om båda svarat ja till en rematch.
+            if(player1.getGameState() == REPEAT_REQUEST && player2.getGameState() == REPEAT_REQUEST){
+                gp.setGameState(GAME_ACTIVE);
+            }
+        }
 
-//        System.out.println(player1.toString());
-//        System.out.println(player2.toString());
+
+
+
         setGamePackage(gp);
         return gp;
     }
@@ -60,5 +79,11 @@ public class ServerProtocol {
         } else {
             player2 = gp;
         }
+    }
+
+    private void setupBaseGamePackage(GamePackage gp){
+        gp.setTotalScore(0);
+        gp.setMessage("Hej och välkommen till spelet");
+        gp.setQA(QAs);
     }
 }

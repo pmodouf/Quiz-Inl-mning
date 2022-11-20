@@ -2,6 +2,7 @@ package server;
 
 import gamepackage.GamePackage;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,7 +10,7 @@ import java.net.Socket;
 
 public class ClientHandler extends Thread {
     private final Socket socket;
-    private ServerProtocol protocol;
+    private final ServerProtocol protocol;
     //private GamePackage gp;
 
     int id;
@@ -33,20 +34,18 @@ public class ClientHandler extends Thread {
 
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
-                    if (gameStarted) {
-                        send.writeObject(waitCheck(g));
-                        send.flush();
-                        System.out.println(g.toString());
-                    } else {
+                    if (!gameStarted) {
                         g.setID(id);
                         gameStarted = true;
-                        System.out.println(g.toString());
-                        //send.writeObject(g);
-                        send.writeObject(waitCheck(g));
-                        send.flush();
                     }
+                    send.writeObject(waitCheck(g));
+                    send.flush();
+                    //TEMP
+                    System.out.println(g);
                 }
             }
+        } catch (EOFException e){
+            System.out.println("Abrupt end of package to " + getName() + " due to disconnect from " + socket.getInetAddress().getHostName());
         } catch (IOException e) {
             System.out.println("hejhopp!");
             System.out.println(e.getClass());
@@ -64,4 +63,5 @@ public class ClientHandler extends Thread {
         }
         return protocol.update(gp);
     }
+
 }

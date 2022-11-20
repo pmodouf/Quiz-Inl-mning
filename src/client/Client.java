@@ -25,6 +25,7 @@ public class Client {
     //GameFrame för att rita upp Username direkt
     public Client() {
         String username;
+        /*
         while(true) {
             username = JOptionPane.showInputDialog(null,"What's your username?");
             if(username != null) {
@@ -34,11 +35,12 @@ public class Client {
                 JOptionPane.showMessageDialog(null, "Your username has to be longer then 0 in length");
             }
         }
+
+         */
+        //Temp
+        username = "Test";
         gp.setName(username);
         //this.gf = new GameFrame(gp);
-
-        //TEMP
-        System.out.println(gp.getName());
     }
 
     //Connect function för att connecta till servern och skapa upp Protocol (kanske ändras var vi skapar upp protocol).
@@ -60,8 +62,14 @@ public class Client {
             Object object;
             while((object = input.readObject()) != null){
                 if(object instanceof GamePackage gamePackage) {
+
+                    //skicka vidare till ClientProtocol
+                    ///gp = protocol.update(gamePackage);
+
+                    //TEMP
                     gp = gamePackage;
-                    System.out.println(gp);
+                    System.out.println(gp.getMessage());
+
                     break;
                 } else if (object instanceof String){
                     System.out.println(object);
