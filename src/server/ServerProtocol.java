@@ -26,12 +26,12 @@ public class ServerProtocol {
 
     //TEMPORÄRA FRÅGOR
     String[] QAs = new String[6];
-    String[] category1 = {"category1 fråga","category1 svar1","category1 svar2","category1 svar3","category1 svar4","category2 rättsvar"};
-    String[] category2 = {"category2 fråga","category2 svar1","category2 svar2","category2 svar3","category2 svar4","category2 rättsvar"};
-    String[] category3 = {"category3 fråga","category3 svar1","category3 svar2","category3 svar3","category3 svar4","category3 rättsvar"};
-    String[] category4 = {"category4 fråga","category4 svar1","category4 svar2","category4 svar3","category4 svar4","category4 rättsvar"};
-    String[] category5 = {"category5 fråga","category5 svar1","category5 svar2","category5 svar3","category5 svar4","category5 rättsvar"};
-    String[] category6 = {"category6 fråga","category6 svar1","category6 svar2","category6 svar3","category6 svar4","category6 rättsvar"};
+    String[] category1 = {"category1 fråga","category1 svar1","category1 svar2","category1 svar3","category1 svar4","category1 svar2"};
+    String[] category2 = {"category2 fråga","category2 svar1","category2 svar2","category2 svar3","category2 svar4","category2 svar3"};
+    String[] category3 = {"category3 fråga","category3 svar1","category3 svar2","category3 svar3","category3 svar4","category3 svar1"};
+    String[] category4 = {"category4 fråga","category4 svar1","category4 svar2","category4 svar3","category4 svar4","category4 svar1"};
+    String[] category5 = {"category5 fråga","category5 svar1","category5 svar2","category5 svar3","category5 svar4","category5 svar4"};
+    String[] category6 = {"category6 fråga","category6 svar1","category6 svar2","category6 svar3","category6 svar4","category6 svar2"};
 
     public ServerProtocol(){
         QAs[0] = "FRÅGAN HÄR";
@@ -92,6 +92,6 @@ public class ServerProtocol {
     private void setupBaseGamePackage(GamePackage gp){
         gp.setTotalScore(0);
         gp.setMessage("Hej och välkommen till spelet");
-        gp.setQA(QAs);
+        gp.setQA(category1);
     }
 }
