@@ -6,6 +6,7 @@ public class ClientProtocol {
     private static final int GAME_ACTIVE = 1;
     private static final int END_GAME = 2;
     private static final int REPEAT_REQUEST = 3;
+    private static final int CHOOSE_CATEGORY = 4;
 
     Client client;
 
