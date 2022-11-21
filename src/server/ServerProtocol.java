@@ -47,7 +47,7 @@ public class ServerProtocol {
 
     public GamePackage update(GamePackage gp){
         setGamePackage(gp);
-        //setOpponent(gp);
+        setOpponent(gp);
         if(gp.getGameState() == FIRST_INIT){
            if(gp.getID() == 1){
                gp.setQA(category1);
@@ -59,6 +59,7 @@ public class ServerProtocol {
            }
         } else if (gp.getGameState() == GAME_ACTIVE) {
             gp.setMessage("TEST2");
+            gp.setWaiting(false);
             //metod för att skicka tillbaka gp medans gamet är aktivt
             gp.setGameState(END_GAME);
         } else if (gp.getGameState() == END_GAME) {
@@ -74,15 +75,23 @@ public class ServerProtocol {
             }
         }
 
-        setGamePackage(gp);
+        //setGamePackage(gp);
         return gp;
     }
 
     private void setOpponent(GamePackage gp){
-        if (gp.getID() == 1){
-            gp.setOpponent(player2);
-        } else {
-            gp.setOpponent(player1);
+        if (gp.getID() == 1 && player2 != null){
+            gp.getOpponent().setName(player2.getName());
+            gp.getOpponent().setTotalScore(player2.getTotalScore());
+
+            //TEMP?
+            gp.getOpponent().setID(player2.getID());
+        } else if (gp.getID() == 2 && player1 != null){
+            gp.getOpponent().setName(player1.getName());
+            gp.getOpponent().setTotalScore(player1.getTotalScore());
+
+            //TEMP?
+            gp.getOpponent().setID(player1.getID());
         }
     }
 
