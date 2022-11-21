@@ -49,25 +49,30 @@ public class ServerProtocol {
         setGamePackage(gp);
         //setOpponent(gp);
         if(gp.getGameState() == FIRST_INIT){
-            //metod för att fylla in all grundinfo i GamePackage
-            //kanske kolla om det är en befintlig user eller en ny också
-            setupBaseGamePackage(gp);
-            gp.setGameState(GAME_ACTIVE);
+           if(gp.getID() == 1){
+               gp.setQA(category1);
+               gp.setGameState(GAME_ACTIVE);
+           }else{
+               gp.setWaiting(true);
+               waitForCategory = true;
+               gp.setGameState(GAME_ACTIVE);
+           }
         } else if (gp.getGameState() == GAME_ACTIVE) {
+            gp.setMessage("TEST2");
             //metod för att skicka tillbaka gp medans gamet är aktivt
-
+            gp.setGameState(END_GAME);
         } else if (gp.getGameState() == END_GAME) {
+            gp.setMessage("TEST3");
             //avsluta spelet?
+            gp.setGameState(REPEAT_REQUEST);
         } else if (gp.getGameState() == REPEAT_REQUEST) {
+            waitForCategory = false;
             //gp.setWaiting(true);
             //metod för att skicka tillbaka båda spelarna om båda svarat ja till en rematch.
             if(player1.getGameState() == REPEAT_REQUEST && player2.getGameState() == REPEAT_REQUEST){
                 gp.setGameState(GAME_ACTIVE);
             }
         }
-
-
-
 
         setGamePackage(gp);
         return gp;

@@ -39,7 +39,7 @@ public class ClientHandler extends Thread {
                         send.writeObject(waitCheck(g));
                         send.flush();
                         //TEMP
-                        System.out.println(g);
+                        System.out.println(getName() + " " + g);
                     } else {
                         g.setID(id);
                         gameStarted = true;
@@ -49,7 +49,7 @@ public class ClientHandler extends Thread {
                 }
             }
         } catch (EOFException | SocketException e){
-            System.out.println("Abrupt end of package to " + getName() + " due to disconnect from " + socket.getInetAddress().getHostName());
+            //System.out.println("Abrupt end of package to " + getName() + " due to disconnect from " + socket.getInetAddress().getHostName());
         } catch (IOException e) {
             System.out.println("hejhopp!");
             System.out.println(e.getClass());
@@ -58,13 +58,14 @@ public class ClientHandler extends Thread {
         }
     }
     private GamePackage waitCheck(GamePackage gp){
-
-        long startTime = System.currentTimeMillis();
-        while(protocol.waitForCategory){
-            if ((System.currentTimeMillis()-startTime) < 20000){
-                break;
-            }
+        if(!gp.isWaiting()) {
+            return protocol.update(gp);
         }
+        long startTime = System.currentTimeMillis();
+            while (protocol.waitForCategory) {
+                if ((System.currentTimeMillis() - startTime) < 20000) {
+                }
+            }
         return protocol.update(gp);
     }
 

@@ -19,8 +19,6 @@ public class Client {
     ObjectOutputStream output;
     ObjectInputStream input;
 
-
-
     //Constructor som sätter namnet i en GamePackage och skickar in GamePackage till
     //GameFrame för att rita upp Username direkt
     public Client() {
@@ -44,7 +42,7 @@ public class Client {
     }
 
     //Connect function för att connecta till servern och skapa upp Protocol (kanske ändras var vi skapar upp protocol).
-    public void connect(){
+    public void connect() {
 
         try {
             socket = new Socket(ip, port);
@@ -53,39 +51,40 @@ public class Client {
             output.writeObject(gp);
             output.flush();
             Object object;
-            while((object = input.readObject()) != null){
-                if(object instanceof GamePackage gamePackage) {
+            while ((object = input.readObject()) != null) {
+                if (object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
                     break;
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     //Skickar GamePackage till servern och tar emot GamePackage från servern varje gång den används.
-    public void sendAndReceive(){
+    public void sendAndReceive() {
         try {
             output.writeObject(gp);
             output.flush();
             Object object;
-            while((object = input.readObject()) != null){
-                if(object instanceof GamePackage gamePackage) {
+            while ((object = input.readObject()) != null) {
+                if (object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
                     protocol.update();
 
-                    //TEMP
-                    System.out.println(gp.getMessage());
+                    //TEST
+
+                    System.out.println(gp);
                     break;
-                } else if (object instanceof String){
+                } else if (object instanceof String) {
                     System.out.println(object);
                     break;
                 } else {
                     System.out.println("Hit skulle du inte komma");
                 }
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -93,8 +92,10 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
         client.connect();
-        System.out.println(client.gp);
         client.sendAndReceive();
-        System.out.println(client.gp);
+        client.sendAndReceive();
+        client.sendAndReceive();
+        client.sendAndReceive();
+
     }
 }

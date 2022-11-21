@@ -8,8 +8,7 @@ public class ClientProtocol {
     }
 
     public void update(){
-        client.gp.setMessage("Hej det här är ifrån klienten. ");
-        System.out.println(client.gp);
+
     }
 
 }
