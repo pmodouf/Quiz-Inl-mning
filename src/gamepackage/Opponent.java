@@ -37,7 +37,6 @@ public class Opponent implements Serializable {
         this.name = name;
         this.ScoreMap = ScoreMap;
         this.image = image;
-
     }
 
     @Override
