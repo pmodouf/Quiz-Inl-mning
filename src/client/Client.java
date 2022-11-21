@@ -13,6 +13,7 @@ public class Client {
 
     public GamePackage gp = new GamePackage();
     ClientProtocol protocol = new ClientProtocol(this);
+    GameFrame gf = new GameFrame(this);
 
     //GameFrame gf;
     Socket socket;
@@ -92,9 +93,5 @@ public class Client {
 
     public static void main(String[] args) {
         Client client = new Client();
-        client.connect();
-        System.out.println(client.gp);
-        client.sendAndReceive();
-        System.out.println(client.gp);
     }
 }
