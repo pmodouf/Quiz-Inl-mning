@@ -142,7 +142,7 @@ public class Database {
         return String.valueOf(fileCount);
     }
 
-    private BufferedImage loadImage(String pngID) {
+    public BufferedImage loadImage(String pngID) {
 
         BufferedImage bi;
         if (pngID.startsWith("p")) {
@@ -156,7 +156,7 @@ public class Database {
         }
         try {
             bi = ImageIO.read(new File("src/resources/images/avatar/" + pngID + ".png"));
-            return bi;
+            return scaleImage(bi);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -81,17 +81,9 @@ public class ServerProtocol {
 
     private void setOpponent(GamePackage gp){
         if (gp.getID() == 1 && player2 != null){
-            gp.getOpponent().setName(player2.getName());
-            gp.getOpponent().setTotalScore(player2.getTotalScore());
-
-            //TEMP?
-            gp.getOpponent().setID(player2.getID());
+            gp.getOpponent().setAll(player2.getName(), player2.getAnswers(), player2.getImage());
         } else if (gp.getID() == 2 && player1 != null){
-            gp.getOpponent().setName(player1.getName());
-            gp.getOpponent().setTotalScore(player1.getTotalScore());
-
-            //TEMP?
-            gp.getOpponent().setID(player1.getID());
+            gp.getOpponent().setAll(player1.getName(), player1.getAnswers(), player1.getImage());
         }
     }
 
