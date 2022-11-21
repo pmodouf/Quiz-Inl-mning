@@ -14,7 +14,7 @@ public class GamePackage implements Serializable {
     String[] QA;
     boolean gameStart;
     int gameState = 0;
-    boolean waiting;
+    boolean waiting = false;
     int[] answers;
     int totalScore;
 
