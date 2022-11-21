@@ -11,12 +11,16 @@ public class ServerProtocol {
     private static final int GAME_ACTIVE = 1;
     private static final int END_GAME = 2;
     private static final int REPEAT_REQUEST = 3;
+    private static final int CHOOSE_CATEGORY = 4;
 
     private boolean gameStarted = false;
 
     public boolean waitForCategory = false;
 
+    public boolean categoryPicked = false;
+
     //QA obj
+    private int categoryPick;
 
     Properties properties = new Properties();
 
@@ -45,36 +49,51 @@ public class ServerProtocol {
     }
 
 
-    public GamePackage update(GamePackage gp){
+    public GamePackage update(GamePackage gp) {
         setGamePackage(gp);
         setOpponent(gp);
-        if(gp.getGameState() == FIRST_INIT){
-           if(gp.getID() == 1){
-               gp.setQA(category1);
-               gp.setGameState(GAME_ACTIVE);
-           }else{
-               gp.setWaiting(true);
-               waitForCategory = true;
-               gp.setGameState(GAME_ACTIVE);
-           }
-        } else if (gp.getGameState() == GAME_ACTIVE) {
-            gp.setMessage("TEST2");
-            gp.setWaiting(false);
-            //metod för att skicka tillbaka gp medans gamet är aktivt
-            gp.setGameState(END_GAME);
-        } else if (gp.getGameState() == END_GAME) {
-            gp.setMessage("TEST3");
-            //avsluta spelet?
-            gp.setGameState(REPEAT_REQUEST);
-        } else if (gp.getGameState() == REPEAT_REQUEST) {
-            waitForCategory = false;
-            //gp.setWaiting(true);
-            //metod för att skicka tillbaka båda spelarna om båda svarat ja till en rematch.
-            if(player1.getGameState() == REPEAT_REQUEST && player2.getGameState() == REPEAT_REQUEST){
-                gp.setGameState(GAME_ACTIVE);
+        switch (gp.getGameState()) {
+            case FIRST_INIT -> {
+                if (gp.getID() == 1) {
+                    gp.setQA(category1);
+                    gp.setGameState(GAME_ACTIVE);
+                } else {
+                    gp.setWaiting(true);
+                    waitForCategory = true;
+                    gp.setGameState(GAME_ACTIVE);
+                }
+            } case GAME_ACTIVE -> {
+                categoryPicked = false;
+                gp.setCategoryID(0);
+                gp.setWaiting(false);
+
+
+                gp.setMessage("TEST2");
+                //metod för att skicka tillbaka gp medans gamet är aktivt
+                gp.setGameState(END_GAME);
+            } case END_GAME -> {
+                gp.setMessage("TEST3");
+                //avsluta spelet?
+                gp.setGameState(REPEAT_REQUEST);
+            } case REPEAT_REQUEST -> {
+                //gp.setWaiting(true);
+                //metod för att skicka tillbaka båda spelarna om båda svarat ja till en rematch.
+                if (player1.getGameState() == REPEAT_REQUEST && player2.getGameState() == REPEAT_REQUEST) {
+                    gp.setGameState(GAME_ACTIVE);
+                }
+            } case CHOOSE_CATEGORY -> {
+                if(gp.getCategoryID() != 0){
+                    categoryPick = gp.getCategoryID();
+                    categoryPicked = true;
+                }
+                if(gp.getCategoryID() != 0 && categoryPicked){
+                    gp.setCategoryID(categoryPick);
+                    gp.setGameState(GAME_ACTIVE);
+                    gp.setQA(category1);
+                    waitForCategory = false;
+                }
             }
         }
-
         //setGamePackage(gp);
         return gp;
     }
@@ -93,11 +112,5 @@ public class ServerProtocol {
         } else {
             player2 = gp;
         }
-    }
-
-    private void setupBaseGamePackage(GamePackage gp){
-        gp.setTotalScore(0);
-        gp.setMessage("Hej och välkommen till spelet");
-        gp.setQA(category1);
     }
 }
