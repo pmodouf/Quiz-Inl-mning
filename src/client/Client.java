@@ -1,7 +1,9 @@
 package client;
 
+import database.Database;
 import gamepackage.GamePackage;
 
+import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -18,6 +20,10 @@ public class Client {
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
+
+    //TEMP
+    Database database = new Database();
+    BufferedImage bufferedImage;
 
     //Constructor som sätter namnet i en GamePackage och skickar in GamePackage till
     //GameFrame för att rita upp Username direkt
@@ -38,6 +44,7 @@ public class Client {
         //Temp
         username = "Test";
         gp.setName(username);
+        gp.setImage(0);
         //this.gf = new GameFrame(gp);
     }
 

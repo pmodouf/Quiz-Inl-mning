@@ -1,6 +1,5 @@
 package gamepackage;
 
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -8,7 +7,8 @@ public class GamePackage implements Serializable {
 
     Opponent opponent = new Opponent();
 
-    BufferedImage image;
+    //BufferedImage image;
+    int image;
     String name;
     String message;
     int ID;
@@ -28,11 +28,11 @@ public class GamePackage implements Serializable {
         this.opponent = opponent;
     }
 
-    public BufferedImage getImage() {
+    public int getImage() {
         return image;
     }
 
-    public void setImage(BufferedImage image) {
+    public void setImage(int image) {
         this.image = image;
     }
 
