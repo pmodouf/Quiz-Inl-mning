@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class GamePackage implements Serializable {
-    GamePackage opponent;
+
+    Opponent opponent = new Opponent();
+
     BufferedImage image;
     String name;
     String message;
@@ -18,11 +20,11 @@ public class GamePackage implements Serializable {
     int[] answers;
     int totalScore;
 
-    public GamePackage getOpponent() {
+    public Opponent getOpponent() {
         return opponent;
     }
 
-    public void setOpponent(GamePackage opponent) {
+    public void setOpponent(Opponent opponent) {
         this.opponent = opponent;
     }
 
