@@ -100,8 +100,5 @@ public class Client {
         client.connect();
         client.sendAndReceive();
         client.sendAndReceive();
-        client.sendAndReceive();
-        client.sendAndReceive();
-
     }
 }

@@ -18,7 +18,9 @@ public class ClientProtocol {
 
     public void update(){
         if(client.gp.getGameState() == FIRST_INIT){
-            loadImage(client.gp.getImage());
+            if(client.gp.getID() == 1){
+                client.gp.setCategoryID(2);
+            }
         }
         if(client.gp.getGameState() == END_GAME){
             System.out.println("Opponent Name: " + client.gp.getOpponent().getName());

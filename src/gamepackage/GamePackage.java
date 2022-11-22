@@ -17,6 +17,7 @@ public class GamePackage implements Serializable {
     boolean gameStart;
     int gameState = 0;
     boolean waiting = false;
+    boolean lastRound = false;
     int[] answers;
     int totalScore;
 
@@ -34,6 +35,14 @@ public class GamePackage implements Serializable {
 
     public void setImage(int image) {
         this.image = image;
+    }
+
+    public boolean isLastRound() {
+        return lastRound;
+    }
+
+    public void setLastRound(boolean lastRound) {
+        this.lastRound = lastRound;
     }
 
     public String getName() {

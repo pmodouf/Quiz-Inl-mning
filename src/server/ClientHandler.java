@@ -35,11 +35,20 @@ public class ClientHandler extends Thread {
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
                     if (gameStarted) {
-                        send.writeObject(waitCheck(g));
-                        send.flush();
-                        //TEMP
-                        System.out.println(getName() + " " + g);
-                    } else {
+                        if(g.isLastRound()) {
+                            protocol.update(g);
+                            while (protocol.waitForResult){
+                                //WOOPTIE DOOO
+                            }
+                            send.writeObject(waitCheck(g));
+                            send.flush();
+                        } else {
+                            send.writeObject(waitCheck(g));
+                            send.flush();
+                            //TEMP
+                            System.out.println(getName() + " " + g);
+                        }
+                    }else {
                         g.setID(id);
                         gameStarted = true;
                         send.writeObject(g);
