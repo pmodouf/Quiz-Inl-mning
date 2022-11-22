@@ -81,7 +81,6 @@ public class Client {
                     protocol.update();
 
                     //TEST
-
                     System.out.println(gp);
                     break;
                 } else if (object instanceof String) {
