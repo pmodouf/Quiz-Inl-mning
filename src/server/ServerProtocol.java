@@ -7,8 +7,8 @@ import java.util.Random;
 
 public class ServerProtocol {
 
-    GamePackage player1;
-    GamePackage player2;
+    GamePackage player1 = new GamePackage();
+    GamePackage player2 = new GamePackage();
 
     private static final int FIRST_INIT = 0;
     private static final int CATEGORY_STATE = 1;
@@ -22,6 +22,8 @@ public class ServerProtocol {
     public boolean categoryPicked = false;
 
     public boolean turnToPick = true;
+
+    public boolean waitForResult = false;
 
     Random random = new Random();
 
@@ -68,8 +70,12 @@ public class ServerProtocol {
                         turnToPick = !turnToPick;
                     }
                     totalRounds++;
+                    if(totalRounds == properties.getRounds()){
+                        gp.setLastRound(true);
+                    }
                 } else {
                     //körs när vi har kommit upp i antal rundor och ska då direkt vidare till visa resultat.
+                    waitForResult = !waitForResult;
                     gp.setGameState(END_GAME);
                 }
             } case CATEGORY_STATE -> {
@@ -99,10 +105,10 @@ public class ServerProtocol {
     }
 
     private void setOpponent(GamePackage gp){
-        if (gp.getID() == 1 && player2 != null){
-            gp.getOpponent().setAll(player2.getName(), player2.getAnswers(), player2.getImage());
-        } else if (gp.getID() == 2 && player1 != null){
-            gp.getOpponent().setAll(player1.getName(), player1.getAnswers(), player1.getImage());
+        if (gp.getID() == 1){
+            gp.getOpponent().setAll(player2.getName(), player2.getAnswers(), player2.getImage(), player2.getTotalScore());
+        } else {
+            gp.getOpponent().setAll(player1.getName(), player1.getAnswers(), player1.getImage(), player1.getTotalScore());
         }
     }
 
