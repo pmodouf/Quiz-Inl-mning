@@ -63,7 +63,8 @@ public class ClientHandler extends Thread {
         }
         long startTime = System.currentTimeMillis();
             while (protocol.waitForCategory) {
-                if ((System.currentTimeMillis() - startTime) < 20000) {
+                if ((System.currentTimeMillis() - startTime) > 20000) {
+                    break;
                 }
             }
         return protocol.update(gp);
