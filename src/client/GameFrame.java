@@ -4,6 +4,9 @@ package client;
 import database.Database;
 
 import javax.swing.*;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -13,14 +16,15 @@ public class GameFrame extends JFrame {
 
     JButton btGiveUp, btQuit, btToggleSound;
     JButton btLogin, btSignUp, btGuest;
-    JButton btOption, btChallengeRandom, btChallengeByName, btSearchOpponent, btSearchLeader, btScoreboard;
+    JButton btOption, btChallengeRandom, btChallengeByName, btSearchOpponent, btSearchLeader, btScoreboard, btLogout,
+    btCreateUser;
     JButton btQuestion1, btQuestion2, btQuestion3, btQuestion4;
     JButton btOK;
     JButton btCategory1, btCategory2, btCategory3;
-    JButton send;
+    JButton btSend;
     JButton btBack;
 
-    JLabel lbUserName, lbPassword, lbLoginMessage, lbLoginTitle;
+    JLabel lbUserName, lbPassword, lbLoginMessage, lbLoginTitle, lbCreateUser;
     //JLabel lbUserImage, lbName;
     JLabel lbOpponentImage, lbOpponentName, lbCurrentScore;
     JLabel lbWaitMessage;
@@ -120,13 +124,18 @@ public class GameFrame extends JFrame {
         tfLogin.setBounds(width / 2 - (square * 3) / 2, square + 25, square * 3, 25);
         loginScreen.add(tfLogin);
 
-        lbUserName = new JLabel("Password");
-        lbUserName.setBounds(width / 2 - (square * 3) / 2, square * 2 - 25, 75, 25);
-        loginScreen.add(lbUserName);
+        lbPassword = new JLabel("Password");
+        lbPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 - 25, 75, 25);
+        loginScreen.add(lbPassword);
 
         tfPassword = new JTextField();
         tfPassword.setBounds(width / 2 - (square * 3) / 2, square * 2, square * 3, 25);
         loginScreen.add(tfPassword);
+
+        lbLoginMessage = new JLabel("Wrong login information");
+        lbLoginMessage.setBounds(width / 2 - (square + square / 2) / 2, square * 2 + square / 2, square + square / 2, 25);
+        lbLoginMessage.setVisible(false);
+        loginScreen.add(lbLoginMessage);
 
         btLogin = new JButton("Login");
         btLogin.setBounds(square + square / 2, square * 3, 75, 25);
@@ -145,7 +154,7 @@ public class GameFrame extends JFrame {
         playerInfoBar = new JPanel();
         playerInfoBar.setBounds(0, 0, width, square * 2 - square / 2);
         playerInfoBar.setFocusable(true);
-        playerInfoBar.setBackground(new Color(0x5B9CFF));
+        playerInfoBar.setBackground(new Color(0x428CFD));
         playerInfoBar.setLayout(null);
         mainScreen.add(playerInfoBar);
 
@@ -183,17 +192,157 @@ public class GameFrame extends JFrame {
         playerInfoBar.add(lbInfoBarOpponentWins);
         lbInfoBarOpponentWins.setVisible(false);
 
-        playerInfoBar.setVisible(false);
+        playerInfoBar.setVisible(true);
 
         homeScreen = new JPanel();
         homeScreen.setBounds(0, square * 2 - square / 2, width, square * 5);
-        homeScreen.setFocusable(true);
-        homeScreen.setBackground(Color.darkGray);
+        homeScreen.setFocusable(false);
+        homeScreen.setBackground(new Color(0x5B9CFF));
         homeScreen.setLayout(null);
         mainScreen.add(homeScreen);
 
+        btChallengeRandom = new JButton("Quick Match");
+        btChallengeRandom.setBounds(width / 2 - square, square / 2, square * 2, square / 2);
+        homeScreen.add(btChallengeRandom);
 
+        btChallengeByName = new JButton("Challenge a Friend");
+        btChallengeByName.setBounds(width / 2 - square, square + square / 2 , square * 2, square / 2);
+        homeScreen.add(btChallengeByName);
 
+        btOption = new JButton("Configure Profile");
+        btOption.setBounds(width / 2 - square, square * 2 + square / 2, square * 2, square / 2);
+        homeScreen.add(btOption);
+
+        btScoreboard= new JButton("Leaderboard");
+        btScoreboard.setBounds(width / 2 - square, square * 3 + square / 2, square * 2, square / 2);
+        homeScreen.add(btScoreboard);
+
+        btLogout = new JButton("Logout");
+        btLogout.setBounds( width / 2 - 40, square * 4 + square / 2, 80, 25);
+        homeScreen.add(btLogout);
+
+        homeScreen.setVisible(false);
+
+        createAccountScreen = new JPanel();
+        createAccountScreen.setBounds(0, square, width, height / 2);
+        createAccountScreen.setFocusable(true);
+        createAccountScreen.setBackground(new Color(0x5B9CFF));
+        createAccountScreen.setLayout(null);
+        mainScreen.add(createAccountScreen);
+
+        lbCreateUser = new JLabel("Create User");
+        lbCreateUser.setFont(new Font("Serif", Font.BOLD, 36));
+        lbCreateUser.setBounds(square * 2, 0, square * 4, 50);
+        createAccountScreen.add(lbCreateUser);
+
+        lbNewUser = new JLabel("User Name");
+        lbNewUser.setBounds(width / 2 - (square * 3) / 2, square, 75, 25);
+        createAccountScreen.add(lbNewUser);
+
+        tfNewLogin = new JTextField();
+        tfNewLogin.setBounds(width / 2 - (square * 3) / 2, square + 25, square * 3, 25);
+        createAccountScreen.add(tfNewLogin);
+
+        lbNewPassword = new JLabel("Password");
+        lbNewPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 - 25, 75, 25);
+        createAccountScreen.add(lbNewPassword);
+
+        tfNewPassword = new JTextField();
+        tfNewPassword.setBounds(width / 2 - (square * 3) / 2, square * 2, square * 3, 25);
+        createAccountScreen.add(tfNewPassword);
+
+        lbRepeatPassword = new JLabel("Confirm Password");
+        lbRepeatPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 + 46, square * 3, 25);
+        createAccountScreen.add(lbRepeatPassword);
+
+        tfRepeatPassword = new JTextField();
+        tfRepeatPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 + 71, square * 3, 25);
+        createAccountScreen.add(tfRepeatPassword);
+
+        lbCreateUserInfo = new JLabel("FELMEDELANDE!");
+        lbCreateUserInfo.setBounds(width / 2 - (square * 3) / 2, square * 3 + 10, square * 3, 25);
+        createAccountScreen.add(lbCreateUserInfo);
+
+        btCreateUser = new JButton("Create User");
+        btCreateUser.setBounds(square + square / 2, square * 3 + square / 2, 150, 25);
+        createAccountScreen.add(btCreateUser);
+
+        createAccountScreen.setVisible(false);
+
+        waitScreen = new JPanel();
+        waitScreen.setBounds(0, square, width, height / 2);
+        waitScreen.setFocusable(true);
+        waitScreen.setBackground(new Color(0x5B9CFF));
+        waitScreen.setLayout(null);
+        mainScreen.add(waitScreen);
+
+        lbWaitMessage = new JLabel("Waiting for Category");
+        lbWaitMessage.setFont(new Font("Serif", Font.BOLD, 36));
+        lbWaitMessage.setBounds(square + square / 3, height / 6, square * 4, 50);
+        waitScreen.add(lbWaitMessage);
+
+        waitScreen.setVisible(false);
+
+        gameScreen = new JPanel();
+        gameScreen.setBounds(0, square, width, height / 2);
+        gameScreen.setFocusable(true);
+        gameScreen.setBackground(new Color(0x5B9CFF));
+        gameScreen.setLayout(null);
+        mainScreen.add(gameScreen);
+
+        tpQuestion = new JTextPane();
+        tpQuestion.setBounds(square / 4, square / 2, width - square / 2, height / 5);
+        tpQuestion.setEditable(false);
+        tpQuestion.setBackground(new Color(0x5B9CFF));
+        tpQuestion.setText("HÄR KOMMER DET VARA FRÅGOR BLBA LBA LBAL BLA BLA BLA BLA BLA");
+        StyledDocument doc = tpQuestion.getStyledDocument();
+        SimpleAttributeSet center = new SimpleAttributeSet();
+        StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
+        tpQuestion.setForeground(Color.DARK_GRAY);
+        tpQuestion.setFont(new Font("Serif", Font.BOLD, 24));
+        gameScreen.add(tpQuestion);
+
+        btQuestion1 = new JButton("FRÅGA 1");
+        btQuestion1.setBounds(square / 4, square * 2 + 9 ,(width - square / 2) / 2 ,square - 5);
+        gameScreen.add(btQuestion1);
+
+        btQuestion2 = new JButton("FRÅGA 2");
+        btQuestion2.setBounds(width / 2, square * 2 + 9 ,(width - square / 2) / 2 ,square- 5);
+        gameScreen.add(btQuestion2);
+
+        btQuestion3 = new JButton("FRÅGA 3");
+        btQuestion3.setBounds(square / 4, square * 3 + 4,(width - square / 2) / 2 ,square - 5);
+        gameScreen.add(btQuestion3);
+
+        btQuestion4 = new JButton("FRÅGA 4");
+        btQuestion4.setBounds(width / 2, square * 3 + 4,(width - square / 2) / 2 ,square - 5);
+        gameScreen.add(btQuestion4);
+
+        chatScreen = new JPanel();
+        chatScreen.setBounds(0, width / 2 + square * 2, width, square * 2 + square / 4);
+        chatScreen.setFocusable(true);
+        chatScreen.setBackground(new Color(0x5B9CFF));
+        chatScreen.setLayout(null);
+        mainScreen.add(chatScreen);
+
+        ScrollPane sp = new ScrollPane();
+        sp.setBounds(square / 4, 10, width - square / 2, height / 5);
+        tpChat = new JTextPane();
+        tpChat.setEditable(false);
+        sp.add(tpChat);
+        chatScreen.add(sp);
+
+        tfChat = new JTextField();
+        tfChat.setBounds(square / 4, height / 5 + 20, width - square - square / 3, 25);
+        chatScreen.add(tfChat);
+
+        btSend = new JButton("Send");
+        btSend.setBounds(width - square - 3 ,height / 5 + 20, 75, 25);
+        chatScreen.add(btSend);
+
+        chatScreen.setVisible(false);
+        gameScreen.setVisible(false);
 
     }
 
