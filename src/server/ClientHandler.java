@@ -2,7 +2,6 @@ package server;
 
 import gamepackage.GamePackage;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -48,11 +47,9 @@ public class ClientHandler extends Thread {
                     }
                 }
             }
-        } catch (EOFException | SocketException e){
-            //System.out.println("Abrupt end of package to " + getName() + " due to disconnect from " + socket.getInetAddress().getHostName());
-            e.printStackTrace();
+        } catch (SocketException e){
+            System.out.println("Client disconnected from " + socket.getInetAddress().getHostName());
         } catch (IOException e) {
-            System.out.println("hejhopp!");
             System.out.println(e.getClass());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

@@ -80,10 +80,11 @@ public class ServerProtocol {
                     categoryPicked = true;
                 } else if (gp.getCategoryID() == 0 && !categoryPicked) {
                     categoryPick = random.nextInt(categories.length)+1;
+                    gp.setCategoryID(categoryPick);
                     categoryPicked = true;
                 }
                 //skickar ut alla frågor och svar till clients så dem kan spela.
-                if(gp.getCategoryID() != 0 && categoryPicked){
+                if(categoryPicked){
                     gp.setCategoryID(categoryPick);
                     gp.setGameState(FIRST_INIT);
                     gp.setQA(setQuestions(categoryPick));
