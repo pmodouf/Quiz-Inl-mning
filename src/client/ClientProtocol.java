@@ -10,6 +10,8 @@ public class ClientProtocol {
 
     Client client;
 
+    String[] Bilderna = {"boy1","girl1","man1","old1","old2","women1"};
+
     public ClientProtocol(Client client){
         this.client = client;
     }
@@ -24,19 +26,13 @@ public class ClientProtocol {
     }
 
     public void loadImage(int imageNumber){
-        if(imageNumber == 0){
-            client.bufferedImage = client.database.loadImage("boy1");
-        } else if(imageNumber == 1){
-            client.bufferedImage = client.database.loadImage("girl1");
-        } else if(imageNumber == 2){
-            client.bufferedImage = client.database.loadImage("man1");
-        } else if(imageNumber == 3){
-            client.bufferedImage = client.database.loadImage("old1");
-        } else if(imageNumber == 4){
-            client.bufferedImage = client.database.loadImage("old2");
-        } else if(imageNumber == 5){
-            client.bufferedImage = client.database.loadImage("women1");
-        }
+        client.bufferedImage = client.database.loadImage(Bilderna[imageNumber]);
     }
 
 }
+
+
+
+
+
+

@@ -50,6 +50,7 @@ public class ClientHandler extends Thread {
             }
         } catch (EOFException | SocketException e){
             //System.out.println("Abrupt end of package to " + getName() + " due to disconnect from " + socket.getInetAddress().getHostName());
+            e.printStackTrace();
         } catch (IOException e) {
             System.out.println("hejhopp!");
             System.out.println(e.getClass());

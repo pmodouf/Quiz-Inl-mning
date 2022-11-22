@@ -3,15 +3,17 @@ package server;
 import gamepackage.GamePackage;
 import properties.Properties;
 
+import java.util.Random;
+
 public class ServerProtocol {
+
     GamePackage player1;
     GamePackage player2;
 
     private static final int FIRST_INIT = 0;
-    private static final int GAME_ACTIVE = 1;
+    private static final int CATEGORY_STATE = 1;
     private static final int END_GAME = 2;
     private static final int REPEAT_REQUEST = 3;
-    private static final int CHOOSE_CATEGORY = 4;
 
     private boolean gameStarted = false;
 
@@ -19,17 +21,22 @@ public class ServerProtocol {
 
     public boolean categoryPicked = false;
 
+    public boolean turnToPick = true;
+
+    Random random = new Random();
+
     //QA obj
     private int categoryPick;
 
+    //Räkna antal rundor servern har delat ut.
+    int totalRounds = 0;
+
     Properties properties = new Properties();
 
-    private final int round1 = 1;
-    private final int round2 = 2;
-    private final int round3 = 3;
+    //TEMPORÄRA KATEGORIER
+    String[] categories = {"Sport","Fritid","Historia", "Samhälle"};
 
     //TEMPORÄRA FRÅGOR
-    String[] QAs = new String[6];
     String[] category1 = {"category1 fråga","category1 svar1","category1 svar2","category1 svar3","category1 svar4","category1 svar2"};
     String[] category2 = {"category2 fråga","category2 svar1","category2 svar2","category2 svar3","category2 svar4","category2 svar3"};
     String[] category3 = {"category3 fråga","category3 svar1","category3 svar2","category3 svar3","category3 svar4","category3 svar1"};
@@ -37,64 +44,56 @@ public class ServerProtocol {
     String[] category5 = {"category5 fråga","category5 svar1","category5 svar2","category5 svar3","category5 svar4","category5 svar4"};
     String[] category6 = {"category6 fråga","category6 svar1","category6 svar2","category6 svar3","category6 svar4","category6 svar2"};
 
-    public ServerProtocol(){
-        QAs[0] = "FRÅGAN HÄR";
-        QAs[1] = "SVAR 1";
-        QAs[2] = "SVAR 2";
-        QAs[3] = "SVAR 3";
-        QAs[4] = "SVAR 4";
-        QAs[5] = "SVAR 3"; //Correct answer
-
-
-    }
-
-
     public GamePackage update(GamePackage gp) {
         setGamePackage(gp);
         setOpponent(gp);
+
         switch (gp.getGameState()) {
             case FIRST_INIT -> {
-                if (gp.getID() == 1) {
-                    gp.setQA(category1);
-                    gp.setGameState(GAME_ACTIVE);
+                if(properties.getRounds() >= totalRounds) {
+                    categoryPicked = false;
+                    gp.setCategoryID(0);
+                    if (gp.getID() == 1 && turnToPick) {
+                        //får välja categories varannan gång
+                        gp.setQA(categories);
+                        gp.setGameState(CATEGORY_STATE);
+                    } else if (gp.getID() == 2 && (!turnToPick)) {
+                        gp.setQA(categories);
+                        gp.setGameState(CATEGORY_STATE);
+                    } else {
+                        //client som inte får välja kategori hamnar här istället.
+                        gp.setWaiting(true);
+                        waitForCategory = true;
+                        gp.setGameState(CATEGORY_STATE);
+                        turnToPick = !turnToPick;
+                    }
+                    totalRounds++;
                 } else {
-                    gp.setWaiting(true);
-                    waitForCategory = true;
-                    gp.setGameState(GAME_ACTIVE);
+                    //körs när vi har kommit upp i antal rundor och ska då direkt vidare till visa resultat.
+                    gp.setGameState(END_GAME);
                 }
-            } case GAME_ACTIVE -> {
-                categoryPicked = false;
-                gp.setCategoryID(0);
-                gp.setWaiting(false);
-
-
-                gp.setMessage("TEST2");
-                //metod för att skicka tillbaka gp medans gamet är aktivt
-                gp.setGameState(END_GAME);
-            } case END_GAME -> {
-                gp.setMessage("TEST3");
-                //avsluta spelet?
-                gp.setGameState(REPEAT_REQUEST);
-            } case REPEAT_REQUEST -> {
-                //gp.setWaiting(true);
-                //metod för att skicka tillbaka båda spelarna om båda svarat ja till en rematch.
-                if (player1.getGameState() == REPEAT_REQUEST && player2.getGameState() == REPEAT_REQUEST) {
-                    gp.setGameState(GAME_ACTIVE);
-                }
-            } case CHOOSE_CATEGORY -> {
-                if(gp.getCategoryID() != 0){
+            } case CATEGORY_STATE -> {
+                //När det har valts kategori så skickas man in här, och det inte valts kategori så väljs en random
+                //kategori
+                if(gp.getCategoryID() != 0 && !categoryPicked){
                     categoryPick = gp.getCategoryID();
                     categoryPicked = true;
+                } else if (gp.getCategoryID() == 0 && !categoryPicked) {
+                    categoryPick = random.nextInt(categories.length)+1;
+                    categoryPicked = true;
                 }
+                //skickar ut alla frågor och svar till clients så dem kan spela.
                 if(gp.getCategoryID() != 0 && categoryPicked){
                     gp.setCategoryID(categoryPick);
-                    gp.setGameState(GAME_ACTIVE);
-                    gp.setQA(category1);
+                    gp.setGameState(FIRST_INIT);
+                    gp.setQA(setQuestions(categoryPick));
                     waitForCategory = false;
                 }
+                gp.setWaiting(false);
             }
         }
-        //setGamePackage(gp);
+        setGamePackage(gp);
+        setOpponent(gp);
         return gp;
     }
 
@@ -111,6 +110,19 @@ public class ServerProtocol {
             player1 = gp;
         } else {
             player2 = gp;
+        }
+    }
+
+    //TEMP METOD
+    private String[] setQuestions(int category){
+        if(category == 1){
+            return category1;
+        } else if (category == 2) {
+            return category2;
+        } else if (category == 3) {
+            return category3;
+        } else {
+            return null;
         }
     }
 }
