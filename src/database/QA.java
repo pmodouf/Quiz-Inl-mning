@@ -15,7 +15,6 @@ public class QA {
         qaList = new ArrayList<>();
     }
 
-
     public void loadQA(int i){
         qaList.removeAll(Collections.singleton(null));
         switch (i){
