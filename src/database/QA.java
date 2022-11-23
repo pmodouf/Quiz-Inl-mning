@@ -50,19 +50,26 @@ public class QA {
     public static void main(String[] args) {
         QA qa = new QA();
         Random random = new Random();
-        qa.loadQA(random.nextInt(6)+1);
-        System.out.println(qa.getList().get(0)[0]);
-        System.out.println(qa.getList().get(0)[1] + " eller " + qa.getList().get(0)[2] + " eller " + qa.getList().get(0)[3] + " eller " + qa.getList().get(0)[4]);
-        Scanner scan = new Scanner(System.in);
-        boolean test = true;
-        while(test) {
+        int Kategori = random.nextInt(6)+1;
+        String[] tempKategori = {"Historia","Sport","Musik", "Samhälle", "Vetenskap", "Geografi"};
+        qa.loadQA(Kategori);
+        int temp = 0;
+        int score = 0;
+        System.out.println(tempKategori[Kategori-1]);
+        for (int i = 0; i <qa.getList().size() ; i++) {
+            System.out.println(qa.getList().get(temp)[0]);
+            System.out.println(qa.getList().get(temp)[1] + " eller " + qa.getList().get(temp)[2] + " eller " + qa.getList().get(temp)[3] + " eller " + qa.getList().get(temp)[4]);
+            Scanner scan = new Scanner(System.in);
             String answer = scan.nextLine();
-            if (answer.equalsIgnoreCase(qa.getList().get(0)[5])) {
+            if (answer.equalsIgnoreCase(qa.getList().get(temp)[5])) {
                 System.out.println("CORRECT");
-                test = false;
+                score++;
             } else {
                 System.out.println("WRONG");
             }
+            temp++;
         }
+        System.out.println("TotalScore: " + score + " out of " + qa.getList().size());
     }
 }
+
