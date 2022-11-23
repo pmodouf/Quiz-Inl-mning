@@ -11,13 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /*
-TODO Ändra timer till vertikal
-TODO lägga till knapp för att ändra avatar
 TODO lägga till några labels för att visa titel på sidorna
 TODO Lägga till action listeners
-TODO Eventuellt skala av onödig god men fan palr inte sitta med swing mer lol
+TODO Eventuellt skala av onödig kod men fan palr inte sitta med swing mer lol
 TODO Metoder för att fylla vissa funktioner
-TODO Lägga till OK knapp vid score elr nått
  */
 
 public class GameFrame extends JFrame {
@@ -27,7 +24,7 @@ public class GameFrame extends JFrame {
     JButton btGiveUp, btQuit, btToggleSound;
     JButton btLogin, btSignUp, btGuest;
     JButton btOption, btChallengeRandom, btChallengeByName, btSearchLeader, btScoreboard, btLogout,
-    btCreateUser;
+    btCreateUser, btChangeAvatar;
     JButton btAnswer1, btAnswer2, btAnswer3, btAnswer4;
 
     JButton btOK;
@@ -68,6 +65,7 @@ public class GameFrame extends JFrame {
     JPanel scoreScreen;
     JPanel optionScreen;
     JPanel leaderboard;
+    JPanel changeAvatar;
 
     int test = 1;
 
@@ -82,7 +80,7 @@ public class GameFrame extends JFrame {
         public boolean go = false;
         int thirty = 0;
         int indicator = 0;
-        int pixel = 0;
+        int pixel = 450;
 
         public Timer(){
             thread = new Thread(this);
@@ -110,7 +108,7 @@ public class GameFrame extends JFrame {
                 indicator++;
                 g2.setColor(Color.red);
                 if (indicator > 3) {
-                    pixel++;
+                    pixel--;
                     indicator = 0;
                 }
                 thirty++;
@@ -120,9 +118,9 @@ public class GameFrame extends JFrame {
             } else {
                 g2.setColor(new Color(0x5B9CFF));
                 thirty = 0;
-                pixel = 0;
+                pixel = 450;
             }
-            g2.fillRect(63, 0, 450 - pixel, 10);
+            g2.fillRect(63, 0, pixel, 10);
             g2.dispose();
         }
     }
@@ -402,7 +400,7 @@ public class GameFrame extends JFrame {
     }
     private void setUpCountBar() {
         timer = new Timer();
-        timer.setBounds(0, square * 3 - 2 , width, 10);
+        timer.setBounds(0, width / 2 + square * 2 + 10 , width, 10);
         timer.setBackground(new Color(0x5B9CFF));
         timer.setLayout(null);
         mainScreen.add(timer);
@@ -640,7 +638,7 @@ public class GameFrame extends JFrame {
 
     private void setUpChatScreen() {
         chatScreen = new JPanel();
-        chatScreen.setBounds(0, width / 2 + square * 2, width, square * 2 + square / 4);
+        chatScreen.setBounds(0, width / 2 + square * 2 + 20, width, square * 2 + square / 4);
         chatScreen.setFocusable(true);
         chatScreen.setBackground(new Color(0x5B9CFF));
         chatScreen.setLayout(null);
@@ -779,6 +777,10 @@ public class GameFrame extends JFrame {
         lbRound6.setBounds(width / 2 - square / 4, square + 400, square, 30);
         scoreScreen.add(lbRound6);
 
+//        btOK = new JButton("OK");
+//        btOK.setBounds(width / 2 - 50, square + 450, 100, 30);
+//        scoreScreen.add(btOK);
+
         scoreScreen.setVisible(false);
     }
 
@@ -793,6 +795,10 @@ public class GameFrame extends JFrame {
         btUpload = new JButton("Upload Profile Image");
         btUpload.setBounds(width / 2 - (square / 2) * 2, square, square * 2, square / 2);
         optionScreen.add(btUpload);
+
+        btChangeAvatar = new JButton("Change Avatar");
+        btChangeAvatar.setBounds(width / 2 - (square / 2) * 2, square * 3, square * 2, square / 2);
+        optionScreen.add(btChangeAvatar);
 
         optionScreen.setVisible(false);
     }

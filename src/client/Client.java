@@ -15,7 +15,6 @@ public class Client {
     ClientProtocol protocol = new ClientProtocol(this);
     GameFrame gf = new GameFrame(this);
 
-    //GameFrame gf;
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
