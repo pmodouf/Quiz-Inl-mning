@@ -43,16 +43,16 @@ public class QA {
         }
     }
 
-    public ArrayList<ArrayList<String[]>> getQaList() {
-        return qaList;
+    public ArrayList<String[]> getList() {
+        return qaList.get(0);
     }
 
     public static void main(String[] args) {
         QA qa = new QA();
         qa.loadQA(2);
-        System.out.println(Arrays.toString(qa.getQaList().get(0).get(0)));
-        System.out.println(Arrays.toString(qa.getQaList().get(0).get(1)));
-        System.out.println(Arrays.toString(qa.getQaList().get(0).get(2)));
-        System.out.println((qa.getQaList().get(0).get(2)[0]));
+        System.out.println(Arrays.toString(qa.getList().get(0)));
+        System.out.println(Arrays.toString(qa.getList().get(1)));
+        System.out.println(Arrays.toString(qa.getList().get(2)));
+        System.out.println((qa.getList().get(2)[0]));
     }
 }
