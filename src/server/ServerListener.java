@@ -25,7 +25,6 @@ public class ServerListener {
         client1.start();
         client2.start();
     }
-
     public static void main(String[] args) {
       new ServerListener();
     }
