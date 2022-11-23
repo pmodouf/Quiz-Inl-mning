@@ -1,5 +1,7 @@
 package client;
 
+import utility.StaticImageHandler;
+
 public class ClientProtocol {
 
     private static final int FIRST_INIT = 0;
@@ -28,7 +30,7 @@ public class ClientProtocol {
     }
 
     public void loadImage(int imageNumber){
-        client.bufferedImage = client.database.loadImage(Bilderna[imageNumber]);
+        client.bufferedImage = StaticImageHandler.loadImage(Bilderna[imageNumber]);
     }
 
 }

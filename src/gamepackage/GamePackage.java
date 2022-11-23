@@ -21,6 +21,8 @@ public class GamePackage implements Serializable {
     int[] answers;
     int totalScore;
 
+    public boolean choseCategory = false;
+
     public Opponent getOpponent() {
         return opponent;
     }

@@ -51,6 +51,9 @@ public class ClientHandler extends Thread {
                     }else {
                         g.setID(id);
                         gameStarted = true;
+                        if(id == 1){
+                            g.choseCategory = true;
+                        }
                         send.writeObject(g);
                         send.flush();
                     }
