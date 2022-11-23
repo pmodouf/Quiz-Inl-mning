@@ -36,7 +36,7 @@ public class ServerProtocol {
     Properties properties = new Properties();
 
     //TEMPORÄRA KATEGORIER
-    String[] categories = {"Sport","Fritid","Historia", "Samhälle"};
+    String[] categories = {"Sport.txt","Fritid","Historia.txt", "Samhälle.txt"};
 
     //TEMPORÄRA FRÅGOR
     String[] category1 = {"category1 fråga","category1 svar1","category1 svar2","category1 svar3","category1 svar4","category1 svar2"};
