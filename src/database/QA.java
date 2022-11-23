@@ -12,6 +12,8 @@ public class QA {
 
     private final ArrayList<ArrayList<String[]>> qaList;
 
+    private final String[] categories = {"Historia","Sport","Musik", "Samhälle", "Vetenskap", "Geografi"};
+
     public QA(){
         qaList = new ArrayList<>();
     }
@@ -19,12 +21,12 @@ public class QA {
     public void loadQA(int i){
         qaList.removeAll(Collections.singleton(null));
         switch (i){
-            case 1 -> qaList.add(loadFiles("Historia"));
-            case 2 -> qaList.add(loadFiles("Sport"));
-            case 3 -> qaList.add(loadFiles("Musik"));
-            case 4 -> qaList.add(loadFiles("Samhälle"));
-            case 5 -> qaList.add(loadFiles("Vetenskap"));
-            case 6 -> qaList.add(loadFiles("Geografi"));
+            case 1 -> qaList.add(loadFiles(categories[0]));
+            case 2 -> qaList.add(loadFiles(categories[1]));
+            case 3 -> qaList.add(loadFiles(categories[2]));
+            case 4 -> qaList.add(loadFiles(categories[3]));
+            case 5 -> qaList.add(loadFiles(categories[4]));
+            case 6 -> qaList.add(loadFiles(categories[5]));
         }
     }
 
@@ -43,6 +45,10 @@ public class QA {
         }
     }
 
+    public String[] getCategories() {
+        return categories;
+    }
+
     public ArrayList<String[]> getList() {
         return qaList.get(0);
     }
@@ -50,11 +56,11 @@ public class QA {
     public static void main(String[] args) {
         QA qa = new QA();
         Random random = new Random();
-        int Kategori = random.nextInt(6)+1;
-        String[] tempKategori = {"Historia","Sport","Musik", "Samhälle", "Vetenskap", "Geografi"};
-        qa.loadQA(Kategori);
+        int val = random.nextInt(6)+1;
+
+        qa.loadQA(val);
         int score = 0;
-        System.out.println(tempKategori[Kategori-1]);
+        System.out.println(qa.getCategories()[val-1]);
         for (int i = 0; i <qa.getList().size() ; i++) {
             System.out.println(qa.getList().get(i)[0]);
             System.out.println(qa.getList().get(i)[1] + " eller " + qa.getList().get(i)[2] + " eller " + qa.getList().get(i)[3] + " eller " + qa.getList().get(i)[4]);
