@@ -7,27 +7,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static java.lang.Math.random;
-
 public class QA {
 
     private final ArrayList<ArrayList<String[]>> qaList;
 
     public QA(){
         qaList = new ArrayList<>();
-        /*
-        qaList.add(loadFiles("historia"));
-        qaList.add(loadFiles("sport"));
-        qaList.add(loadFiles("musik"));
-        qaList.add(loadFiles("samhälle"));
-        qaList.add(loadFiles("vetenskap"));
-        qaList.add(loadFiles("geografi"));
-
-     */
     }
 
 
     public void loadQA(int i){
+        qaList.removeAll(Collections.singleton(null));
         switch (i){
             case 1 -> qaList.add(loadFiles("historia"));
             case 2 -> qaList.add(loadFiles("sport"));
@@ -46,7 +36,7 @@ public class QA {
                 temp.add(line.split("/"));
             }
             //Kanske flytta shuffle till när man skickar ut frågorna istället
-            //Collections.shuffle(temp);
+            Collections.shuffle(temp);
             return temp;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -57,17 +47,12 @@ public class QA {
         return qaList;
     }
 
-
-
     public static void main(String[] args) {
         QA qa = new QA();
         qa.loadQA(2);
         System.out.println(Arrays.toString(qa.getQaList().get(0).get(0)));
         System.out.println(Arrays.toString(qa.getQaList().get(0).get(1)));
         System.out.println(Arrays.toString(qa.getQaList().get(0).get(2)));
-
-        if(qa.getQaList().get(0).get(0)[2].equals(qa.getQaList().get(0).get(0)[5])){
-            System.out.println("rätt svar");
-        }
+        System.out.println((qa.getQaList().get(0).get(2)[0]));
     }
 }
