@@ -4,8 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
+import java.util.Scanner;
 
 public class QA {
 
@@ -48,10 +49,20 @@ public class QA {
 
     public static void main(String[] args) {
         QA qa = new QA();
-        qa.loadQA(2);
-        System.out.println(Arrays.toString(qa.getList().get(0)));
-        System.out.println(Arrays.toString(qa.getList().get(1)));
-        System.out.println(Arrays.toString(qa.getList().get(2)));
-        System.out.println((qa.getList().get(2)[0]));
+        Random random = new Random();
+        qa.loadQA(random.nextInt(6)+1);
+        System.out.println(qa.getList().get(0)[0]);
+        System.out.println(qa.getList().get(0)[1] + " eller " + qa.getList().get(0)[2] + " eller " + qa.getList().get(0)[3] + " eller " + qa.getList().get(0)[4]);
+        Scanner scan = new Scanner(System.in);
+        boolean test = true;
+        while(test) {
+            String answer = scan.nextLine();
+            if (answer.equalsIgnoreCase(qa.getList().get(0)[5])) {
+                System.out.println("CORRECT");
+                test = false;
+            } else {
+                System.out.println("WRONG");
+            }
+        }
     }
 }
