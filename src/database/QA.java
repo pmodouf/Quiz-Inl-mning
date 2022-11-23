@@ -18,12 +18,12 @@ public class QA {
     public void loadQA(int i){
         qaList.removeAll(Collections.singleton(null));
         switch (i){
-            case 1 -> qaList.add(loadFiles("historia"));
-            case 2 -> qaList.add(loadFiles("sport"));
-            case 3 -> qaList.add(loadFiles("musik"));
-            case 4 -> qaList.add(loadFiles("samhälle"));
-            case 5 -> qaList.add(loadFiles("vetenskap"));
-            case 6 -> qaList.add(loadFiles("geografi"));
+            case 1 -> qaList.add(loadFiles("Historia"));
+            case 2 -> qaList.add(loadFiles("Sport"));
+            case 3 -> qaList.add(loadFiles("Musik"));
+            case 4 -> qaList.add(loadFiles("Samhälle"));
+            case 5 -> qaList.add(loadFiles("Vetenskap"));
+            case 6 -> qaList.add(loadFiles("Geografi"));
         }
     }
 
