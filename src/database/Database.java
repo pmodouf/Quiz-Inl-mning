@@ -1,5 +1,7 @@
 package database;
 
+import utility.StaticImageHandler;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -28,7 +30,7 @@ public class Database {
         String[] userSplit = userLine.split("/");
         return new User(userSplit[0], Integer.parseInt(userSplit[2]),
                 LocalDate.parse(userSplit[3]),
-                loadImage(userSplit[4]));
+                StaticImageHandler.loadImage(userSplit[4]));
     }
 
     public boolean validateUser(String name, String password) {
@@ -56,7 +58,7 @@ public class Database {
 
     public boolean createUser(String name, String password, BufferedImage image) {
         if (userDoesNotExist(name)) {
-            String pngID = newPngID(image);
+            String pngID = StaticImageHandler.newImage(image, "src/resources/images/profile-pictures", "png");
             String userLine = name + "/" + password + "/" + LocalDate.now() + "/" + pngID;
             addUserToFile(userLine);
             return true;
@@ -120,54 +122,5 @@ public class Database {
             e.printStackTrace();
         }
         return userLine.equals("");
-    }
-
-    private String newPngID(BufferedImage image) {
-        int fileCount = 0;
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("src/resources/images/profile-pictures"), "*.{png}")) {
-            for (Path ignored : stream) {
-                fileCount++;
-            }
-        } catch (IOException | DirectoryIteratorException e) {
-            e.printStackTrace();
-        }
-        fileCount++;
-        String pngID = String.valueOf(fileCount);
-        try {
-            File newFile = File.createTempFile(pngID, "png");
-            ImageIO.write(image, "png", newFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return String.valueOf(fileCount);
-    }
-
-    public BufferedImage loadImage(String pngID) {
-
-        BufferedImage bi;
-        if (pngID.startsWith("p")) {
-            try {
-                bi = ImageIO.read(new File("src/resources/images/profile-pictures/" + pngID + ".png"));
-                return scaleImage(bi);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-        try {
-            bi = ImageIO.read(new File("src/resources/images/avatar/" + pngID + ".png"));
-            return scaleImage(bi);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private BufferedImage scaleImage(BufferedImage original) {
-        BufferedImage scaledImage = new BufferedImage(96, 96, original.getType());
-        Graphics2D g2 = scaledImage.createGraphics();
-        g2.drawImage(original, 0, 0, 96, 96, null);
-        g2.dispose();
-        return scaledImage;
     }
 }

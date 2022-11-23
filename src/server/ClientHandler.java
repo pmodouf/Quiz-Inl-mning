@@ -36,6 +36,7 @@ public class ClientHandler extends Thread {
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
                     if (gameStarted) {
+
                         send.writeObject(waitCheck(g));
                         send.flush();
                         //TEMP
