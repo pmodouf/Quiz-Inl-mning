@@ -1,5 +1,7 @@
 package gamepackage;
 
+import properties.GameProperties;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,22 +10,23 @@ public class GamePackage implements Serializable {
 
     Opponent opponent = new Opponent();
 
-    //BufferedImage image;
     int image;
+    int ID;
     String name;
     String message;
-    int ID;
+
     int categoryID;
+
     ArrayList<String[]> QA;
-    //String[] QA;
-    boolean gameStart;
+    int[] AnswersMap;
     int gameState = 0;
-    boolean waiting = false;
-    boolean lastRound = false;
-    int[] answers;
+
     int totalScore;
 
     public boolean choseCategory = false;
+    public boolean gameStart;
+    public boolean waiting = false;
+    public  boolean lastRound = false;
 
     public Opponent getOpponent() {
         return opponent;
@@ -113,12 +116,12 @@ public class GamePackage implements Serializable {
         this.waiting = waiting;
     }
 
-    public int[] getAnswers() {
-        return answers;
+    public int[] getAnswersMap() {
+        return AnswersMap;
     }
 
-    public void setAnswers(int[] answers) {
-        this.answers = answers;
+    public void setAnswersMap(int[] answers) {
+        this.AnswersMap = answers;
     }
 
     public void incrementScore(){
@@ -138,18 +141,18 @@ public class GamePackage implements Serializable {
         return "GamePackage{" +
                 "opponent=" + opponent +
                 ", image=" + image +
+                ", ID=" + ID +
                 ", name='" + name + '\'' +
                 ", message='" + message + '\'' +
-                ", ID=" + ID +
                 ", categoryID=" + categoryID +
                 ", QA=" + QA +
-                ", gameStart=" + gameStart +
+                ", answers=" + Arrays.toString(AnswersMap) +
                 ", gameState=" + gameState +
-                ", waiting=" + waiting +
-                ", lastRound=" + lastRound +
-                ", answers=" + Arrays.toString(answers) +
                 ", totalScore=" + totalScore +
                 ", choseCategory=" + choseCategory +
+                ", gameStart=" + gameStart +
+                ", waiting=" + waiting +
+                ", lastRound=" + lastRound +
                 '}';
     }
 }

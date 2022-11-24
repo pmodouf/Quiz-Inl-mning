@@ -1,12 +1,15 @@
 package client;
 
 import database.Database;
+import database.QA;
 import gamepackage.GamePackage;
 
 import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Client {
 
@@ -14,12 +17,17 @@ public class Client {
     private static final int port = 12345;
 
     public GamePackage gp = new GamePackage();
-    ClientProtocol protocol = new ClientProtocol(this);
 
-    //GameFrame gf;
+    ClientProtocol protocol = new ClientProtocol(this);
+    //GameFrame gf = new GameFrame(this);
+
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
+
+    //LOCAL VALUES
+    public int localRoundScore = 0;
+    public int localTotalScore = 0;
 
     //TEMP
     Database database = new Database();
@@ -29,23 +37,11 @@ public class Client {
     //GameFrame för att rita upp Username direkt
     public Client() {
         String username;
-        /*
-        while(true) {
-            username = JOptionPane.showInputDialog(null,"What's your username?");
-            if(username != null) {
-                if (username.length() > 0) {
-                    break;
-                }
-                JOptionPane.showMessageDialog(null, "Your username has to be longer then 0 in length");
-            }
-        }
-
-         */
-        //Temp
         username = "Test";
         gp.setName(username);
         gp.setImage(0);
-        //this.gf = new GameFrame(gp);
+        gp.setGameState(1);
+        protocol.update();
     }
 
     //Connect function för att connecta till servern och skapa upp Protocol (kanske ändras var vi skapar upp protocol).
@@ -98,6 +94,10 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
         client.connect();
+        client.sendAndReceive();
+        client.sendAndReceive();
+        client.sendAndReceive();
+        client.sendAndReceive();
         client.sendAndReceive();
         client.sendAndReceive();
     }
