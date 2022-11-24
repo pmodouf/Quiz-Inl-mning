@@ -57,10 +57,10 @@ public class ServerProtocol {
                     gp.setCategoryID(0);
                     if (gp.getID() == 1 && turnToPick) {
                         //får välja categories varannan gång
-                        gp.setQA(categories);
+                        //gp.setQA(categories);
                         gp.setGameState(CATEGORY_STATE);
                     } else if (gp.getID() == 2 && (!turnToPick)) {
-                        gp.setQA(categories);
+                        //gp.setQA(categories);
                         gp.setGameState(CATEGORY_STATE);
                     } else {
                         //client som inte får välja kategori hamnar här istället.
@@ -93,7 +93,7 @@ public class ServerProtocol {
                 if(categoryPicked){
                     gp.setCategoryID(categoryPick);
                     gp.setGameState(FIRST_INIT);
-                    gp.setQA(setQuestions(categoryPick));
+                    //gp.setQA(setQuestions(categoryPick));
                     waitForCategory = false;
                 }
                 gp.setWaiting(false);
