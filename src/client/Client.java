@@ -51,6 +51,7 @@ public class Client {
         username = "Test";
         gp.setName(username);
         gp.setImage(0);
+        gp.setGameState(1);
         protocol.update();
 
 

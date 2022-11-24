@@ -1,5 +1,7 @@
 package gamepackage;
 
+import properties.GameProperties;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +21,6 @@ public class GamePackage implements Serializable {
     int[] AnswersMap;
     int gameState = 0;
 
-    int roundScore;
     int totalScore;
 
     public boolean choseCategory = false;
@@ -61,14 +62,6 @@ public class GamePackage implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public int getRoundScore() {
-        return roundScore;
-    }
-
-    public void setRoundScore(int roundScore) {
-        this.roundScore = roundScore;
     }
 
     public void setName(String name) {
@@ -155,7 +148,6 @@ public class GamePackage implements Serializable {
                 ", QA=" + QA +
                 ", answers=" + Arrays.toString(AnswersMap) +
                 ", gameState=" + gameState +
-                ", roundScore=" + roundScore +
                 ", totalScore=" + totalScore +
                 ", choseCategory=" + choseCategory +
                 ", gameStart=" + gameStart +

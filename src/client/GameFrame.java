@@ -75,6 +75,8 @@ public class GameFrame extends JFrame {
 
     Timer timer;
 
+    String correctAnswer;
+
     public static class Timer extends JPanel implements Runnable{
         public Thread thread;
         public boolean go = false;
@@ -193,6 +195,20 @@ public class GameFrame extends JFrame {
         };
         btQuit.addActionListener(al);
         btToggleSound.addActionListener(al);
+
+        ActionListener answerButtons = e -> {
+            JButton bt = (JButton) e.getSource();
+            if(bt.getText().equalsIgnoreCase(correctAnswer)){
+                client.localRoundScore++;
+                client.protocol.update();
+            } else {
+                client.protocol.update();
+            }
+        };
+        btAnswer1.addActionListener(answerButtons);
+        btAnswer2.addActionListener(answerButtons);
+        btAnswer3.addActionListener(answerButtons);
+        btAnswer4.addActionListener(answerButtons);
     }
 
     public void GUIState(int state){

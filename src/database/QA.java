@@ -26,7 +26,7 @@ public class QA {
             case 4 -> qaList = (loadFiles(categories[3]));
             case 5 -> qaList = (loadFiles(categories[4]));
             case 6 -> qaList = (loadFiles(categories[5]));
-            default -> qaList = (loadFiles(categories[random.nextInt(categories.length)+1]));
+            default -> qaList = (loadFiles(categories[random.nextInt(categories.length)]));
         }
     }
 

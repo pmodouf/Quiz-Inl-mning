@@ -28,25 +28,41 @@ public class ClientProtocol {
     String[] Bilderna = {"boy1","girl1","man1","old1","old2","women1"};
 
     GameProperties properties = new GameProperties();
+
+    //TEMP
     QA qa = new QA();
+
+    int counter = 0;
 
 
     public ClientProtocol(Client client){
         this.client = client;
     }
 
-    public void update(){
+    public void update() {
         switch(client.gp.getGameState()){
             case FIRST_INIT -> {
-                client.gf.GUIState(gameScreenState);
-                client.gp.setGameState(1);
-                qa.loadQA(2);
-                client.gp.setQA(qa.getList());
-                client.gf.GUIState(4);
-                loadRoundGame(0);
+                client.gp.setAnswersMap(new int[properties.getRounds() * properties.getQuestions()]);
+
             }
             case GAME_ACTIVE -> {
+                //TEMP
+                qa.loadQA(client.gp.getCategoryID());
+                client.gp.setQA(qa.getList());
 
+
+                client.gf.GUIState(gameScreenState);
+                if(counter < properties.getQuestions()){
+                    loadRoundGame(counter);
+                    counter++;
+                } else {
+                    client.localTotalScore += client.localRoundScore;
+                    client.localRoundScore = 0;
+                    client.gp.setGameState(END_GAME);
+                }
+            }
+            case END_GAME -> {
+               client.gp.setTotalScore(client.localTotalScore);
             }
         }
     }
@@ -61,7 +77,7 @@ public class ClientProtocol {
         client.gf.btAnswer2.setText(client.gp.getQA().get(i)[2]);
         client.gf.btAnswer3.setText(client.gp.getQA().get(i)[3]);
         client.gf.btAnswer4.setText(client.gp.getQA().get(i)[4]);
-        client.gf.GUIState(4);
+        client.gf.correctAnswer = client.gp.getQA().get(i)[5];
     }
 
 }
