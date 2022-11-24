@@ -1,5 +1,7 @@
 package client;
 
+import database.QA;
+import properties.GameProperties;
 import utility.StaticImageHandler;
 
 public class ClientProtocol {
@@ -25,6 +27,10 @@ public class ClientProtocol {
 
     String[] Bilderna = {"boy1","girl1","man1","old1","old2","women1"};
 
+    GameProperties properties = new GameProperties();
+    QA qa = new QA();
+
+
     public ClientProtocol(Client client){
         this.client = client;
     }
@@ -32,15 +38,30 @@ public class ClientProtocol {
     public void update(){
         switch(client.gp.getGameState()){
             case FIRST_INIT -> {
-                client.gf.GUIState(waitScreenState);
+                client.gf.GUIState(gameScreenState);
+                client.gp.setGameState(1);
+                qa.loadQA(2);
+                client.gp.setQA(qa.getList());
+                client.gf.GUIState(4);
+                loadRoundGame(0);
             }
             case GAME_ACTIVE -> {
+
             }
         }
     }
 
-    public void loadImage(int imageNumber){
+    private void loadImage(int imageNumber){
         client.bufferedImage = StaticImageHandler.loadImage(Bilderna[imageNumber]);
+    }
+
+    private void loadRoundGame(int i){
+        client.gf.tpQuestion.setText(client.gp.getQA().get(i)[0]);
+        client.gf.btAnswer1.setText(client.gp.getQA().get(i)[1]);
+        client.gf.btAnswer2.setText(client.gp.getQA().get(i)[2]);
+        client.gf.btAnswer3.setText(client.gp.getQA().get(i)[3]);
+        client.gf.btAnswer4.setText(client.gp.getQA().get(i)[4]);
+        client.gf.GUIState(4);
     }
 
 }

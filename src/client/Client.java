@@ -1,6 +1,7 @@
 package client;
 
 import database.Database;
+import database.QA;
 import gamepackage.GamePackage;
 
 import java.awt.image.BufferedImage;
@@ -21,6 +22,10 @@ public class Client {
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
+
+    //LOCAL VALUES
+    public int localRoundScore = 0;
+    public int localTotalScore = 0;
 
     //TEMP
     Database database = new Database();
@@ -46,6 +51,9 @@ public class Client {
         username = "Test";
         gp.setName(username);
         gp.setImage(0);
+        protocol.update();
+
+
     }
 
     //Connect function för att connecta till servern och skapa upp Protocol (kanske ändras var vi skapar upp protocol).

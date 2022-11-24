@@ -84,7 +84,7 @@ public class QA {
                     System.out.println("WRONG");
                 }
             }
-            System.out.println("Score: " + score + " out of " + qa.getList().size());
+            System.out.println("Score: " + score + " out of " + properties.getQuestions());
             totalScore += score;
         }
         System.out.println("TotalScore: " + totalScore + " out of " + properties.getQuestions()*properties.getRounds());

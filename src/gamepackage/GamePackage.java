@@ -14,6 +14,7 @@ public class GamePackage implements Serializable {
     String message;
 
     int categoryID;
+
     ArrayList<String[]> QA;
     int[] AnswersMap;
     int gameState = 0;
