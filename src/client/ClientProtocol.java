@@ -40,6 +40,7 @@ public class ClientProtocol {
     }
 
     public void update() {
+        /*
         switch(client.gp.getGameState()){
             case FIRST_INIT -> {
                 client.gp.setAnswersMap(new int[properties.getRounds() * properties.getQuestions()]);
@@ -65,13 +66,15 @@ public class ClientProtocol {
                client.gp.setTotalScore(client.localTotalScore);
             }
         }
+
+         */
     }
 
     private void loadImage(int imageNumber){
         client.bufferedImage = StaticImageHandler.loadImage(Bilderna[imageNumber]);
     }
 
-    private void loadRoundGame(int i){
+    /*private void loadRoundGame(int i){
         client.gf.tpQuestion.setText(client.gp.getQA().get(i)[0]);
         client.gf.btAnswer1.setText(client.gp.getQA().get(i)[1]);
         client.gf.btAnswer2.setText(client.gp.getQA().get(i)[2]);
@@ -79,6 +82,8 @@ public class ClientProtocol {
         client.gf.btAnswer4.setText(client.gp.getQA().get(i)[4]);
         client.gf.correctAnswer = client.gp.getQA().get(i)[5];
     }
+
+     */
 
 }
 
