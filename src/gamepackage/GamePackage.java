@@ -1,6 +1,7 @@
 package gamepackage;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GamePackage implements Serializable {
@@ -13,7 +14,8 @@ public class GamePackage implements Serializable {
     String message;
     int ID;
     int categoryID;
-    String[] QA;
+    ArrayList<String[]> QA;
+    //String[] QA;
     boolean gameStart;
     int gameState = 0;
     boolean waiting = false;
@@ -79,11 +81,11 @@ public class GamePackage implements Serializable {
         this.categoryID = categoryID;
     }
 
-    public String[] getQA() {
+    public ArrayList<String[]> getQA() {
         return QA;
     }
 
-    public void setQA(String[] QA) {
+    public void setQA(ArrayList<String[]> QA) {
         this.QA = QA;
     }
 
@@ -140,12 +142,14 @@ public class GamePackage implements Serializable {
                 ", message='" + message + '\'' +
                 ", ID=" + ID +
                 ", categoryID=" + categoryID +
-                ", QA=" + Arrays.toString(QA) +
+                ", QA=" + QA +
                 ", gameStart=" + gameStart +
                 ", gameState=" + gameState +
                 ", waiting=" + waiting +
+                ", lastRound=" + lastRound +
                 ", answers=" + Arrays.toString(answers) +
                 ", totalScore=" + totalScore +
+                ", choseCategory=" + choseCategory +
                 '}';
     }
 }
