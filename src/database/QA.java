@@ -1,6 +1,6 @@
 package database;
 
-import properties.Properties;
+import properties.GameProperties;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -10,11 +10,8 @@ import java.util.*;
 public class QA {
 
     private final Random random = new Random();
-
     private ArrayList<String[]> qaList;
-
     private String category = "";
-
     private final String[] categories = {"Historia","Sport","Musik", "Samhälle", "Vetenskap", "Geografi"};
 
     public QA(){
@@ -22,7 +19,6 @@ public class QA {
     }
 
     public void loadQA(int i){
-        //qaList.removeAll(Collections.singleton(null));
         switch (i){
             case 1 -> qaList = (loadFiles(categories[0]));
             case 2 -> qaList = (loadFiles(categories[1]));
@@ -42,7 +38,6 @@ public class QA {
             while((line = reader.readLine()) != null) {
                 temp.add(line.split("/"));
             }
-            //Kanske flytta shuffle till när man skickar ut frågorna istället
             Collections.shuffle(temp);
             return temp;
         } catch (IOException e) {
@@ -60,7 +55,7 @@ public class QA {
 
     public static void main(String[] args) {
         QA qa = new QA();
-        Properties properties = new Properties();
+        GameProperties properties = new GameProperties();
 
         //Exempel till koden
         //Första.
@@ -71,6 +66,8 @@ public class QA {
         //
         //ifall 0 eller högre än dem kategorierna som finns så blir det random, annars så väljer man
 
+
+        int totalScore = 0;
         for (int j = 0; j < properties.getRounds(); j++) {
             qa.loadQA(0);
             int score = 0;
@@ -87,8 +84,10 @@ public class QA {
                     System.out.println("WRONG");
                 }
             }
-            System.out.println("TotalScore: " + score + " out of " + qa.getList().size());
+            System.out.println("Score: " + score + " out of " + qa.getList().size());
+            totalScore += score;
         }
+        System.out.println("TotalScore: " + totalScore + " out of " + properties.getQuestions()*properties.getRounds());
     }
 }
 

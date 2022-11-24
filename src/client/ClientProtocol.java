@@ -10,6 +10,17 @@ public class ClientProtocol {
     private static final int REPEAT_REQUEST = 3;
     private static final int CHOOSE_CATEGORY = 4;
 
+    //TEMP För att hålla koll på gameFrame scenes
+    final int loginScreenState = 1;
+    final int createAccountScreenState = 2;
+    final int homeScreenState = 3;
+    final int gameScreenState = 4;
+    final int waitScreenState = 5;
+    final int categoryScreenState = 6;
+    final int scoreScreenState = 7;
+    final int optionScreenState = 8;
+    final int leaderboardState = 9;
+
     Client client;
 
     String[] Bilderna = {"boy1","girl1","man1","old1","old2","women1"};
@@ -19,13 +30,12 @@ public class ClientProtocol {
     }
 
     public void update(){
-        if(client.gp.getGameState() == FIRST_INIT){
-            if(client.gp.getID() == 1){
-                client.gp.setCategoryID(2);
+        switch(client.gp.getGameState()){
+            case FIRST_INIT -> {
+                client.gf.GUIState(waitScreenState);
             }
-        }
-        if(client.gp.getGameState() == END_GAME){
-            System.out.println("Opponent Name: " + client.gp.getOpponent().getName());
+            case GAME_ACTIVE -> {
+            }
         }
     }
 

@@ -14,9 +14,10 @@ public class Client {
     private static final int port = 12345;
 
     public GamePackage gp = new GamePackage();
-    ClientProtocol protocol = new ClientProtocol(this);
 
-    //GameFrame gf;
+    ClientProtocol protocol = new ClientProtocol(this);
+    GameFrame gf = new GameFrame(this);
+
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
@@ -45,7 +46,6 @@ public class Client {
         username = "Test";
         gp.setName(username);
         gp.setImage(0);
-        //this.gf = new GameFrame(gp);
     }
 
     //Connect function för att connecta till servern och skapa upp Protocol (kanske ändras var vi skapar upp protocol).

@@ -1,7 +1,7 @@
 package server;
 
 import gamepackage.GamePackage;
-import properties.Properties;
+import properties.GameProperties;
 
 import java.util.Random;
 
@@ -33,7 +33,7 @@ public class ServerProtocol {
     //Räkna antal rundor servern har delat ut.
     int totalRounds = 0;
 
-    Properties properties = new Properties();
+    GameProperties properties = new GameProperties();
 
     //TEMPORÄRA KATEGORIER
     String[] categories = {"Sport.txt","Fritid","Historia.txt", "Samhälle.txt"};
@@ -106,9 +106,9 @@ public class ServerProtocol {
 
     private void setOpponent(GamePackage gp){
         if (gp.getID() == 1){
-            gp.getOpponent().setAll(player2.getName(), player2.getAnswers(), player2.getImage(), player2.getTotalScore());
+            gp.getOpponent().setAll(player2.getName(), player2.getAnswersMap(), player2.getImage(), player2.getTotalScore());
         } else {
-            gp.getOpponent().setAll(player1.getName(), player1.getAnswers(), player1.getImage(), player1.getTotalScore());
+            gp.getOpponent().setAll(player1.getName(), player1.getAnswersMap(), player1.getImage(), player1.getTotalScore());
         }
     }
 
