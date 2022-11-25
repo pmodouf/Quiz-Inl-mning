@@ -1,15 +1,15 @@
 package client;
 
 import database.Database;
-import database.QA;
+import database.Guest;
+import database.User;
 import gamepackage.GamePackage;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Client {
 
@@ -17,34 +17,27 @@ public class Client {
     private static final int port = 12345;
 
     public GamePackage gp = new GamePackage();
-
     ClientProtocol protocol = new ClientProtocol(this);
-    //GameFrame gf = new GameFrame(this);
 
+    GameFrame gf = new GameFrame(this);
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
 
-    //LOCAL VALUES
-    public int localRoundScore = 0;
-    public int localTotalScore = 0;
+    String[] currentQuestion;
 
-    //TEMP
-    Database database = new Database();
     BufferedImage bufferedImage;
 
-    //Constructor som sätter namnet i en GamePackage och skickar in GamePackage till
-    //GameFrame för att rita upp Username direkt
+    User user;
+    Guest guest;
+
+    boolean isUser = true;
+
+
     public Client() {
-        String username;
-        username = "Test";
-        gp.setName(username);
-        gp.setImage(0);
-        gp.setGameState(1);
-        protocol.update();
+
     }
 
-    //Connect function för att connecta till servern och skapa upp Protocol (kanske ändras var vi skapar upp protocol).
     public void connect() {
 
         try {
@@ -65,7 +58,32 @@ public class Client {
         }
     }
 
-    //Skickar GamePackage till servern och tar emot GamePackage från servern varje gång den används.
+    public void connectToLoginServer(Object obj){
+
+        try(Socket ss = new Socket("localhost", 55555);
+            ObjectOutputStream send = new ObjectOutputStream(ss.getOutputStream());
+            ObjectInputStream receive = new ObjectInputStream(ss.getInputStream())) {
+
+            send.writeObject(obj);
+
+            Object received;
+            while((received = receive.readObject()) != null){
+                if(received instanceof User u){
+                    user = u;
+                    isUser = true;
+                    break;
+                }else if(received instanceof Guest g){
+                    guest = g;
+                    isUser = false;
+                    break;
+                }
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void sendAndReceive() {
         try {
             output.writeObject(gp);
@@ -91,14 +109,12 @@ public class Client {
         }
     }
 
+
     public static void main(String[] args) {
         Client client = new Client();
-        client.connect();
-        client.sendAndReceive();
-        client.sendAndReceive();
-        client.sendAndReceive();
-        client.sendAndReceive();
-        client.sendAndReceive();
-        client.sendAndReceive();
+    }
+
+    public void joinAsGuest() {
+        //Connect and receive guest
     }
 }

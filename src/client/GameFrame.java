@@ -13,13 +13,9 @@ import java.awt.image.BufferedImage;
 /*
 TODO lägga till några labels för att visa titel på sidorna
 TODO Lägga till action listeners
-TODO Eventuellt skala av onödig kod men fan palr inte sitta med swing mer lol
-TODO Metoder för att fylla vissa funktioner
  */
 
 public class GameFrame extends JFrame {
-
-    Client client;
 
     JButton btGiveUp, btQuit, btToggleSound;
     JButton btLogin, btSignUp, btGuest;
@@ -32,6 +28,8 @@ public class GameFrame extends JFrame {
     JButton btCategory1, btCategory2, btCategory3;
     JButton btSend;
     JButton btBack;
+
+    JButton btAvatar1, btAvatar2, btAvatar3, btAvatar4, btAvatar5, btAvatar6;
 
     JLabel lbUserName, lbPassword, lbLoginMessage, lbLoginTitle, lbCreateUser;
 
@@ -46,36 +44,23 @@ public class GameFrame extends JFrame {
     JLabel lbNewUser, lbNewPassword, lbRepeatPassword, lbCreateUserInfo;
     JLabel lbInfoBarName, lbInfoBarOpponentName, lbInfoBarPic, lbInfoBarOpponentPic, lbInfoBarWins, lbInfoBarOpponentWins;
 
-    JTextField tfLogin, tfPassword, tfChat, tfSearchLeader;
-    JTextField tfNewLogin, tfNewPassword, tfRepeatPassword;
+    JTextField tfLogin, tfChat, tfSearchLeader, tfNewLogin;
+    JPasswordField tfPassword, tfNewPassword, tfRepeatPassword;
 
-    JTextPane tpQuestion;
-    JTextPane tpScoreboard;
-    JTextPane tpChat;
+    JTextPane tpQuestion, tpScoreboard, tpChat;
 
-    JPanel mainScreen;
-    JPanel chatScreen;
-    JPanel loginScreen;
-    JPanel createAccountScreen;
-    JPanel homeScreen;
-    JPanel playerInfoBar;
-    JPanel gameScreen;
-    JPanel waitScreen;
-    JPanel categoryScreen;
-    JPanel scoreScreen;
-    JPanel optionScreen;
-    JPanel leaderboard;
-    JPanel changeAvatar;
+    JPanel mainScreen, chatScreen, loginScreen, createAccountScreen,
+            homeScreen, playerInfoBar, gameScreen, waitScreen,
+            categoryScreen, scoreScreen, optionScreen, leaderboard,
+            changeAvatar;
 
-    int test = 1;
+    Client client;
 
     private final int square = 96;
     private final int width = square * 6;
     private final int height = square * 8;
 
     Timer timer;
-
-    String correctAnswer;
 
     public static class Timer extends JPanel implements Runnable{
         public Thread thread;
@@ -142,7 +127,7 @@ public class GameFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-        GUIState(1);
+        GUIState(10);
 
     }
 
@@ -174,41 +159,116 @@ public class GameFrame extends JFrame {
 
         setUpLeaderboard();
 
+        setUpAvatarSelection();
 
     }
-    private void setUpActionListeners() {
-        ActionListener al = e -> {
-            JButton bt = (JButton) e.getSource();
-            if(bt.equals(btQuit)){
-                test++;
-                if(test == 10){
-                    test = 0;
-                }
-                GUIState(test);
-            }else{
-                if (timer.go){
-                    timer.go = false;
-                }else{
-                    timer.go = true;
-                }
-            }
-        };
-        btQuit.addActionListener(al);
-        btToggleSound.addActionListener(al);
 
-        ActionListener answerButtons = e -> {
+    private void setUpActionListeners() {
+        ActionListener connectLogin = e ->{
             JButton bt = (JButton) e.getSource();
-            if(bt.getText().equalsIgnoreCase(correctAnswer)){
-                client.localRoundScore++;
-                client.protocol.update();
+            if(bt.equals(btLogin)){
+                if(tfLogin.getText().isBlank() || String.valueOf(tfPassword.getPassword()).isBlank()){
+                    lbLoginMessage.setText("Invalid Account");
+                    tfLogin.setText("");
+                    tfPassword.setText("");
+                } else {
+                    client.connectToLoginServer(new String[]{tfLogin.getText(), String.valueOf(tfPassword.getPassword())});
+                    if(client.user.getName() == null){
+                        lbLoginMessage.setText("Invalid Account");
+                        tfLogin.setText("");
+                        tfPassword.setText("");
+                    } else {
+                        lbInfoBarName.setText(client.user.getName());
+                        lbInfoBarPic.setIcon(StaticImageHandler.getIcon(client.user.getImage()));
+                        lbInfoBarWins.setText("Wins: " + client.user.getWins());
+                        tfLogin.setText("");
+                        tfPassword.setText("");
+                        GUIState(3);
+                    }
+                }
+            } else if (bt.equals(btCreateUser)){
+                if(tfNewLogin.getText().isBlank() || String.valueOf(tfNewPassword.getPassword()).isBlank() || String.valueOf(tfRepeatPassword.getPassword()).isBlank()){
+                    lbCreateUserInfo.setText("Missing Requirements");
+                } else if (!String.valueOf(tfNewPassword.getPassword()).equals(String.valueOf(tfRepeatPassword.getPassword()))){
+                    lbCreateUserInfo.setText("Password not matching");
+                    tfNewPassword.setText("");
+                    tfRepeatPassword.setText("");
+                } else {
+                    client.connectToLoginServer(new String[]{tfNewLogin.getText(), String.valueOf(tfNewPassword.getPassword()), "girl1"});
+                    if(client.user.getName() == null){
+                        lbCreateUserInfo.setText("Name already exists");
+                        tfNewLogin.setText("");
+                        tfNewPassword.setText("");
+                        tfRepeatPassword.setText("");
+                    } else {
+                        lbInfoBarName.setText(client.user.getName());
+                        lbInfoBarPic.setIcon(StaticImageHandler.getIcon(client.user.getImage()));
+                        lbInfoBarWins.setText("Wins: " + client.user.getWins());
+                        tfNewLogin.setText("");
+                        tfNewPassword.setText("");
+                        tfRepeatPassword.setText("");
+                        GUIState(3);
+                    }
+                }
             } else {
-                client.protocol.update();
+                client.connectToLoginServer("Guest");
+                if(client.guest.getName() == null){
+                    lbLoginMessage.setText("Check your internet connection");
+                } else {
+                    lbInfoBarName.setText(client.guest.getName());
+                    lbInfoBarPic.setIcon(StaticImageHandler.getIcon("boy1"));
+                    lbInfoBarWins.setText("Wins: N/A");
+                    tfLogin.setText("");
+                    tfPassword.setText("");
+                    GUIState(3);
+                }
             }
         };
-        btAnswer1.addActionListener(answerButtons);
-        btAnswer2.addActionListener(answerButtons);
-        btAnswer3.addActionListener(answerButtons);
-        btAnswer4.addActionListener(answerButtons);
+        btLogin.addActionListener(connectLogin);
+        btGuest.addActionListener(connectLogin);
+        btCreateUser.addActionListener(connectLogin);
+
+        ActionListener answer = e -> {
+            JButton bt = (JButton) e.getSource();
+            if (bt.getText().equals(client.currentQuestion[5])){
+                bt.setBackground(new Color(0x39D054));
+                client.gp.incrementScore();
+            } else {
+                bt.setBackground(new Color(0xBB3838));
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        };
+        btAnswer1.addActionListener(answer);
+        btAnswer2.addActionListener(answer);
+        btAnswer3.addActionListener(answer);
+        btAnswer4.addActionListener(answer);
+
+        ActionListener avatarChoice = e -> {
+            JButton bt = (JButton) e.getSource();
+            lbInfoBarPic.setIcon(StaticImageHandler.getIcon(bt.getName()));
+            client.user.setImage(bt.getName());
+            client.connectToLoginServer(client.user);
+            GUIState(3);
+        };
+
+        btAvatar1.addActionListener(avatarChoice);
+        btAvatar2.addActionListener(avatarChoice);
+        btAvatar3.addActionListener(avatarChoice);
+        btAvatar4.addActionListener(avatarChoice);
+        btAvatar5.addActionListener(avatarChoice);
+        btAvatar6.addActionListener(avatarChoice);
+
+        ActionListener categoryChoice = e -> {
+            JButton bt = (JButton) e.getSource();
+            client.gp.setCategoryID(Integer.parseInt(bt.getName()));
+        };
+        btCategory1.addActionListener(categoryChoice);
+        btCategory2.addActionListener(categoryChoice);
+        btCategory3.addActionListener(categoryChoice);
     }
 
     public void GUIState(int state){
@@ -221,6 +281,7 @@ public class GameFrame extends JFrame {
         final int scoreScreenState = 7;
         final int optionScreenState = 8;
         final int leaderboardState = 9;
+        final int selectAvatarState = 10;
 
         switch (state){
             case loginScreenState -> {
@@ -239,6 +300,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(false);
             }case createAccountScreenState -> {
@@ -257,6 +319,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }case homeScreenState -> {
@@ -275,6 +338,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(false);
             }case gameScreenState -> {
@@ -293,6 +357,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(true);
             }case waitScreenState -> {
@@ -311,6 +376,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(true);
             }case categoryScreenState -> {
@@ -329,6 +395,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(true);
             }case scoreScreenState -> {
@@ -347,6 +414,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(true);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }case optionScreenState -> {
@@ -365,6 +433,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(true);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }case leaderboardState -> {
@@ -383,6 +452,26 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(true);
+                changeAvatar.setVisible(false);
+                btBack.setVisible(true);
+                btGiveUp.setVisible(false);
+            }case selectAvatarState -> {
+                timer.setVisible(false);
+                chatScreen.setVisible(false);
+                loginScreen.setVisible(false);
+                createAccountScreen.setVisible(false);
+                homeScreen.setVisible(false);
+                playerInfoBar.setVisible(false);
+                    lbInfoBarOpponentPic.setVisible(false);
+                    lbInfoBarOpponentName.setVisible(false);
+                    lbInfoBarOpponentWins.setVisible(false);
+                gameScreen.setVisible(false);
+                waitScreen.setVisible(false);
+                categoryScreen.setVisible(false);
+                scoreScreen.setVisible(false);
+                optionScreen.setVisible(false);
+                leaderboard.setVisible(false);
+                changeAvatar.setVisible(true);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }
@@ -398,6 +487,9 @@ public class GameFrame extends JFrame {
 
         btQuit = new JButton("Quit");
         btQuit.setBounds(width - 100, height - 50, 75, 25);
+        btQuit.addActionListener(e ->{
+            System.exit(0);
+        });
         mainScreen.add(btQuit);
 
         btToggleSound = new JButton("Sound Off");
@@ -411,6 +503,13 @@ public class GameFrame extends JFrame {
 
         btBack = new JButton("Back");
         btBack.setBounds( 25, height - 50, 75, 25);
+        btBack.addActionListener(e->{
+            if(client.user == null && client.guest == null){
+                GUIState(1);
+            } else {
+                GUIState(3);
+            }
+        });
         btBack.setVisible(false);
         mainScreen.add(btBack);
     }
@@ -448,13 +547,12 @@ public class GameFrame extends JFrame {
         lbPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 - 25, 75, 25);
         loginScreen.add(lbPassword);
 
-        tfPassword = new JTextField();
+        tfPassword = new JPasswordField();
         tfPassword.setBounds(width / 2 - (square * 3) / 2, square * 2, square * 3, 25);
         loginScreen.add(tfPassword);
 
-        lbLoginMessage = new JLabel("Wrong login information");
-        lbLoginMessage.setBounds(width / 2 - (square + square / 2) / 2, square * 2 + square / 2, square + square / 2, 25);
-        lbLoginMessage.setVisible(false);
+        lbLoginMessage = new JLabel("");
+        lbLoginMessage.setBounds(square + square / 2, square * 2 + square / 2, square + square / 2, 25);
         loginScreen.add(lbLoginMessage);
 
         btLogin = new JButton("Login");
@@ -463,6 +561,7 @@ public class GameFrame extends JFrame {
 
         btSignUp = new JButton("Sign Up");
         btSignUp.setBounds(square * 2 + square / 2, square * 3, 100, 25);
+        btSignUp.addActionListener(e -> GUIState(2));
         loginScreen.add(btSignUp);
 
         btGuest = new JButton("Guest");
@@ -526,6 +625,10 @@ public class GameFrame extends JFrame {
 
         btChallengeRandom = new JButton("Quick Match");
         btChallengeRandom.setBounds(width / 2 - square, square / 2, square * 2, square / 2);
+        btChallengeRandom.addActionListener(e ->{
+            client.connect();
+            GUIState(5);
+        });
         homeScreen.add(btChallengeRandom);
 
         btChallengeByName = new JButton("Challenge a Friend");
@@ -534,14 +637,25 @@ public class GameFrame extends JFrame {
 
         btOption = new JButton("Configure Profile");
         btOption.setBounds(width / 2 - square, square * 2 + square / 2, square * 2, square / 2);
+        btOption.addActionListener(e->{
+            GUIState(8);
+        });
         homeScreen.add(btOption);
 
         btScoreboard= new JButton("Leaderboard");
         btScoreboard.setBounds(width / 2 - square, square * 3 + square / 2, square * 2, square / 2);
+        btScoreboard.addActionListener(e->{
+            GUIState(9);
+        });
         homeScreen.add(btScoreboard);
 
         btLogout = new JButton("Logout");
         btLogout.setBounds( width / 2 - 40, square * 4 + square / 2, 80, 25);
+        btLogout.addActionListener(e ->{
+            client.user = null;
+            client.guest = null;
+            GUIState(1);
+        });
         homeScreen.add(btLogout);
 
         homeScreen.setVisible(false);
@@ -572,7 +686,7 @@ public class GameFrame extends JFrame {
         lbNewPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 - 25, 75, 25);
         createAccountScreen.add(lbNewPassword);
 
-        tfNewPassword = new JTextField();
+        tfNewPassword = new JPasswordField();
         tfNewPassword.setBounds(width / 2 - (square * 3) / 2, square * 2, square * 3, 25);
         createAccountScreen.add(tfNewPassword);
 
@@ -580,11 +694,11 @@ public class GameFrame extends JFrame {
         lbRepeatPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 + 46, square * 3, 25);
         createAccountScreen.add(lbRepeatPassword);
 
-        tfRepeatPassword = new JTextField();
+        tfRepeatPassword = new JPasswordField();
         tfRepeatPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 + 71, square * 3, 25);
         createAccountScreen.add(tfRepeatPassword);
 
-        lbCreateUserInfo = new JLabel("FELMEDELANDE!");
+        lbCreateUserInfo = new JLabel("");
         lbCreateUserInfo.setBounds(width / 2 - (square * 3) / 2, square * 3 + 10, square * 3, 25);
         createAccountScreen.add(lbCreateUserInfo);
 
@@ -814,6 +928,9 @@ public class GameFrame extends JFrame {
 
         btChangeAvatar = new JButton("Change Avatar");
         btChangeAvatar.setBounds(width / 2 - (square / 2) * 2, square * 3, square * 2, square / 2);
+        btChangeAvatar.addActionListener(e->{
+            GUIState(10);
+        });
         optionScreen.add(btChangeAvatar);
 
         optionScreen.setVisible(false);
@@ -844,5 +961,40 @@ public class GameFrame extends JFrame {
         leaderboard.add(sp2);
 
         leaderboard.setVisible(false);
+    }
+    private void setUpAvatarSelection() {
+        changeAvatar = new JPanel();
+        changeAvatar.setBounds(width / 2 - 128, 128, 256, 384);
+        changeAvatar.setFocusable(true);
+        changeAvatar.setBackground(new Color(0x7F97BD));
+        changeAvatar.setLayout(new GridLayout(3,2));
+        mainScreen.add(changeAvatar);
+
+        btAvatar1 = new JButton();
+        btAvatar1.setName("boy1");
+        btAvatar1.setIcon(StaticImageHandler.getIconNonScaled("boy1"));
+        changeAvatar.add(btAvatar1);
+        btAvatar2 = new JButton("2");
+        btAvatar2.setName("girl1");
+        btAvatar2.setIcon(StaticImageHandler.getIconNonScaled("girl1"));
+        changeAvatar.add(btAvatar2);
+        btAvatar3 = new JButton("3");
+        btAvatar3.setName("man1");
+        btAvatar3.setIcon(StaticImageHandler.getIconNonScaled("man1"));
+        changeAvatar.add(btAvatar3);
+        btAvatar4 = new JButton("4");
+        btAvatar4.setName("women1");
+        btAvatar4.setIcon(StaticImageHandler.getIconNonScaled("women1"));
+        changeAvatar.add(btAvatar4);
+        btAvatar5 = new JButton("5");
+        btAvatar5.setName("old1");
+        btAvatar5.setIcon(StaticImageHandler.getIconNonScaled("old1"));
+        changeAvatar.add(btAvatar5);
+        btAvatar6 = new JButton("6");
+        btAvatar6.setName("old2");
+        btAvatar6.setIcon(StaticImageHandler.getIconNonScaled("old2"));
+        changeAvatar.add(btAvatar6);
+
+        changeAvatar.setVisible(false);
     }
 }

@@ -75,4 +75,16 @@ public class StaticImageHandler {
         }
         return null;
     }
+    public static ImageIcon getIcon(String pngID) {
+        return new ImageIcon(loadImage(pngID));
+    }
+    public static ImageIcon getIconNonScaled(String pngID){
+        BufferedImage bi = null;
+        try {
+            bi = ImageIO.read(new File("src/resources/images/avatar/" + pngID + ".png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new ImageIcon(bi);
+    }
 }
