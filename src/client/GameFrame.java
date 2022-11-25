@@ -13,13 +13,9 @@ import java.awt.image.BufferedImage;
 /*
 TODO lägga till några labels för att visa titel på sidorna
 TODO Lägga till action listeners
-TODO Eventuellt skala av onödig kod men fan palr inte sitta med swing mer lol
-TODO Metoder för att fylla vissa funktioner
  */
 
 public class GameFrame extends JFrame {
-
-    Client client;
 
     JButton btGiveUp, btQuit, btToggleSound;
     JButton btLogin, btSignUp, btGuest;
@@ -32,6 +28,8 @@ public class GameFrame extends JFrame {
     JButton btCategory1, btCategory2, btCategory3;
     JButton btSend;
     JButton btBack;
+
+    JButton avatar1, avatar2, avatar3, avatar4, avatar5, avatar6;
 
     JLabel lbUserName, lbPassword, lbLoginMessage, lbLoginTitle, lbCreateUser;
 
@@ -67,7 +65,7 @@ public class GameFrame extends JFrame {
     JPanel leaderboard;
     JPanel changeAvatar;
 
-    int test = 1;
+    Client client;
 
     private final int square = 96;
     private final int width = square * 6;
@@ -140,7 +138,7 @@ public class GameFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-        GUIState(1);
+        GUIState(10);
 
     }
 
@@ -172,28 +170,11 @@ public class GameFrame extends JFrame {
 
         setUpLeaderboard();
 
+        setUpAvatarSelection();
 
     }
-    private void setUpActionListeners() {
-        ActionListener al = e -> {
-            JButton bt = (JButton) e.getSource();
-            if(bt.equals(btQuit)){
-                test++;
-                if(test == 10){
-                    test = 0;
-                }
-                GUIState(test);
-            }else{
-                if (timer.go){
-                    timer.go = false;
-                }else{
-                    timer.go = true;
-                }
-            }
-        };
-        btQuit.addActionListener(al);
-        btToggleSound.addActionListener(al);
 
+    private void setUpActionListeners() {
         ActionListener connectLogin = e ->{
             JButton bt = (JButton) e.getSource();
             if(bt.equals(btLogin)){
@@ -257,6 +238,33 @@ public class GameFrame extends JFrame {
         btLogin.addActionListener(connectLogin);
         btGuest.addActionListener(connectLogin);
         btCreateUser.addActionListener(connectLogin);
+
+        ActionListener answer = e -> {
+            JButton bt = (JButton) e.getSource();
+            if (bt.getText().equals(client.currentQuestion[5])){
+                bt.setBackground(new Color(0x39D054));
+                client.gp.incrementScore();
+            } else {
+                bt.setBackground(new Color(0xBB3838));
+            }
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+        };
+        btAnswer1.addActionListener(answer);
+        btAnswer2.addActionListener(answer);
+        btAnswer3.addActionListener(answer);
+        btAnswer4.addActionListener(answer);
+
+        ActionListener categoryChoice = e -> {
+            JButton bt = (JButton) e.getSource();
+            client.gp.setCategoryID(Integer.parseInt(bt.getName()));
+        };
+        btCategory1.addActionListener(categoryChoice);
+        btCategory2.addActionListener(categoryChoice);
+        btCategory3.addActionListener(categoryChoice);
     }
 
     public void GUIState(int state){
@@ -269,6 +277,7 @@ public class GameFrame extends JFrame {
         final int scoreScreenState = 7;
         final int optionScreenState = 8;
         final int leaderboardState = 9;
+        final int selectAvatarState = 10;
 
         switch (state){
             case loginScreenState -> {
@@ -287,6 +296,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(false);
             }case createAccountScreenState -> {
@@ -305,6 +315,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }case homeScreenState -> {
@@ -323,6 +334,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(false);
             }case gameScreenState -> {
@@ -341,6 +353,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(true);
             }case waitScreenState -> {
@@ -359,6 +372,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(true);
             }case categoryScreenState -> {
@@ -377,6 +391,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(true);
             }case scoreScreenState -> {
@@ -395,6 +410,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(true);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }case optionScreenState -> {
@@ -413,6 +429,7 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(true);
                 leaderboard.setVisible(false);
+                changeAvatar.setVisible(false);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }case leaderboardState -> {
@@ -431,6 +448,26 @@ public class GameFrame extends JFrame {
                 scoreScreen.setVisible(false);
                 optionScreen.setVisible(false);
                 leaderboard.setVisible(true);
+                changeAvatar.setVisible(false);
+                btBack.setVisible(true);
+                btGiveUp.setVisible(false);
+            }case selectAvatarState -> {
+                timer.setVisible(false);
+                chatScreen.setVisible(false);
+                loginScreen.setVisible(false);
+                createAccountScreen.setVisible(false);
+                homeScreen.setVisible(false);
+                playerInfoBar.setVisible(false);
+                    lbInfoBarOpponentPic.setVisible(false);
+                    lbInfoBarOpponentName.setVisible(false);
+                    lbInfoBarOpponentWins.setVisible(false);
+                gameScreen.setVisible(false);
+                waitScreen.setVisible(false);
+                categoryScreen.setVisible(false);
+                scoreScreen.setVisible(false);
+                optionScreen.setVisible(false);
+                leaderboard.setVisible(false);
+                changeAvatar.setVisible(true);
                 btBack.setVisible(true);
                 btGiveUp.setVisible(false);
             }
@@ -446,6 +483,9 @@ public class GameFrame extends JFrame {
 
         btQuit = new JButton("Quit");
         btQuit.setBounds(width - 100, height - 50, 75, 25);
+        btQuit.addActionListener(e ->{
+            System.exit(0);
+        });
         mainScreen.add(btQuit);
 
         btToggleSound = new JButton("Sound Off");
@@ -459,6 +499,13 @@ public class GameFrame extends JFrame {
 
         btBack = new JButton("Back");
         btBack.setBounds( 25, height - 50, 75, 25);
+        btBack.addActionListener(e->{
+            if(client.user == null && client.guest == null){
+                GUIState(1);
+            } else {
+                GUIState(3);
+            }
+        });
         btBack.setVisible(false);
         mainScreen.add(btBack);
     }
@@ -574,6 +621,10 @@ public class GameFrame extends JFrame {
 
         btChallengeRandom = new JButton("Quick Match");
         btChallengeRandom.setBounds(width / 2 - square, square / 2, square * 2, square / 2);
+        btChallengeRandom.addActionListener(e ->{
+            client.connect();
+            GUIState(5);
+        });
         homeScreen.add(btChallengeRandom);
 
         btChallengeByName = new JButton("Challenge a Friend");
@@ -582,14 +633,25 @@ public class GameFrame extends JFrame {
 
         btOption = new JButton("Configure Profile");
         btOption.setBounds(width / 2 - square, square * 2 + square / 2, square * 2, square / 2);
+        btOption.addActionListener(e->{
+            GUIState(8);
+        });
         homeScreen.add(btOption);
 
         btScoreboard= new JButton("Leaderboard");
         btScoreboard.setBounds(width / 2 - square, square * 3 + square / 2, square * 2, square / 2);
+        btScoreboard.addActionListener(e->{
+            GUIState(9);
+        });
         homeScreen.add(btScoreboard);
 
         btLogout = new JButton("Logout");
         btLogout.setBounds( width / 2 - 40, square * 4 + square / 2, 80, 25);
+        btLogout.addActionListener(e ->{
+            client.user = null;
+            client.guest = null;
+            GUIState(1);
+        });
         homeScreen.add(btLogout);
 
         homeScreen.setVisible(false);
@@ -862,6 +924,9 @@ public class GameFrame extends JFrame {
 
         btChangeAvatar = new JButton("Change Avatar");
         btChangeAvatar.setBounds(width / 2 - (square / 2) * 2, square * 3, square * 2, square / 2);
+        btChangeAvatar.addActionListener(e->{
+            GUIState(10);
+        });
         optionScreen.add(btChangeAvatar);
 
         optionScreen.setVisible(false);
@@ -892,5 +957,34 @@ public class GameFrame extends JFrame {
         leaderboard.add(sp2);
 
         leaderboard.setVisible(false);
+    }
+    private void setUpAvatarSelection() {
+        changeAvatar = new JPanel();
+        changeAvatar.setBounds(width / 2 - 128, 128, 256, 384);
+        changeAvatar.setFocusable(true);
+        changeAvatar.setBackground(new Color(0x7F97BD));
+        changeAvatar.setLayout(new GridLayout(3,2));
+        mainScreen.add(changeAvatar);
+
+        avatar1 = new JButton("1");
+        avatar1.setName("boy1");
+        changeAvatar.add(avatar1);
+        avatar2 = new JButton("2");
+        avatar2.setName("girl1");
+        changeAvatar.add(avatar2);
+        avatar3 = new JButton("3");
+        avatar3.setName("man1");
+        changeAvatar.add(avatar3);
+        avatar4 = new JButton("4");
+        avatar4.setName("women1");
+        changeAvatar.add(avatar4);
+        avatar5 = new JButton("5");
+        avatar5.setName("old1");
+        changeAvatar.add(avatar5);
+        avatar6 = new JButton("6");
+        avatar6.setName("old2");
+        changeAvatar.add(avatar6);
+
+        changeAvatar.setVisible(false);
     }
 }

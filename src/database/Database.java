@@ -66,15 +66,25 @@ public class Database {
         return false;
     }
 
-    public void updateWins(String name) {
+    public void updateUser(User user){
         List<String> lines = Collections.emptyList();
         try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
-            lines = processLines(stream, name);
+            lines = stream
+                    .filter(line -> !line.isBlank())
+                    .<String>mapMulti((line, consumer) -> {
+                        if (!line.startsWith(user.getName())) consumer.accept(line);
+                        else {
+                            String[] parts = line.split("/");
+                            parts[2] = String.valueOf(user.getWins());
+                            parts[4] = user.getImage();
+                            consumer.accept(String.join("/", parts));
+                        }
+                    })
+                    .toList();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        try (FileWriter fw = new FileWriter(Paths.get("src/resources/users/users.txt").toFile(), true);
+        try (FileWriter fw = new FileWriter(Paths.get("src/resources/users/users.txt").toFile());
              BufferedWriter bw = new BufferedWriter(fw)) {
             for (String s :
                     lines) {
@@ -85,21 +95,6 @@ public class Database {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private List<String> processLines(Stream<String> lines, String name) {
-
-        return lines
-                .filter(line -> !line.isBlank())
-                .<String>mapMulti((line, consumer) -> {
-                    if (!line.startsWith(name)) consumer.accept(line);
-                    else {
-                        String[] parts = line.split("/");
-                        parts[2] = String.valueOf(Integer.parseInt(parts[2]) + 1);
-                        consumer.accept(String.join("/", parts));
-                    }
-                })
-                .toList();
     }
 
     private void addUserToFile(String userLine) {

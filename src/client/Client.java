@@ -24,6 +24,8 @@ public class Client {
     ObjectOutputStream output;
     ObjectInputStream input;
 
+    String[] currentQuestion;
+
     BufferedImage bufferedImage;
 
     User user;

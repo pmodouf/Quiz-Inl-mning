@@ -42,13 +42,9 @@ public class LoginServer extends Thread{
                         }else{
                             send.writeObject(new User());
                         }
-                        for (String s:
-                                login) {
-                            System.out.println(s);
-                        }
                     }
                 } else if(clientRequest instanceof User u){
-                    db.updateWins(u.getName());
+                    db.updateUser(u);
                     send.writeObject(u);
                 }
                 else {
