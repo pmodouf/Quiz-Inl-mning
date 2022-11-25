@@ -1,29 +1,25 @@
 package server;
 
 import database.Database;
+import database.Guest;
 import database.User;
-import gamepackage.GamePackage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
-public class LoginServer {
+public class LoginServer extends Thread{
 
     Database db;
 
-    final private int port = 555555;
+    ArrayList<Integer> idList = new ArrayList<>();
+
+    final private int port = 55555;
     public LoginServer(){
         db = new Database();
-        try (ServerSocket server = new ServerSocket(port)) {
-            while (true) {
-                connectClient(server);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private void connectClient(ServerSocket server) throws IOException {
@@ -40,13 +36,25 @@ public class LoginServer {
                         } else {
                             send.writeObject(new User());
                         }
+                        for (String s:
+                                login) {
+                            System.out.println(s);
+                        }
+                        System.out.println();
                     } else {
                         if(db.validateUser(login[0], login[1])){
                             send.writeObject(db.getUser(login[0]));
                         }else{
                             send.writeObject(new User());
                         }
+                        for (String s:
+                                login) {
+                            System.out.println(s);
+                        }
                     }
+                } else {
+                    idList.add(idList.size());
+                    send.writeObject(new Guest(idList.size()));
                 }
             }
 
@@ -56,8 +64,18 @@ public class LoginServer {
             throw new RuntimeException(e);
         }
     }
+    public void run(){
+        try (ServerSocket server = new ServerSocket(port)) {
+            while (true) {
+                connectClient(server);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
-        new LoginServer();
+        LoginServer s = new LoginServer();
+        s.start();
     }
 }

@@ -28,9 +28,13 @@ public class Database {
             return null;
         }
         String[] userSplit = userLine.split("/");
-        return new User(userSplit[0], Integer.parseInt(userSplit[2]),
-                LocalDate.parse(userSplit[3]),
-                StaticImageHandler.loadImage(userSplit[4]));
+        User user = new User();
+        user.setName(userSplit[0]);
+        user.setWins(Integer.parseInt(userSplit[2]));
+        user.setCreated(LocalDate.parse(userSplit[3]));
+        user.setImage(StaticImageHandler.loadImage(userSplit[4]));
+
+        return user;
     }
 
     public boolean validateUser(String name, String password) {

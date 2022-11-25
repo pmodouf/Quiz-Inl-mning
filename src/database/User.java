@@ -1,13 +1,19 @@
 package database;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class User {
+public class User implements Serializable {
 
     String name;
     int wins;
     LocalDate created;
+    BufferedImage image;
+
+    public User() {
+
+    }
 
     public String getName() {
         return name;
@@ -40,10 +46,4 @@ public class User {
     public void setImage(BufferedImage image) {
         this.image = image;
     }
-
-    BufferedImage image;
-    public User() {
-
-    }
-
 }

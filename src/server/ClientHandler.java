@@ -11,18 +11,15 @@ import java.net.SocketException;
 public class ClientHandler extends Thread {
     private final Socket socket;
     private final ServerProtocol protocol;
-    //private GamePackage gp;
 
     int id;
 
     private boolean gameStarted = false;
 
 
-    public ClientHandler(Socket socket, ServerProtocol protocol, int id) {
+    public ClientHandler(Socket socket, ServerProtocol protocol) {
         this.socket = socket;
         this.protocol = protocol;
-        this.id = id;
-
     }
 
     public void run(){
@@ -79,5 +76,4 @@ public class ClientHandler extends Thread {
             }
         return protocol.update(gp);
     }
-
 }
