@@ -29,7 +29,7 @@ public class GameFrame extends JFrame {
     JButton btSend;
     JButton btBack;
 
-    JButton avatar1, avatar2, avatar3, avatar4, avatar5, avatar6;
+    JButton btAvatar1, btAvatar2, btAvatar3, btAvatar4, btAvatar5, btAvatar6;
 
     JLabel lbUserName, lbPassword, lbLoginMessage, lbLoginTitle, lbCreateUser;
 
@@ -47,23 +47,12 @@ public class GameFrame extends JFrame {
     JTextField tfLogin, tfChat, tfSearchLeader, tfNewLogin;
     JPasswordField tfPassword, tfNewPassword, tfRepeatPassword;
 
-    JTextPane tpQuestion;
-    JTextPane tpScoreboard;
-    JTextPane tpChat;
+    JTextPane tpQuestion, tpScoreboard, tpChat;
 
-    JPanel mainScreen;
-    JPanel chatScreen;
-    JPanel loginScreen;
-    JPanel createAccountScreen;
-    JPanel homeScreen;
-    JPanel playerInfoBar;
-    JPanel gameScreen;
-    JPanel waitScreen;
-    JPanel categoryScreen;
-    JPanel scoreScreen;
-    JPanel optionScreen;
-    JPanel leaderboard;
-    JPanel changeAvatar;
+    JPanel mainScreen, chatScreen, loginScreen, createAccountScreen,
+            homeScreen, playerInfoBar, gameScreen, waitScreen,
+            categoryScreen, scoreScreen, optionScreen, leaderboard,
+            changeAvatar;
 
     Client client;
 
@@ -257,6 +246,21 @@ public class GameFrame extends JFrame {
         btAnswer2.addActionListener(answer);
         btAnswer3.addActionListener(answer);
         btAnswer4.addActionListener(answer);
+
+        ActionListener avatarChoice = e -> {
+            JButton bt = (JButton) e.getSource();
+            lbInfoBarPic.setIcon(StaticImageHandler.getIcon(bt.getName()));
+            client.user.setImage(bt.getName());
+            client.connectToLoginServer(client.user);
+            GUIState(3);
+        };
+
+        btAvatar1.addActionListener(avatarChoice);
+        btAvatar2.addActionListener(avatarChoice);
+        btAvatar3.addActionListener(avatarChoice);
+        btAvatar4.addActionListener(avatarChoice);
+        btAvatar5.addActionListener(avatarChoice);
+        btAvatar6.addActionListener(avatarChoice);
 
         ActionListener categoryChoice = e -> {
             JButton bt = (JButton) e.getSource();
@@ -966,24 +970,30 @@ public class GameFrame extends JFrame {
         changeAvatar.setLayout(new GridLayout(3,2));
         mainScreen.add(changeAvatar);
 
-        avatar1 = new JButton("1");
-        avatar1.setName("boy1");
-        changeAvatar.add(avatar1);
-        avatar2 = new JButton("2");
-        avatar2.setName("girl1");
-        changeAvatar.add(avatar2);
-        avatar3 = new JButton("3");
-        avatar3.setName("man1");
-        changeAvatar.add(avatar3);
-        avatar4 = new JButton("4");
-        avatar4.setName("women1");
-        changeAvatar.add(avatar4);
-        avatar5 = new JButton("5");
-        avatar5.setName("old1");
-        changeAvatar.add(avatar5);
-        avatar6 = new JButton("6");
-        avatar6.setName("old2");
-        changeAvatar.add(avatar6);
+        btAvatar1 = new JButton();
+        btAvatar1.setName("boy1");
+        btAvatar1.setIcon(StaticImageHandler.getIconNonScaled("boy1"));
+        changeAvatar.add(btAvatar1);
+        btAvatar2 = new JButton("2");
+        btAvatar2.setName("girl1");
+        btAvatar2.setIcon(StaticImageHandler.getIconNonScaled("girl1"));
+        changeAvatar.add(btAvatar2);
+        btAvatar3 = new JButton("3");
+        btAvatar3.setName("man1");
+        btAvatar3.setIcon(StaticImageHandler.getIconNonScaled("man1"));
+        changeAvatar.add(btAvatar3);
+        btAvatar4 = new JButton("4");
+        btAvatar4.setName("women1");
+        btAvatar4.setIcon(StaticImageHandler.getIconNonScaled("women1"));
+        changeAvatar.add(btAvatar4);
+        btAvatar5 = new JButton("5");
+        btAvatar5.setName("old1");
+        btAvatar5.setIcon(StaticImageHandler.getIconNonScaled("old1"));
+        changeAvatar.add(btAvatar5);
+        btAvatar6 = new JButton("6");
+        btAvatar6.setName("old2");
+        btAvatar6.setIcon(StaticImageHandler.getIconNonScaled("old2"));
+        changeAvatar.add(btAvatar6);
 
         changeAvatar.setVisible(false);
     }
