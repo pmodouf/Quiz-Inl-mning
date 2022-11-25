@@ -9,7 +9,7 @@ public class User implements Serializable {
     String name;
     int wins;
     LocalDate created;
-    BufferedImage image;
+    String avatarID = "old1";
 
     public User() {
 
@@ -39,11 +39,11 @@ public class User implements Serializable {
         this.created = created;
     }
 
-    public BufferedImage getImage() {
-        return image;
+    public String getImage() {
+        return avatarID;
     }
 
-    public void setImage(BufferedImage image) {
-        this.image = image;
+    public void setImage(String image) {
+        this.avatarID = avatarID;
     }
 }

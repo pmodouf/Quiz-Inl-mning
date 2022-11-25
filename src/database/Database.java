@@ -13,6 +13,8 @@ import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Database {
@@ -20,7 +22,8 @@ public class Database {
     public User getUser(String name) {
         String userLine = "";
         try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
-            userLine = stream.filter(line -> line.startsWith(name)).toString();
+            userLine = stream.filter(line -> line.startsWith(name))
+                    .collect(Collectors.joining());;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -32,7 +35,7 @@ public class Database {
         user.setName(userSplit[0]);
         user.setWins(Integer.parseInt(userSplit[2]));
         user.setCreated(LocalDate.parse(userSplit[3]));
-        user.setImage(StaticImageHandler.loadImage(userSplit[4]));
+        user.setImage(userSplit[4]);
 
         return user;
     }
@@ -40,30 +43,23 @@ public class Database {
     public boolean validateUser(String name, String password) {
         String userLine = "";
         try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
-            userLine = stream.filter(line -> line.startsWith(name)).toString();
+            userLine = stream.filter(line -> line.startsWith(name))
+                    .collect(Collectors.joining());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (userLine.equals("")) {
             return false;
         }
+        System.out.println(userLine);
         String[] userSplit = userLine.split("/");
         return userSplit[1].equals(password);
     }
 
     public boolean createUser(String name, String password, String avatarID) {
         if (userDoesNotExist(name)) {
-            String userLine = name + "/" + password + "/" + LocalDate.now() + "/" + avatarID;
-            addUserToFile(userLine);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean createUser(String name, String password, BufferedImage image) {
-        if (userDoesNotExist(name)) {
-            String pngID = StaticImageHandler.newImage(image, "src/resources/images/profile-pictures", "png");
-            String userLine = name + "/" + password + "/" + LocalDate.now() + "/" + pngID;
+            String userLine = name + "/" + password + "/0/" + LocalDate.now() + "/" + avatarID;
             addUserToFile(userLine);
             return true;
         }
@@ -121,7 +117,8 @@ public class Database {
     private boolean userDoesNotExist(String name) {
         String userLine = "";
         try (Stream<String> stream = Files.lines(Paths.get("src/resources/users/users.txt"))) {
-            userLine = stream.filter(line -> line.startsWith(name)).toString();
+            userLine = stream.filter(line -> line.startsWith(name))
+                    .collect(Collectors.joining());
         } catch (IOException e) {
             e.printStackTrace();
         }

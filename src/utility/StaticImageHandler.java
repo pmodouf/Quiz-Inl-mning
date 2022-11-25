@@ -76,7 +76,8 @@ public class StaticImageHandler {
         return null;
     }
 
-    public static ImageIcon getIcon(BufferedImage image) {
-        return new ImageIcon(image);
+    public static ImageIcon getIcon(String imageID) {
+
+        return new ImageIcon(loadImage(imageID));
     }
 }

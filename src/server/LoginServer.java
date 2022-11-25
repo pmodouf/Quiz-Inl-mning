@@ -36,11 +36,6 @@ public class LoginServer extends Thread{
                         } else {
                             send.writeObject(new User());
                         }
-                        for (String s:
-                                login) {
-                            System.out.println(s);
-                        }
-                        System.out.println();
                     } else {
                         if(db.validateUser(login[0], login[1])){
                             send.writeObject(db.getUser(login[0]));
@@ -52,12 +47,15 @@ public class LoginServer extends Thread{
                             System.out.println(s);
                         }
                     }
-                } else {
+                } else if(clientRequest instanceof User u){
+                    db.updateWins(u.getName());
+                    send.writeObject(u);
+                }
+                else {
                     idList.add(idList.size());
                     send.writeObject(new Guest(idList.size()));
                 }
             }
-
         }catch (IOException e) {
             System.out.println(e.getClass());
         } catch (ClassNotFoundException e) {

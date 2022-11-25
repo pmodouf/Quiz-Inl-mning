@@ -46,8 +46,8 @@ public class GameFrame extends JFrame {
     JLabel lbNewUser, lbNewPassword, lbRepeatPassword, lbCreateUserInfo;
     JLabel lbInfoBarName, lbInfoBarOpponentName, lbInfoBarPic, lbInfoBarOpponentPic, lbInfoBarWins, lbInfoBarOpponentWins;
 
-    JTextField tfLogin, tfPassword, tfChat, tfSearchLeader;
-    JTextField tfNewLogin, tfNewPassword, tfRepeatPassword;
+    JTextField tfLogin, tfChat, tfSearchLeader, tfNewLogin;
+    JPasswordField tfPassword, tfNewPassword, tfRepeatPassword;
 
     JTextPane tpQuestion;
     JTextPane tpScoreboard;
@@ -197,15 +197,12 @@ public class GameFrame extends JFrame {
         ActionListener connectLogin = e ->{
             JButton bt = (JButton) e.getSource();
             if(bt.equals(btLogin)){
-                if(tfLogin.getText().isBlank() || tfPassword.getText().isBlank()){
+                if(tfLogin.getText().isBlank() || String.valueOf(tfPassword.getPassword()).isBlank()){
                     lbLoginMessage.setText("Invalid Account");
                     tfLogin.setText("");
                     tfPassword.setText("");
                 } else {
-                    String[] t = new String[2];
-                    t[0] = "gustav";
-                    t[1] = "123";
-                    client.connectToLoginServer(t);
+                    client.connectToLoginServer(new String[]{tfLogin.getText(), String.valueOf(tfPassword.getPassword())});
                     if(client.user.getName() == null){
                         lbLoginMessage.setText("Invalid Account");
                         tfLogin.setText("");
@@ -213,21 +210,21 @@ public class GameFrame extends JFrame {
                     } else {
                         lbInfoBarName.setText(client.user.getName());
                         lbInfoBarPic.setIcon(StaticImageHandler.getIcon(client.user.getImage()));
-                        lbInfoBarWins.setText(String.valueOf(client.user.getWins()));
+                        lbInfoBarWins.setText("Wins: " + client.user.getWins());
                         tfLogin.setText("");
                         tfPassword.setText("");
                         GUIState(3);
                     }
                 }
             } else if (bt.equals(btCreateUser)){
-                if(tfNewLogin.getText().isBlank() || tfNewPassword.getText().isBlank() || tfRepeatPassword.getText().isBlank()){
+                if(tfNewLogin.getText().isBlank() || String.valueOf(tfNewPassword.getPassword()).isBlank() || String.valueOf(tfRepeatPassword.getPassword()).isBlank()){
                     lbCreateUserInfo.setText("Missing Requirements");
-                } else if (!tfNewPassword.getText().equals(tfRepeatPassword.getText())){
+                } else if (!String.valueOf(tfNewPassword.getPassword()).equals(String.valueOf(tfRepeatPassword.getPassword()))){
                     lbCreateUserInfo.setText("Password not matching");
                     tfNewPassword.setText("");
                     tfRepeatPassword.setText("");
                 } else {
-                    client.connectToLoginServer(new String[]{tfNewLogin.getText(), tfNewPassword.getText(), "girl1"});
+                    client.connectToLoginServer(new String[]{tfNewLogin.getText(), String.valueOf(tfNewPassword.getPassword()), "girl1"});
                     if(client.user.getName() == null){
                         lbCreateUserInfo.setText("Name already exists");
                         tfNewLogin.setText("");
@@ -236,7 +233,7 @@ public class GameFrame extends JFrame {
                     } else {
                         lbInfoBarName.setText(client.user.getName());
                         lbInfoBarPic.setIcon(StaticImageHandler.getIcon(client.user.getImage()));
-                        lbInfoBarWins.setText(String.valueOf(client.user.getWins()));
+                        lbInfoBarWins.setText("Wins: " + client.user.getWins());
                         tfNewLogin.setText("");
                         tfNewPassword.setText("");
                         tfRepeatPassword.setText("");
@@ -249,7 +246,7 @@ public class GameFrame extends JFrame {
                     lbLoginMessage.setText("Check your internet connection");
                 } else {
                     lbInfoBarName.setText(client.guest.getName());
-                    lbInfoBarPic.setIcon(StaticImageHandler.getIcon(StaticImageHandler.loadImage("boy1")));
+                    lbInfoBarPic.setIcon(StaticImageHandler.getIcon("boy1"));
                     lbInfoBarWins.setText("Wins: N/A");
                     tfLogin.setText("");
                     tfPassword.setText("");
@@ -499,7 +496,7 @@ public class GameFrame extends JFrame {
         lbPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 - 25, 75, 25);
         loginScreen.add(lbPassword);
 
-        tfPassword = new JTextField();
+        tfPassword = new JPasswordField();
         tfPassword.setBounds(width / 2 - (square * 3) / 2, square * 2, square * 3, 25);
         loginScreen.add(tfPassword);
 
@@ -623,7 +620,7 @@ public class GameFrame extends JFrame {
         lbNewPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 - 25, 75, 25);
         createAccountScreen.add(lbNewPassword);
 
-        tfNewPassword = new JTextField();
+        tfNewPassword = new JPasswordField();
         tfNewPassword.setBounds(width / 2 - (square * 3) / 2, square * 2, square * 3, 25);
         createAccountScreen.add(tfNewPassword);
 
@@ -631,7 +628,7 @@ public class GameFrame extends JFrame {
         lbRepeatPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 + 46, square * 3, 25);
         createAccountScreen.add(lbRepeatPassword);
 
-        tfRepeatPassword = new JTextField();
+        tfRepeatPassword = new JPasswordField();
         tfRepeatPassword.setBounds(width / 2 - (square * 3) / 2, square * 2 + 71, square * 3, 25);
         createAccountScreen.add(tfRepeatPassword);
 
