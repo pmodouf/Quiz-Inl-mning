@@ -265,6 +265,7 @@ public class GameFrame extends JFrame {
         ActionListener categoryChoice = e -> {
             JButton bt = (JButton) e.getSource();
             client.gp.setCategoryID(Integer.parseInt(bt.getName()));
+            client.sendAndReceive();
         };
         btCategory1.addActionListener(categoryChoice);
         btCategory2.addActionListener(categoryChoice);
