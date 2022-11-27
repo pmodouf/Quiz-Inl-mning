@@ -24,6 +24,8 @@ public class ServerProtocol {
 
     int id = 0;
 
+    int rounds = 0;
+
     ArrayList<String[]> category;
 
     GameProperties properties = new GameProperties();
@@ -31,8 +33,10 @@ public class ServerProtocol {
     QA qa = new QA();
 
     public synchronized GamePackage update(GamePackage gp) {
-        setGamePackage(gp);
-        setOpponent(gp);
+        if(id != 0) {
+            setGamePackage(gp);
+            setOpponent(gp);
+        }
 
         switch (gp.getGameState()) {
             case FIRST_INIT -> {
@@ -59,6 +63,7 @@ public class ServerProtocol {
                 gp.setGameState(ROUND_STATE);
                 gp.choseCategory = false;
                 waitForCategory = false;
+                rounds++;
             } case GET_CATEGORY_STATE -> {
                 gp.setGameState(ROUND_STATE);
                 gp.setQA(category);
@@ -81,6 +86,9 @@ public class ServerProtocol {
                     waitForResult = true;
                 }
             }
+        }
+        if(rounds == properties.getRounds()){
+            gp.lastRound = true;
         }
         setGamePackage(gp);
         setOpponent(gp);
