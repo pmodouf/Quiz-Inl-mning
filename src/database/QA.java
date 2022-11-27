@@ -13,6 +13,7 @@ public class QA {
     private ArrayList<String[]> qaList;
     private String category = "";
     private final String[] categories = {"Historia","Sport","Musik", "Samhälle", "Vetenskap", "Geografi"};
+    private final GameProperties properties = new GameProperties();
 
     public QA(){
         qaList = new ArrayList<>();
@@ -39,7 +40,11 @@ public class QA {
                 temp.add(line.split("/"));
             }
             Collections.shuffle(temp);
-            return temp;
+            ArrayList<String[]> temp2 = new ArrayList<>();
+            for (int i = 0; i < properties.getQuestions(); i++) {
+                temp2.add(temp.get(i));
+            }
+            return temp2;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

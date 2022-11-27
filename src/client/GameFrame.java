@@ -183,11 +183,12 @@ public class GameFrame extends JFrame {
 
     private String getCategoryName(String s) {
         switch (s){
-            case "1" -> {return "Geography";}
-            case "2" -> {return "History";}
-            case "3" -> {return "Music";}
-            case "4" -> {return "Civics";}
-            case "5" -> {return "Sport";}
+            case "1" -> {return "Historia";}
+            case "2" -> {return "Sport";}
+            case "3" -> {return "Musik";}
+            case "4" -> {return "Samhälle";}
+            case "5" -> {return "Vetenskap";}
+            case "6" -> {return "Geografi";}
             default -> {return "Science";}
         }
     }
