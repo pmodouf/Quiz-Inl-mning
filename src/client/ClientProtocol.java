@@ -1,90 +1,78 @@
 package client;
 
-import database.QA;
-import properties.GameProperties;
-import utility.StaticImageHandler;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ClientProtocol {
 
-    private static final int FIRST_INIT = 0;
-    private static final int GAME_ACTIVE = 1;
-    private static final int END_GAME = 2;
-    private static final int REPEAT_REQUEST = 3;
-    private static final int CHOOSE_CATEGORY = 4;
-
-    //TEMP För att hålla koll på gameFrame scenes
-    final int loginScreenState = 1;
-    final int createAccountScreenState = 2;
-    final int homeScreenState = 3;
-    final int gameScreenState = 4;
-    final int waitScreenState = 5;
-    final int categoryScreenState = 6;
-    final int scoreScreenState = 7;
-    final int optionScreenState = 8;
-    final int leaderboardState = 9;
-
     Client client;
 
-    String[] Bilderna = {"boy1","girl1","man1","old1","old2","women1"};
+    int questionCount = 0;
 
-    GameProperties properties = new GameProperties();
+    boolean opponentIsNotSet = true;
 
-    //TEMP
-    QA qa = new QA();
-
-    int counter = 0;
-
+    private static final int FIRST_INIT = 0;
+    private static final int CATEGORY_STATE = 1;
+    private static final int GET_CATEGORY_STATE = 2;
+    private static final int WAIT_STATE = 3;
+    private static final int RESULT_STATE = 4;
+    private static final int ROUND_STATE = 5;
 
     public ClientProtocol(Client client){
         this.client = client;
     }
 
     public void update() {
-        /*
-        switch(client.gp.getGameState()){
-            case FIRST_INIT -> {
-                client.gp.setAnswersMap(new int[properties.getRounds() * properties.getQuestions()]);
 
-            }
-            case GAME_ACTIVE -> {
-                //TEMP
-                qa.loadQA(client.gp.getCategoryID());
-                client.gp.setQA(qa.getList());
-
-
-                client.gf.GUIState(gameScreenState);
-                if(counter < properties.getQuestions()){
-                    loadRoundGame(counter);
-                    counter++;
-                } else {
-                    client.localTotalScore += client.localRoundScore;
-                    client.localRoundScore = 0;
-                    client.gp.setGameState(END_GAME);
-                }
-            }
-            case END_GAME -> {
-               client.gp.setTotalScore(client.localTotalScore);
-            }
+        if(client.gp.getOpponent().getName() != null && opponentIsNotSet){
+            client.gf.setUpOpponentInfo(client.gp.getOpponent().getName(), client.gp.getOpponent().getImageID(), client.gp.getOpponent().getWins());
+            opponentIsNotSet = false;
         }
 
-         */
+        switch (client.gp.getGameState()){
+            case CATEGORY_STATE ->{
+                getRandomCategory();
+                client.gf.GUIState(6);
+                client.gf.toggleTimer();
+            } case WAIT_STATE ->{
+                client.gp.setGameState(GET_CATEGORY_STATE);
+                client.sendAndReceive();
+            }
+            case ROUND_STATE ->{
+                client.gp.setCategoryID(0);
+                nextQuestion();
+            } case RESULT_STATE ->{
+                client.gf.GUIState(7);
+            }
+        }
     }
 
-    private void loadImage(int imageNumber){
-        client.bufferedImage = StaticImageHandler.loadImage(Bilderna[imageNumber]);
+    private void getRandomCategory() {
+        List<String> categoryList = new ArrayList<>(List.of("1", "2", "3", "4", "5", "6"));
+        Collections.shuffle(categoryList);
+        client.gf.setCategories(categoryList.get(0), categoryList.get(1), categoryList.get(2));
     }
 
-    /*private void loadRoundGame(int i){
-        client.gf.tpQuestion.setText(client.gp.getQA().get(i)[0]);
-        client.gf.btAnswer1.setText(client.gp.getQA().get(i)[1]);
-        client.gf.btAnswer2.setText(client.gp.getQA().get(i)[2]);
-        client.gf.btAnswer3.setText(client.gp.getQA().get(i)[3]);
-        client.gf.btAnswer4.setText(client.gp.getQA().get(i)[4]);
-        client.gf.correctAnswer = client.gp.getQA().get(i)[5];
+    public void nextQuestion(){
+        if(questionCount == client.gp.getQA().size()){
+            questionCount = 0;
+            if(client.gp.isWaiting()){
+                client.gf.GUIState(5);
+                client.gp.setGameState(GET_CATEGORY_STATE);
+            } else {
+                client.gf.GUIState(5);
+                client.gp.setGameState(CATEGORY_STATE);
+            }
+            client.sendAndReceive();
+        } else{
+            client.currentQuestion = client.gp.getQA().get(questionCount);
+            client.gf.setUpQA(client.currentQuestion);
+            client.gf.GUIState(4);
+            client.gf.toggleTimer();
+        }
+        questionCount++;
     }
-
-     */
-
 }
 
 

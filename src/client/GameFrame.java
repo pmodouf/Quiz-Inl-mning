@@ -162,6 +162,49 @@ public class GameFrame extends JFrame {
         setUpAvatarSelection();
 
     }
+    public void setUpOpponentInfo(String name, String imageID, int wins) {
+        lbInfoBarOpponentWins.setText("Wins: " + wins);
+        lbInfoBarOpponentPic.setIcon(StaticImageHandler.getIcon(imageID));
+        lbInfoBarName.setText(name);
+    }
+
+    public void setCategories(String s, String s1, String s2) {
+        btCategory1.setText(getCategoryName(s));
+        btCategory1.setName(s);
+        btCategory2.setText(getCategoryName(s1));
+        btCategory2.setName(s1);
+        btCategory3.setText(getCategoryName(s2));
+        btCategory3.setName(s2);
+    }
+
+    private String getCategoryName(String s) {
+        switch (s){
+            case "1" -> {return "Geography";}
+            case "2" -> {return "History";}
+            case "3" -> {return "Music";}
+            case "4" -> {return "Civics";}
+            case "5" -> {return "Sport";}
+            default -> {return "Science";}
+        }
+    }
+
+    public void setUpQA(String[] QAs){
+        tpQuestion.setText(QAs[0]);
+        btAnswer1.setText(QAs[1]);
+        btAnswer2.setText(QAs[2]);
+        btAnswer3.setText(QAs[3]);
+        btAnswer4.setText(QAs[4]);
+    }
+
+    public void toggleTimer(){
+        if(timer.go){
+            timer.setVisible(false);
+            timer.go = false;
+        } else {
+            timer.setVisible(true);
+            timer.go = true;
+        }
+    }
 
     private void setUpActionListeners() {
         ActionListener connectLogin = e ->{
@@ -230,17 +273,22 @@ public class GameFrame extends JFrame {
 
         ActionListener answer = e -> {
             JButton bt = (JButton) e.getSource();
+            toggleTimer();
             if (bt.getText().equals(client.currentQuestion[5])){
                 bt.setBackground(new Color(0x39D054));
+                paint(getGraphics());
                 client.gp.incrementScore();
             } else {
                 bt.setBackground(new Color(0xBB3838));
+                paint(getGraphics());
             }
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
+            bt.setBackground(new JButton().getBackground());
+            client.protocol.nextQuestion();
         };
         btAnswer1.addActionListener(answer);
         btAnswer2.addActionListener(answer);
@@ -264,6 +312,7 @@ public class GameFrame extends JFrame {
 
         ActionListener categoryChoice = e -> {
             JButton bt = (JButton) e.getSource();
+            toggleTimer();
             client.gp.setCategoryID(Integer.parseInt(bt.getName()));
             client.sendAndReceive();
         };
@@ -367,7 +416,7 @@ public class GameFrame extends JFrame {
                 loginScreen.setVisible(false);
                 createAccountScreen.setVisible(false);
                 homeScreen.setVisible(false);
-                playerInfoBar.setVisible(true);
+                playerInfoBar.setVisible(false);
                     lbInfoBarOpponentPic.setVisible(true);
                     lbInfoBarOpponentName.setVisible(true);
                     lbInfoBarOpponentWins.setVisible(true);
@@ -477,6 +526,7 @@ public class GameFrame extends JFrame {
                 btGiveUp.setVisible(false);
             }
         }
+        paint(getGraphics());
     }
     private void setUpMainScreen() {
         mainScreen = new JPanel();
@@ -627,8 +677,9 @@ public class GameFrame extends JFrame {
         btChallengeRandom = new JButton("Quick Match");
         btChallengeRandom.setBounds(width / 2 - square, square / 2, square * 2, square / 2);
         btChallengeRandom.addActionListener(e ->{
-            client.connect();
+            lbWaitMessage.setText("Waiting for Opponent");
             GUIState(5);
+            client.connect();
         });
         homeScreen.add(btChallengeRandom);
 

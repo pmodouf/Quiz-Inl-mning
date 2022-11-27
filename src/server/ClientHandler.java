@@ -12,10 +12,6 @@ public class ClientHandler extends Thread {
     private final Socket socket;
     private final ServerProtocol protocol;
 
-    int id;
-
-    private boolean gameStarted = false;
-
 
     public ClientHandler(Socket socket, ServerProtocol protocol) {
         this.socket = socket;
@@ -31,28 +27,19 @@ public class ClientHandler extends Thread {
 
             while ((clientRequest = receive.readObject()) != null){
                 if (clientRequest instanceof GamePackage g) {
-                    if (gameStarted) {
-                        if(g.isLastRound()) {
-                            protocol.update(g);
-                            while (protocol.waitForResult){
-                                //WOOPTIE DOOO
-                            }
-                            send.writeObject(waitCheck(g));
-                            send.flush();
-                        } else {
-                            send.writeObject(waitCheck(g));
-                            send.flush();
-                            //TEMP
-                            System.out.println(getName() + " " + g);
+                    if (g.isLastRound()) {
+                        protocol.update(g);
+                        while (protocol.waitForResult) {
+                            System.out.println(protocol.waitForResult);
                         }
-                    }else {
-                        g.setID(id);
-                        gameStarted = true;
-                        if(id == 1){
-                            g.choseCategory = true;
-                        }
-                        send.writeObject(g);
+                        send.writeObject(waitCheck(g));
                         send.flush();
+                    } else {
+                        System.out.println("IN: " + g.getID() + " " + g + "\n");
+                        send.writeObject(waitCheck(g));
+                        send.flush();
+                        //TEMP
+                        System.out.println("UT: " + g.getID() + " " + g + "\n");
                     }
                 }
             }
@@ -64,16 +51,11 @@ public class ClientHandler extends Thread {
             throw new RuntimeException(e);
         }
     }
-    private GamePackage waitCheck(GamePackage gp){
-        if(!gp.isWaiting()) {
+    private GamePackage waitCheck(GamePackage gp) {
+        if (!gp.isWaiting()) {
             return protocol.update(gp);
         }
-        long startTime = System.currentTimeMillis();
-            while (protocol.waitForCategory) {
-                if ((System.currentTimeMillis() - startTime) > 20000) {
-                    break;
-                }
-            }
+        while (protocol.waitForCategory){}
         return protocol.update(gp);
     }
 }

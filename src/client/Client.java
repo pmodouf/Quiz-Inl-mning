@@ -26,8 +26,6 @@ public class Client {
 
     String[] currentQuestion;
 
-    BufferedImage bufferedImage;
-
     User user;
     Guest guest;
 
@@ -50,6 +48,7 @@ public class Client {
             while ((object = input.readObject()) != null) {
                 if (object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
+                    protocol.update();
                     break;
                 }
             }
@@ -71,16 +70,30 @@ public class Client {
                 if(received instanceof User u){
                     user = u;
                     isUser = true;
+                    setUpGP();
                     break;
                 }else if(received instanceof Guest g){
                     guest = g;
                     isUser = false;
+                    setUpGP();
                     break;
                 }
             }
 
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void setUpGP() {
+        if (isUser){
+            gp.setName(user.getName());
+            gp.setWins(user.getWins());
+            gp.setImageID(user.getImage());
+        }else{
+            gp.setName(guest.getName());
+            gp.setWins(0);
+            gp.setImageID("boy1");
         }
     }
 
@@ -94,27 +107,18 @@ public class Client {
                     gp = gamePackage;
                     protocol.update();
 
-                    //TEST
                     System.out.println(gp);
                     break;
                 } else if (object instanceof String) {
                     System.out.println(object);
                     break;
-                } else {
-                    System.out.println("Hit skulle du inte komma");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
     public static void main(String[] args) {
-        Client client = new Client();
-    }
-
-    public void joinAsGuest() {
-        //Connect and receive guest
+        new Client();
     }
 }

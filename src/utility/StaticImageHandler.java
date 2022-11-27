@@ -22,7 +22,6 @@ public class StaticImageHandler {
     }
 
     static public BufferedImage scoreSubImage(BufferedImage image, int row){
-
         return image.getSubimage(0, (row * 30) - 30, 144, 30);
     }
 
@@ -55,28 +54,18 @@ public class StaticImageHandler {
         return pngID;
     }
 
-    static public BufferedImage loadImage(String pngID) {
-
+    static public BufferedImage loadImage(String imageID) {
         BufferedImage bi;
-        if (pngID.startsWith("p")) {
-            try {
-                bi = ImageIO.read(new File("src/resources/images/profile-pictures/" + pngID + ".png"));
-                return StaticImageHandler.scaleImage(bi);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
         try {
-            bi = ImageIO.read(new File("src/resources/images/avatar/" + pngID + ".png"));
+            bi = ImageIO.read(new File("src/resources/images/avatar/" + imageID + ".png"));
             return StaticImageHandler.scaleImage(bi);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-    public static ImageIcon getIcon(String pngID) {
-        return new ImageIcon(loadImage(pngID));
+    public static ImageIcon getIcon(String imageID) {
+        return new ImageIcon(loadImage(imageID));
     }
     public static ImageIcon getIconNonScaled(String pngID){
         BufferedImage bi = null;

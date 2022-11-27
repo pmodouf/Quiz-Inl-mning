@@ -67,9 +67,4 @@ public class LoginServer extends Thread{
             throw new RuntimeException(e);
         }
     }
-
-    public static void main(String[] args) {
-        LoginServer s = new LoginServer();
-        s.start();
-    }
 }

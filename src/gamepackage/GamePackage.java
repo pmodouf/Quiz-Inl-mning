@@ -10,21 +10,19 @@ public class GamePackage implements Serializable {
 
     Opponent opponent = new Opponent();
 
-    int image;
+    String imageID;
     int ID;
     String name;
     String message;
-
-    int categoryID;
+    int wins;
+    int categoryID = 0;
 
     ArrayList<String[]> QA;
     int[] AnswersMap;
     int gameState = 0;
-
     int totalScore;
 
     public boolean choseCategory = false;
-    public boolean gameStart;
     public boolean waiting = false;
     public  boolean lastRound = false;
 
@@ -32,16 +30,24 @@ public class GamePackage implements Serializable {
         return opponent;
     }
 
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
+    }
+
     public void setOpponent(Opponent opponent) {
         this.opponent = opponent;
     }
 
-    public int getImage() {
-        return image;
+    public String getImageID() {
+        return imageID;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setImageID(String imageID) {
+        this.imageID = imageID;
     }
 
     public boolean isLastRound() {
@@ -92,14 +98,6 @@ public class GamePackage implements Serializable {
         this.QA = QA;
     }
 
-    public boolean isGameStart() {
-        return gameStart;
-    }
-
-    public void setGameStart(boolean gameStart) {
-        this.gameStart = gameStart;
-    }
-
     public int getGameState() {
         return gameState;
     }
@@ -138,21 +136,29 @@ public class GamePackage implements Serializable {
 
     @Override
     public String toString() {
-        return "GamePackage{" +
-                "opponent=" + opponent +
-                ", image=" + image +
+
+        return "{" +
                 ", ID=" + ID +
-                ", name='" + name + '\'' +
-                ", message='" + message + '\'' +
                 ", categoryID=" + categoryID +
                 ", QA=" + QA +
-                ", answers=" + Arrays.toString(AnswersMap) +
                 ", gameState=" + gameState +
-                ", totalScore=" + totalScore +
                 ", choseCategory=" + choseCategory +
-                ", gameStart=" + gameStart +
                 ", waiting=" + waiting +
-                ", lastRound=" + lastRound +
                 '}';
+//        return "GamePackage{" +
+//                "opponent=" + opponent +
+//                ", image=" + imageID +
+//                ", ID=" + ID +
+//                ", name='" + name + '\'' +
+//                ", message='" + message + '\'' +
+//                ", categoryID=" + categoryID +
+//                ", QA=" + QA +
+//                ", answers=" + Arrays.toString(AnswersMap) +
+//                ", gameState=" + gameState +
+//                ", totalScore=" + totalScore +
+//                ", choseCategory=" + choseCategory +
+//                ", waiting=" + waiting +
+//                ", lastRound=" + lastRound +
+//                '}';
     }
 }

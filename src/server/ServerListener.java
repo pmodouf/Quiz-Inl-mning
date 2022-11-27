@@ -8,7 +8,6 @@ public class ServerListener {
 
     final private int port = 12345;
     ServerProtocol spHolder;
-    //ChatServer chatHolder;
     LoginServer loginServer;
 
     ServerListener() {

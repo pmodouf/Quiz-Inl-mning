@@ -7,9 +7,11 @@ public class Opponent implements Serializable {
 
     String name;
     int[] ScoreMap;
+    int wins = 0;
     int totalScore;
-    int image;
+    String imageID = "boy1";
 
+    public int getWins(){return wins;}
     public String getName() {
         return name;
     }
@@ -26,8 +28,8 @@ public class Opponent implements Serializable {
         return ScoreMap;
     }
 
-    public int getImage() {
-        return image;
+    public String getImageID() {
+        return imageID;
     }
 
     public void setName(String name) {
@@ -38,15 +40,16 @@ public class Opponent implements Serializable {
         ScoreMap = scoreMap;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setImage(String imageID) {
+        this.imageID = imageID;
     }
 
-    public void setAll(String name, int[] ScoreMap, int image, int totalScore) {
+    public void setAll(String name, int[] ScoreMap, String imageID, int totalScore, int wins) {
         this.name = name;
         this.ScoreMap = ScoreMap;
-        this.image = image;
+        this.imageID = imageID;
         this.totalScore = totalScore;
+        this.wins = wins;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class Opponent implements Serializable {
         return "Opponent{" +
                 "name='" + name + '\'' +
                 ", ScoreMap=" + Arrays.toString(ScoreMap) +
-                ", image=" + image +
+                ", image=" + imageID +
                 '}';
     }
 }
