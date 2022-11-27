@@ -15,11 +15,9 @@ public class ClientProtocol {
     Client client;
 
     int questionCount = 0;
-    int roundCount = 0;
 
     boolean opponentIsNotSet = true;
 
-    private static final int FIRST_INIT = 0;
     private static final int SET_CATEGORY_STATE = 1;
     private static final int GET_CATEGORY_STATE = 2;
     private static final int WAIT_STATE = 3;
@@ -65,6 +63,7 @@ public class ClientProtocol {
     public void nextQuestion(){
         if(client.gp.lastRound){
             client.gp.setGameState(RESULT_STATE);
+            client.gp.setWaiting(false);
             client.sendAndReceive();
         } else if(questionCount == client.gp.getQA().size()){
             questionCount = 0;
@@ -77,17 +76,17 @@ public class ClientProtocol {
         }
         questionCount++;
     }
-
-
     private void nextCategory() {
         if (client.gp.choseCategory){
             client.gp.setGameState(SET_CATEGORY_STATE);
+            client.gp.setWaiting(false);
             getRandomCategory();
             client.gf.GUIState(6);
             client.gf.toggleTimer();
         } else {
             client.gp.setGameState(GET_CATEGORY_STATE);
             client.gf.GUIState(5);
+            client.gp.setWaiting(true);
             client.sendAndReceive();
         }
     }

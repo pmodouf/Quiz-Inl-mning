@@ -62,10 +62,6 @@ public class GameFrame extends JFrame {
 
     Timer timer;
 
-    public void setScore(int[] answersMap, int[] scoreMap) {
-
-    }
-
     public static class Timer extends JPanel implements Runnable{
         public Thread thread;
         public boolean go = false;
@@ -166,6 +162,75 @@ public class GameFrame extends JFrame {
         setUpAvatarSelection();
 
     }
+    public void setScore(int[] answersMap, int[] scoreMap) {
+
+        int countRounds = 0;
+        int scoreID = 0;
+        int opponentScoreID = 0;
+        for (int i = 0; i < answersMap.length; i++) {
+            if(answersMap[i] != 0){
+
+                scoreID = scoreID * 10 + answersMap[i];
+                opponentScoreID = opponentScoreID * 10 + scoreMap[i];
+
+                if(i % 3 == 0){
+                    countRounds++;
+                    setScoreIcon(countRounds, scoreID, opponentScoreID);
+
+                    opponentScoreID = 0;
+                    scoreID = 0;
+                }
+            }
+        }
+    }
+    private void setScoreIcon(int countRounds, int scoreID, int opponentScoreID) {
+
+        switch (countRounds){
+            case 1 ->{
+                lbRound1.setVisible(true);
+                lbScore1.setIcon(StaticImageHandler.getScoreSubImageByID(scoreID));
+                lbScore1.setVisible(true);
+                lbOpponentScore1.setIcon(StaticImageHandler.getScoreSubImageByID(opponentScoreID));
+                lbOpponentScore1.setVisible(true);
+            }
+            case 2 ->{
+                lbRound2.setVisible(true);
+                lbScore2.setIcon(StaticImageHandler.getScoreSubImageByID(scoreID));
+                lbScore2.setVisible(true);
+                lbOpponentScore2.setIcon(StaticImageHandler.getScoreSubImageByID(opponentScoreID));
+                lbOpponentScore2.setVisible(true);
+            }
+            case 3 ->{
+                lbRound3.setVisible(true);
+                lbScore3.setIcon(StaticImageHandler.getScoreSubImageByID(scoreID));
+                lbScore3.setVisible(true);
+                lbOpponentScore3.setIcon(StaticImageHandler.getScoreSubImageByID(opponentScoreID));
+                lbOpponentScore3.setVisible(true);
+            }
+            case 4 ->{
+                lbRound4.setVisible(true);
+                lbScore4.setIcon(StaticImageHandler.getScoreSubImageByID(scoreID));
+                lbScore4.setVisible(true);
+                lbOpponentScore4.setIcon(StaticImageHandler.getScoreSubImageByID(opponentScoreID));
+                lbOpponentScore4.setVisible(true);
+            }
+            case 5 ->{
+                lbRound5.setVisible(true);
+                lbScore5.setIcon(StaticImageHandler.getScoreSubImageByID(scoreID));
+                lbScore5.setVisible(true);
+                lbOpponentScore5.setIcon(StaticImageHandler.getScoreSubImageByID(opponentScoreID));
+                lbOpponentScore5.setVisible(true);
+            }
+            case 6 ->{
+                lbRound6.setVisible(true);
+                lbScore6.setIcon(StaticImageHandler.getScoreSubImageByID(scoreID));
+                lbScore6.setVisible(true);
+                lbOpponentScore6.setIcon(StaticImageHandler.getScoreSubImageByID(opponentScoreID));
+                lbOpponentScore6.setVisible(true);
+            }
+        }
+    }
+
     public void setUpOpponentInfo(String name, String imageID, int wins) {
         lbInfoBarOpponentWins.setText("Wins: " + wins);
         lbInfoBarOpponentPic.setIcon(StaticImageHandler.getIcon(imageID));
@@ -280,12 +345,14 @@ public class GameFrame extends JFrame {
             toggleTimer();
             if (bt.getText().equals(client.currentQuestion[5])){
                 bt.setBackground(new Color(0x39D054));
-                paint(getGraphics());
                 client.gp.incrementScore();
+                client.gp.getAnswersMap()[client.rounds]++;
             } else {
                 bt.setBackground(new Color(0xBB3838));
-                paint(getGraphics());
+                client.gp.getAnswersMap()[client.rounds] = 2;
             }
+            client.rounds++;
+            paint(getGraphics());
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ex) {
@@ -882,85 +949,103 @@ public class GameFrame extends JFrame {
         lbScore1 = new JLabel();
         lbScore1.setBounds(square / 2, square, square * 3, 30);
         lbScore1.setIcon(new ImageIcon(StaticImageHandler.scoreImage(6)));
+        lbScore1.setVisible(false);
         scoreScreen.add(lbScore1);
 
         lbScore2 = new JLabel();
         lbScore2.setBounds(square / 2, square + 80, square * 3, 30);
         lbScore2.setIcon(new ImageIcon(StaticImageHandler.scoreImage(7)));
+        lbScore2.setVisible(false);
         scoreScreen.add(lbScore2);
 
         lbScore3 = new JLabel();
         lbScore3.setBounds(square / 2, square + 160, square * 3, 30);
         lbScore3.setIcon(new ImageIcon(StaticImageHandler.scoreImage(7)));
+        lbScore3.setVisible(false);
         scoreScreen.add(lbScore3);
 
         lbScore4 = new JLabel();
         lbScore4.setBounds(square / 2, square + 240, square * 3, 30);
         lbScore4.setIcon(new ImageIcon(StaticImageHandler.scoreImage(7)));
+        lbScore4.setVisible(false);
         scoreScreen.add(lbScore4);
 
         lbScore5 = new JLabel();
         lbScore5.setBounds(square / 2, square + 320, square * 3, 30);
         lbScore5.setIcon(new ImageIcon(StaticImageHandler.scoreImage(7)));
+        lbScore5.setVisible(false);
         scoreScreen.add(lbScore5);
 
         lbScore6 = new JLabel();
         lbScore6.setBounds(square / 2, square + 400, square * 3, 30);
         lbScore6.setIcon(new ImageIcon(StaticImageHandler.scoreImage(7)));
+        lbScore6.setVisible(false);
         scoreScreen.add(lbScore6);
 
         lbOpponentScore1 = new JLabel();
         lbOpponentScore1.setBounds(width - square * 2, square, square * 3, 30);
         lbOpponentScore1.setIcon(new ImageIcon(StaticImageHandler.scoreImage(6)));
+        lbOpponentScore1.setVisible(false);
         scoreScreen.add(lbOpponentScore1);
 
         lbOpponentScore2 = new JLabel();
         lbOpponentScore2.setBounds(width - square * 2, square + 80, square * 3, 30);
         lbOpponentScore2.setIcon(new ImageIcon(StaticImageHandler.scoreImage(4)));
+        lbOpponentScore2.setVisible(false);
         scoreScreen.add(lbOpponentScore2);
 
         lbOpponentScore3 = new JLabel();
         lbOpponentScore3.setBounds(width - square * 2, square + 160, square * 3, 30);
         lbOpponentScore3.setIcon(new ImageIcon(StaticImageHandler.scoreImage(7)));
+        lbOpponentScore3.setVisible(false);
         scoreScreen.add(lbOpponentScore3);
 
         lbOpponentScore4 = new JLabel();
         lbOpponentScore4.setBounds(width - square * 2, square + 240, square * 3, 30);
         lbOpponentScore4.setIcon(new ImageIcon(StaticImageHandler.scoreImage(3)));
+        lbOpponentScore4.setVisible(false);
         scoreScreen.add(lbOpponentScore4);
 
         lbOpponentScore5 = new JLabel();
         lbOpponentScore5.setBounds(width - square * 2, square + 320, square * 3, 30);
         lbOpponentScore5.setIcon(new ImageIcon(StaticImageHandler.scoreImage(7)));
+        lbOpponentScore5.setVisible(false);
         scoreScreen.add(lbOpponentScore5);
 
         lbOpponentScore6 = new JLabel();
         lbOpponentScore6.setBounds(width - square * 2, square + 400, square * 3, 30);
         lbOpponentScore6.setIcon(new ImageIcon(StaticImageHandler.scoreImage(8)));
+        lbOpponentScore6.setVisible(false);
         scoreScreen.add(lbOpponentScore6);
 
         lbRound1 = new JLabel("Round 1");
         lbRound1.setBounds(width / 2 - square / 4, square, square, 30);
+        lbRound1.setVisible(false);
         scoreScreen.add(lbRound1);
 
         lbRound2 = new JLabel("Round 2");
         lbRound2.setBounds(width / 2 - square / 4, square + 80, square, 30);
+        lbRound2.setVisible(false);
         scoreScreen.add(lbRound2);
 
         lbRound3 = new JLabel("Round 3");
         lbRound3.setBounds(width / 2 - square / 4, square + 160, square, 30);
+        lbRound3.setVisible(false);
         scoreScreen.add(lbRound3);
 
         lbRound4 = new JLabel("Round 4");
         lbRound4.setBounds(width / 2 - square / 4, square + 240, square, 30);
+        lbRound4.setVisible(false);
         scoreScreen.add(lbRound4);
 
         lbRound5 = new JLabel("Round 5");
         lbRound5.setBounds(width / 2 - square / 4, square + 320, square, 30);
+        lbRound5.setVisible(false);
         scoreScreen.add(lbRound5);
 
         lbRound6 = new JLabel("Round 6");
         lbRound6.setBounds(width / 2 - square / 4, square + 400, square, 30);
+        lbRound6.setVisible(false);
         scoreScreen.add(lbRound6);
 
 //        btOK = new JButton("OK");

@@ -25,6 +25,30 @@ public class StaticImageHandler {
         return image.getSubimage(0, (row * 30) - 30, 144, 30);
     }
 
+    static public ImageIcon getScoreSubImageByID(int ID){
+        switch (ID){
+            case 212 ->{
+                return new ImageIcon(scoreImage(1));
+            }case 121 ->{
+                return new ImageIcon(scoreImage(2));
+            }case 211 ->{
+                return new ImageIcon(scoreImage(3));
+            }case 221 ->{
+                return new ImageIcon(scoreImage(4));
+            }case 222 ->{
+                return new ImageIcon(scoreImage(5));
+            }case 111 ->{
+                return new ImageIcon(scoreImage(6));
+            }case 112 ->{
+                return new ImageIcon(scoreImage(7));
+            }case 122 ->{
+                return new ImageIcon(scoreImage(8));
+            }default -> {
+                return null;
+            }
+        }
+    }
+
     static public BufferedImage scaleImage(BufferedImage original) {
         BufferedImage scaledImage = new BufferedImage(96, 96, original.getType());
         Graphics2D g2 = scaledImage.createGraphics();

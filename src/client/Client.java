@@ -17,6 +17,7 @@ public class Client {
     private static final int port = 12345;
 
     public GamePackage gp = new GamePackage();
+    public int rounds = 0;
     ClientProtocol protocol = new ClientProtocol(this);
 
     GameFrame gf = new GameFrame(this);
