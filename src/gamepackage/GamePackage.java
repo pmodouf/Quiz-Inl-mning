@@ -21,11 +21,19 @@ public class GamePackage implements Serializable {
     int[] AnswersMap;
     int gameState = 0;
     int totalScore;
-    public boolean iWon = false;
+    int iWon = 0;
 
     public boolean choseCategory = false;
     public boolean waiting = false;
     public  boolean lastRound = false;
+
+    public int getIWon() {
+        return iWon;
+    }
+
+    public void setIWon(int iWon) {
+        this.iWon = iWon;
+    }
 
     public Opponent getOpponent() {
         return opponent;

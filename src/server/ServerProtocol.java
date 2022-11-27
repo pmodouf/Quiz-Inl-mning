@@ -5,7 +5,6 @@ import gamepackage.GamePackage;
 import properties.GameProperties;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class ServerProtocol {
 
@@ -13,7 +12,7 @@ public class ServerProtocol {
     GamePackage player2 = new GamePackage();
 
     private static final int FIRST_INIT = 0;
-    private static final int CATEGORY_STATE = 1;
+    private static final int SET_CATEGORY_STATE = 1;
     private static final int GET_CATEGORY_STATE = 2;
     private static final int WAIT_STATE = 3;
     private static final int RESULT_STATE = 4;
@@ -42,7 +41,7 @@ public class ServerProtocol {
                     gp.setID(id);
                     gp.choseCategory = true;
                     gp.setWaiting(false);
-                    gp.setGameState(CATEGORY_STATE);
+                    gp.setGameState(SET_CATEGORY_STATE);
                 } else {
                     gp.setID(id);
                     gp.setGameState(WAIT_STATE);
@@ -52,7 +51,7 @@ public class ServerProtocol {
                     id = 0;
                 }
             }
-            case CATEGORY_STATE -> {
+            case SET_CATEGORY_STATE -> {
                 qa.loadQA(gp.getCategoryID());
                 category = qa.getList();
                 gp.setQA(category);
@@ -73,7 +72,11 @@ public class ServerProtocol {
                     waitForResult = true;
                 } else {
                     if(gp.getTotalScore() > gp.getOpponent().getTotalScore()){
-                        gp.iWon = true;
+                        gp.setIWon(1);
+                    } else if (gp.getTotalScore() < gp.getOpponent().getTotalScore()){
+                        gp.setIWon(3);
+                    } else {
+                        gp.setIWon(2);
                     }
                     waitForResult = true;
                 }

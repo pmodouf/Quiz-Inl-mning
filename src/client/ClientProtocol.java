@@ -20,7 +20,7 @@ public class ClientProtocol {
     boolean opponentIsNotSet = true;
 
     private static final int FIRST_INIT = 0;
-    private static final int CATEGORY_STATE = 1;
+    private static final int SET_CATEGORY_STATE = 1;
     private static final int GET_CATEGORY_STATE = 2;
     private static final int WAIT_STATE = 3;
     private static final int RESULT_STATE = 4;
@@ -38,7 +38,7 @@ public class ClientProtocol {
         }
 
         switch (client.gp.getGameState()){
-            case CATEGORY_STATE ->{
+            case SET_CATEGORY_STATE ->{
                 getRandomCategory();
                 client.gf.GUIState(6);
                 client.gf.toggleTimer();
@@ -81,7 +81,7 @@ public class ClientProtocol {
 
     private void nextCategory() {
         if (client.gp.choseCategory){
-            client.gp.setGameState(CATEGORY_STATE);
+            client.gp.setGameState(SET_CATEGORY_STATE);
             getRandomCategory();
             client.gf.GUIState(6);
             client.gf.toggleTimer();
