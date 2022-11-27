@@ -29,9 +29,7 @@ public class ClientHandler extends Thread {
                 if (clientRequest instanceof GamePackage g) {
                     if (g.isLastRound()) {
                         protocol.update(g);
-                        while (protocol.waitForResult) {
-                            System.out.println(protocol.waitForResult);
-                        }
+                        while (protocol.waitForResult) {}
                         send.writeObject(waitCheck(g));
                         send.flush();
                     } else {

@@ -62,6 +62,10 @@ public class GameFrame extends JFrame {
 
     Timer timer;
 
+    public void setScore(int[] answersMap, int[] scoreMap) {
+
+    }
+
     public static class Timer extends JPanel implements Runnable{
         public Thread thread;
         public boolean go = false;

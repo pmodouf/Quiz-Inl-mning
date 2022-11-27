@@ -49,6 +49,7 @@ public class ServerProtocol {
                     gp.choseCategory = false;
                     gp.setWaiting(true);
                     waitForCategory = true;
+                    id = 0;
                 }
             }
             case CATEGORY_STATE -> {
@@ -66,7 +67,16 @@ public class ServerProtocol {
                 gp.choseCategory = true;
                 waitForCategory = true;
             } case RESULT_STATE ->{
-
+                waitForCategory = false;
+                id++;
+                if(id == 1){
+                    waitForResult = true;
+                } else {
+                    if(gp.getTotalScore() > gp.getOpponent().getTotalScore()){
+                        gp.iWon = true;
+                    }
+                    waitForResult = true;
+                }
             }
         }
         setGamePackage(gp);

@@ -21,6 +21,7 @@ public class GamePackage implements Serializable {
     int[] AnswersMap;
     int gameState = 0;
     int totalScore;
+    public boolean iWon = false;
 
     public boolean choseCategory = false;
     public boolean waiting = false;

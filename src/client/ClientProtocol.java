@@ -4,11 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*
+TODO use ints to add to score map as id
+    look at the score picture and have one id for each possible combination
+    leave the grayed out image at the top.
+ */
+
 public class ClientProtocol {
 
     Client client;
 
     int questionCount = 0;
+    int roundCount = 0;
 
     boolean opponentIsNotSet = true;
 
@@ -43,6 +50,7 @@ public class ClientProtocol {
                 client.gp.setCategoryID(0);
                 nextQuestion();
             } case RESULT_STATE ->{
+                client.gf.setScore(client.gp.getAnswersMap(), client.gp.getOpponent().getScoreMap());
                 client.gf.GUIState(7);
             }
         }
@@ -55,16 +63,12 @@ public class ClientProtocol {
     }
 
     public void nextQuestion(){
-        if(questionCount == client.gp.getQA().size()){
-            questionCount = 0;
-            if(client.gp.isWaiting()){
-                client.gf.GUIState(5);
-                client.gp.setGameState(GET_CATEGORY_STATE);
-            } else {
-                client.gf.GUIState(5);
-                client.gp.setGameState(CATEGORY_STATE);
-            }
+        if(client.gp.lastRound){
+            client.gp.setGameState(RESULT_STATE);
             client.sendAndReceive();
+        } else if(questionCount == client.gp.getQA().size()){
+            questionCount = 0;
+            nextCategory();
         } else{
             client.currentQuestion = client.gp.getQA().get(questionCount);
             client.gf.setUpQA(client.currentQuestion);
@@ -72,6 +76,20 @@ public class ClientProtocol {
             client.gf.toggleTimer();
         }
         questionCount++;
+    }
+
+
+    private void nextCategory() {
+        if (client.gp.choseCategory){
+            client.gp.setGameState(CATEGORY_STATE);
+            getRandomCategory();
+            client.gf.GUIState(6);
+            client.gf.toggleTimer();
+        } else {
+            client.gp.setGameState(GET_CATEGORY_STATE);
+            client.gf.GUIState(5);
+            client.sendAndReceive();
+        }
     }
 }
 
