@@ -100,15 +100,11 @@ public class Client {
             output.flush();
             Object object;
             while ((object = input.readObject()) != null) {
-
                 if (object instanceof GamePackage gamePackage) {
                     gp = gamePackage;
                     protocol.update();
 
                     System.out.println(gp);
-                    break;
-                } else if (object instanceof String) {
-                    System.out.println(object);
                     break;
                 }
             }

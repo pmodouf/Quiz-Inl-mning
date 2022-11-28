@@ -91,7 +91,7 @@ public class ServerProtocol {
                     } else {
                         gp.setIWon(2);
                     }
-                    waitForResult = true;
+                    waitForResult = false;
                 }
             } case AUTO_WIN_STATE ->{
                 gp.setIWon(1);
@@ -100,6 +100,11 @@ public class ServerProtocol {
                 waitForCategory = false;
                 playerGivenUp = true;
             }
+        }
+
+        if(rounds == properties.getRounds()){
+            waitForCategory = false;
+            gp.setLastRound(true);
         }
 
         setGamePackage(gp);

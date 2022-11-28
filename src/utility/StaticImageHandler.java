@@ -28,21 +28,21 @@ public class StaticImageHandler {
     static public ImageIcon getScoreSubImageByID(int ID){
         switch (ID){
             case 212 ->{
-                return new ImageIcon(scoreImage(1));
-            }case 121 ->{
                 return new ImageIcon(scoreImage(2));
-            }case 211 ->{
+            }case 121 ->{
                 return new ImageIcon(scoreImage(3));
-            }case 221 ->{
+            }case 211 ->{
                 return new ImageIcon(scoreImage(4));
-            }case 222 ->{
+            }case 221 ->{
                 return new ImageIcon(scoreImage(5));
-            }case 111 ->{
+            }case 222 ->{
                 return new ImageIcon(scoreImage(6));
-            }case 112 ->{
+            }case 111 ->{
                 return new ImageIcon(scoreImage(7));
-            }case 122 ->{
+            }case 112 ->{
                 return new ImageIcon(scoreImage(8));
+            }case 122 ->{
+                return new ImageIcon(scoreImage(9));
             }default -> {
                 return null;
             }

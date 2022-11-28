@@ -71,7 +71,7 @@ public class ClientProtocol {
     }
 
     public void nextQuestion(){
-        if(client.gp.lastRound){
+        if(questionCount == client.gp.getQA().size() && client.gp.lastRound){
             client.gp.setGameState(RESULT_STATE);
             client.gp.setWaiting(false);
             client.sendAndReceive();

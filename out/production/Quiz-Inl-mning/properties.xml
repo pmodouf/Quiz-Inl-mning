@@ -3,5 +3,5 @@
 <properties>
     <comment>Antal Frågor och Rundor</comment>
     <entry key="questions">3</entry>
-    <entry key="rounds">2</entry>
+    <entry key="rounds">6</entry>
 </properties>
