@@ -46,8 +46,7 @@ public class LoginServer extends Thread{
                 } else if(clientRequest instanceof User u){
                     db.updateUser(u);
                     send.writeObject(u);
-                }
-                else {
+                } else {
                     idList.add(idList.size());
                     send.writeObject(new Guest(idList.size()));
                 }

@@ -8,12 +8,6 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-
-/*
-TODO lägga till några labels för att visa titel på sidorna
-TODO Lägga till action listeners
- */
 
 public class GameFrame extends JFrame {
 
@@ -614,6 +608,11 @@ public class GameFrame extends JFrame {
         btQuit = new JButton("Quit");
         btQuit.setBounds(width - 100, height - 50, 75, 25);
         btQuit.addActionListener(e ->{
+            if(client.gp.getGameState() > 0){
+                client.gp.setWaiting(false);
+                client.gp.setGameState(7);
+                client.sendAndReceive();
+            }
             System.exit(0);
         });
         mainScreen.add(btQuit);

@@ -101,15 +101,6 @@ public class ServerProtocol {
                 playerGivenUp = true;
             }
         }
-        if(category != null){
-            for (String[] s: category
-            ) {
-                for (String s1: s
-                     ) {
-                    System.out.println(s1);
-                }
-            }
-        }
 
         setGamePackage(gp);
         setOpponent(gp);

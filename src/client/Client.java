@@ -1,11 +1,8 @@
 package client;
 
-import database.Database;
 import database.Guest;
 import database.User;
 import gamepackage.GamePackage;
-
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -31,7 +28,6 @@ public class Client {
     Guest guest;
 
     boolean isUser = true;
-
 
     public Client() {
 

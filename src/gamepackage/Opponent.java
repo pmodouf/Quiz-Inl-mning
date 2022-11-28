@@ -9,7 +9,7 @@ public class Opponent implements Serializable {
     int[] ScoreMap;
     int wins = 0;
     int totalScore;
-    String imageID = "boy1";
+    String imageID = "";
 
     public int getWins(){return wins;}
     public String getName() {

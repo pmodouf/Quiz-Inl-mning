@@ -1,6 +1,5 @@
 package database;
 
-import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -28,7 +27,7 @@ public class User implements Serializable {
     }
 
     public void setWins(int wins) {
-        this.wins = wins;
+        this.wins += wins;
     }
 
     public LocalDate getCreated() {

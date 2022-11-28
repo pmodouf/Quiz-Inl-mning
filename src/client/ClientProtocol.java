@@ -44,10 +44,19 @@ public class ClientProtocol {
                 nextQuestion();
             } case RESULT_STATE ->{
                 client.gf.setScore(client.gp.getAnswersMap(), client.gp.getOpponent().getScoreMap());
+                if(client.gp.getIWon() == 1 && client.isUser){
+                    client.user.setWins(1);
+                    client.connectToLoginServer(client.user);
+                }
                 client.gf.GUIState(7);
             } case AUTO_WIN_STATE -> {
                 client.gf.lbWaitMessage.setText("Opponent gave up");
+                client.gf.btGiveUp.setVisible(false);
                 client.gf.btBack.setVisible(true);
+                if(client.isUser){
+                    client.user.setWins(1);
+                    client.connectToLoginServer(client.user);
+                }
                 client.gf.GUIState(5);
             } case GIVE_UP_STATE -> {
                 client.gf.GUIState(3);
@@ -89,6 +98,9 @@ public class ClientProtocol {
             client.gf.GUIState(5);
             client.sendAndReceive();
         }
+    }
+    private void resetGamePackage(){
+
     }
 }
 
