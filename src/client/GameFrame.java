@@ -164,14 +164,10 @@ public class GameFrame extends JFrame {
         for (int i = 0; i < answersMap.length; i++) {
             if(answersMap[i] != 0){
                 scoreID = scoreID * 10 + answersMap[i];
-                System.out.println(" i = " + i + " och score = " + scoreID);
                 opponentScoreID = opponentScoreID * 10 + scoreMap[i];
 
                 if(i == 2 || i == 5 || i == 8 || i == 11 || i == 14 || i == 17){
-                    System.out.println(scoreID + "\n");
-                    System.out.println(opponentScoreID + "\n");
                     countRounds++;
-                    System.out.println(countRounds + "\n");
                     setScoreIcon(countRounds, scoreID, opponentScoreID);
 
                     opponentScoreID = 0;
