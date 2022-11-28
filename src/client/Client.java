@@ -13,7 +13,7 @@ public class Client {
     private static final String ip = "localhost";
     private static final int port = 12345;
 
-    public GamePackage gp = new GamePackage();
+    public GamePackage gp;
     public int rounds = 0;
     ClientProtocol protocol = new ClientProtocol(this);
 
@@ -39,18 +39,22 @@ public class Client {
             socket = new Socket(ip, port);
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
-            output.writeObject(gp);
-            output.flush();
-            Object object;
-            while ((object = input.readObject()) != null) {
-                if (object instanceof GamePackage gamePackage) {
-                    gp = gamePackage;
-                    protocol.update();
-                    break;
-                }
-            }
+            writeAndRead();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void writeAndRead() throws IOException, ClassNotFoundException {
+        output.writeObject(gp);
+        output.flush();
+        Object object;
+        while ((object = input.readObject()) != null) {
+            if (object instanceof GamePackage gamePackage) {
+                gp = gamePackage;
+                protocol.update();
+                break;
+            }
         }
     }
 
@@ -76,13 +80,13 @@ public class Client {
                     break;
                 }
             }
-
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void setUpGP() {
+    public void setUpGP() {
+        gp = new GamePackage();
         if (isUser){
             gp.setName(user.getName());
             gp.setWins(user.getWins());
@@ -96,18 +100,7 @@ public class Client {
 
     public void sendAndReceive() {
         try {
-            output.writeObject(gp);
-            output.flush();
-            Object object;
-            while ((object = input.readObject()) != null) {
-                if (object instanceof GamePackage gamePackage) {
-                    gp = gamePackage;
-                    protocol.update();
-
-                    System.out.println(gp);
-                    break;
-                }
-            }
+            writeAndRead();
         } catch (Exception e) {
             e.printStackTrace();
         }

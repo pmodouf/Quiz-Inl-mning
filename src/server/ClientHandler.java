@@ -33,11 +33,8 @@ public class ClientHandler extends Thread {
                         send.writeObject(waitCheck(g));
                         send.flush();
                     } else {
-                        System.out.println("IN: " + g.getID() + " " + g + "\n");
                         send.writeObject(waitCheck(g));
                         send.flush();
-                        //TEMP
-                        System.out.println("UT: " + g.getID() + " " + g + "\n");
                     }
                 }
             }

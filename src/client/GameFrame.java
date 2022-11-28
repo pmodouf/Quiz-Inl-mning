@@ -18,7 +18,6 @@ public class GameFrame extends JFrame {
     JButton btAnswer1, btAnswer2, btAnswer3, btAnswer4;
 
     JButton btOK;
-    JButton btUpload;
     JButton btCategory1, btCategory2, btCategory3;
     JButton btSend;
     JButton btBack;
@@ -30,7 +29,7 @@ public class GameFrame extends JFrame {
     JLabel lbWaitMessage;
     JLabel lbScore1, lbScore2, lbScore3, lbScore4, lbScore5, lbScore6,
             lbOpponentScore1, lbOpponentScore2, lbOpponentScore3, lbOpponentScore4, lbOpponentScore5, lbOpponentScore6,
-            lbRound1, lbRound2, lbRound3, lbRound4, lbRound5, lbRound6;
+            lbRound1, lbRound2, lbRound3, lbRound4, lbRound5, lbRound6, lbInfoMessage, lbScore;
 
     JLabel lbCategoryMessage;
 
@@ -56,7 +55,7 @@ public class GameFrame extends JFrame {
 
     Timer timer;
 
-    public static class Timer extends JPanel implements Runnable{
+    public class Timer extends JPanel implements Runnable{
         public Thread thread;
         public boolean go = false;
         int thirty = 0;
@@ -95,6 +94,7 @@ public class GameFrame extends JFrame {
                 thirty++;
                 if(thirty > 1800){
                     go = false;
+                    client.protocol.timedOut();
                 }
             } else {
                 g2.setColor(new Color(0x5B9CFF));
@@ -156,27 +156,7 @@ public class GameFrame extends JFrame {
         setUpAvatarSelection();
 
     }
-    public void setScore(int[] answersMap, int[] scoreMap) {
-
-        int countRounds = 0;
-        int scoreID = 0;
-        int opponentScoreID = 0;
-        for (int i = 0; i < answersMap.length; i++) {
-            if(answersMap[i] != 0){
-                scoreID = scoreID * 10 + answersMap[i];
-                opponentScoreID = opponentScoreID * 10 + scoreMap[i];
-
-                if(i == 2 || i == 5 || i == 8 || i == 11 || i == 14 || i == 17){
-                    countRounds++;
-                    setScoreIcon(countRounds, scoreID, opponentScoreID);
-
-                    opponentScoreID = 0;
-                    scoreID = 0;
-                }
-            }
-        }
-    }
-    private void setScoreIcon(int countRounds, int scoreID, int opponentScoreID) {
+    public void setScoreIcon(int countRounds, int scoreID, int opponentScoreID) {
 
         switch (countRounds){
             case 1 ->{
@@ -410,6 +390,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(false);
                     lbInfoBarOpponentName.setVisible(false);
                     lbInfoBarOpponentWins.setVisible(false);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -429,6 +410,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(false);
                     lbInfoBarOpponentName.setVisible(false);
                     lbInfoBarOpponentWins.setVisible(false);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -448,6 +430,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(false);
                     lbInfoBarOpponentName.setVisible(false);
                     lbInfoBarOpponentWins.setVisible(false);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -470,6 +453,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(true);
                     lbInfoBarOpponentName.setVisible(true);
                     lbInfoBarOpponentWins.setVisible(true);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(true);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -489,6 +473,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(true);
                     lbInfoBarOpponentName.setVisible(true);
                     lbInfoBarOpponentWins.setVisible(true);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(true);
                 categoryScreen.setVisible(false);
@@ -508,6 +493,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(true);
                     lbInfoBarOpponentName.setVisible(true);
                     lbInfoBarOpponentWins.setVisible(true);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(true);
@@ -527,6 +513,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(true);
                     lbInfoBarOpponentName.setVisible(true);
                     lbInfoBarOpponentWins.setVisible(true);
+                    lbInfoMessage.setVisible(true);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -546,6 +533,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(false);
                     lbInfoBarOpponentName.setVisible(false);
                     lbInfoBarOpponentWins.setVisible(false);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -565,6 +553,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(false);
                     lbInfoBarOpponentName.setVisible(false);
                     lbInfoBarOpponentWins.setVisible(false);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -584,6 +573,7 @@ public class GameFrame extends JFrame {
                     lbInfoBarOpponentPic.setVisible(false);
                     lbInfoBarOpponentName.setVisible(false);
                     lbInfoBarOpponentWins.setVisible(false);
+                    lbInfoMessage.setVisible(false);
                 gameScreen.setVisible(false);
                 waitScreen.setVisible(false);
                 categoryScreen.setVisible(false);
@@ -708,6 +698,12 @@ public class GameFrame extends JFrame {
         playerInfoBar.setBackground(new Color(0x428CFD));
         playerInfoBar.setLayout(null);
         mainScreen.add(playerInfoBar);
+
+        lbInfoMessage = new JLabel();
+        lbInfoMessage.setBounds(width / 2 - square / 2 + 15, square / 2, square, 30);
+        lbInfoMessage.setVisible(false);
+        lbInfoMessage.setFont(new Font("Serif", Font.BOLD, 24));
+        playerInfoBar.add(lbInfoMessage);
 
         lbInfoBarPic = new JLabel();
         lbInfoBarPic.setBounds(20, square / 4, square, square);
@@ -944,6 +940,11 @@ public class GameFrame extends JFrame {
         scoreScreen.setBackground(new Color(0x5B9CFF));
         scoreScreen.setLayout(null);
         mainScreen.add(scoreScreen);
+
+        lbScore = new JLabel("");
+        lbScore.setBounds(width / 2 - square / 4, square * 6 - square / 4, square, 25);
+        lbScore.setVisible(true);
+        scoreScreen.add(lbScore);
 
         lbScore1 = new JLabel();
         lbScore1.setBounds(square / 2, square, square * 3, 30);

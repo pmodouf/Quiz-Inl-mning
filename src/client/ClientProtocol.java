@@ -11,6 +11,8 @@ public class ClientProtocol {
     int questionCount = 0;
 
     boolean opponentIsNotSet = true;
+    public boolean categoryTimeOut = false;
+    public boolean answerTimeOut = false;
 
     private static final int SET_CATEGORY_STATE = 1;
     private static final int GET_CATEGORY_STATE = 2;
@@ -36,30 +38,43 @@ public class ClientProtocol {
                 getRandomCategory();
                 client.gf.GUIState(6);
                 client.gf.toggleTimer();
+                categoryTimeOut = true;
             } case WAIT_STATE ->{
                 client.gp.setGameState(GET_CATEGORY_STATE);
                 client.sendAndReceive();
             } case ROUND_STATE ->{
                 client.gp.setCategoryID(0);
                 nextQuestion();
+                answerTimeOut = true;
             } case RESULT_STATE ->{
-                client.gf.setScore(client.gp.getAnswersMap(), client.gp.getOpponent().getScoreMap());
+                setScore(client.gp.getAnswersMap(), client.gp.getOpponent().getScoreMap());
+                client.gf.lbScore.setText("Score: " + client.gp.getTotalScore());
+                client.gf.GUIState(7);
+                if(client.gp.getIWon() == 1){
+                    client.gf.lbInfoMessage.setText("WON!");
+                } else if (client.gp.getIWon() == 3){
+                    client.gf.lbInfoMessage.setText("LOST");
+                } else {
+                    client.gf.lbInfoMessage.setText("DRAW");
+                }
                 if(client.gp.getIWon() == 1 && client.isUser){
                     client.user.setWins(1);
                     client.connectToLoginServer(client.user);
                 }
-                client.gf.GUIState(7);
+                resetGamePackage();
             } case AUTO_WIN_STATE -> {
                 client.gf.lbWaitMessage.setText("Opponent gave up");
                 client.gf.btGiveUp.setVisible(false);
                 client.gf.btBack.setVisible(true);
+                client.gf.GUIState(5);
                 if(client.isUser){
                     client.user.setWins(1);
                     client.connectToLoginServer(client.user);
                 }
-                client.gf.GUIState(5);
+                resetGamePackage();
             } case GIVE_UP_STATE -> {
                 client.gf.GUIState(3);
+                resetGamePackage();
             }
         }
     }
@@ -74,6 +89,7 @@ public class ClientProtocol {
         if(questionCount == client.gp.getQA().size() && client.gp.lastRound){
             client.gp.setGameState(RESULT_STATE);
             client.gp.setWaiting(false);
+            client.gf.GUIState(5);
             client.sendAndReceive();
         } else if(questionCount == client.gp.getQA().size()){
             questionCount = 0;
@@ -83,6 +99,7 @@ public class ClientProtocol {
             client.gf.setUpQA(client.currentQuestion);
             client.gf.GUIState(4);
             client.gf.toggleTimer();
+            answerTimeOut = true;
             questionCount++;
         }
     }
@@ -93,6 +110,7 @@ public class ClientProtocol {
             getRandomCategory();
             client.gf.GUIState(6);
             client.gf.toggleTimer();
+            categoryTimeOut = true;
         } else {
             client.gp.setGameState(GET_CATEGORY_STATE);
             client.gf.GUIState(5);
@@ -100,12 +118,46 @@ public class ClientProtocol {
         }
     }
     private void resetGamePackage(){
+        client.gp = null;
+        client.setUpGP();
+    }
 
+    public void timedOut() {
+
+        if (categoryTimeOut) {
+            client.gp.setCategoryID(setRandomCategory());
+            System.out.println(client.gp.getCategoryID());
+            categoryTimeOut = false;
+            client.sendAndReceive();
+        } else if (answerTimeOut) {
+            client.gp.getAnswersMap()[client.rounds] = 2;
+            client.rounds++;
+            answerTimeOut = false;
+            client.protocol.nextQuestion();
+        }
+    }
+    public void setScore(int[] answersMap, int[] scoreMap) {
+        int countRounds = 0;
+        int scoreID = 0;
+        int opponentScoreID = 0;
+        for (int i = 0; i < answersMap.length; i++) {
+            if(answersMap[i] != 0){
+                scoreID = scoreID * 10 + answersMap[i];
+                opponentScoreID = opponentScoreID * 10 + scoreMap[i];
+
+                if(i == 2 || i == 5 || i == 8 || i == 11 || i == 14 || i == 17){
+                    countRounds++;
+                    client.gf.setScoreIcon(countRounds, scoreID, opponentScoreID);
+
+                    opponentScoreID = 0;
+                    scoreID = 0;
+                }
+            }
+        }
+    }
+    private int setRandomCategory(){
+        List<String> random = new ArrayList<>(List.of(client.gf.btCategory1.getName(), client.gf.btCategory2.getName(), client.gf.btCategory3.getName()));
+        Collections.shuffle(random);
+        return Integer.parseInt(random.get(1));
     }
 }
-
-
-
-
-
-
