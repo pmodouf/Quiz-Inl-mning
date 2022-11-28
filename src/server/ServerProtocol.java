@@ -38,6 +38,7 @@ public class ServerProtocol {
 
     public synchronized GamePackage update(GamePackage gp) {
 
+
         setGamePackage(gp);
         setOpponent(gp);
 
