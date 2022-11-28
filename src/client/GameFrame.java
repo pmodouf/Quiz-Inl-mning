@@ -223,12 +223,12 @@ public class GameFrame extends JFrame {
 
     private String getCategoryName(String s) {
         switch (s){
-            case "0" -> {return "History";}
+            case "0" -> {return "Historia";}
             case "1" -> {return "Sport";}
-            case "2" -> {return "Music";}
-            case "3" -> {return "Civics";}
-            case "4" -> {return "Science";}
-            default -> {return "Geography";}
+            case "2" -> {return "Musik";}
+            case "3" -> {return "Samhälle";}
+            case "4" -> {return "Vetenskap";}
+            default -> {return "Geografi";}
         }
     }
 
@@ -867,18 +867,22 @@ public class GameFrame extends JFrame {
 
         btAnswer1 = new JButton("FRÅGA 1");
         btAnswer1.setBounds(square / 4, square * 2 + 9 ,(width - square / 2) / 2 ,square - 5);
+        btAnswer1.setFocusPainted(false);
         gameScreen.add(btAnswer1);
 
         btAnswer2 = new JButton("FRÅGA 2");
         btAnswer2.setBounds(width / 2, square * 2 + 9 ,(width - square / 2) / 2 ,square- 5);
+        btAnswer2.setFocusPainted(false);
         gameScreen.add(btAnswer2);
 
         btAnswer3 = new JButton("FRÅGA 3");
         btAnswer3.setBounds(square / 4, square * 3 + 4,(width - square / 2) / 2 ,square - 5);
+        btAnswer3.setFocusPainted(false);
         gameScreen.add(btAnswer3);
 
         btAnswer4 = new JButton("FRÅGA 4");
         btAnswer4.setBounds(width / 2, square * 3 + 4,(width - square / 2) / 2 ,square - 5);
+        btAnswer4.setFocusPainted(false);
         gameScreen.add(btAnswer4);
 
         gameScreen.setVisible(true);
