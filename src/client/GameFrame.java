@@ -311,7 +311,7 @@ public class GameFrame extends JFrame {
                     lbLoginMessage.setText("Check your internet connection");
                 } else {
                     lbInfoBarName.setText(client.guest.getName());
-                    lbInfoBarPic.setIcon(StaticImageHandler.getIcon("boy1"));
+                    lbInfoBarPic.setIcon(StaticImageHandler.getIcon("Guest"));
                     lbInfoBarWins.setText("Wins: N/A");
                     tfLogin.setText("");
                     tfPassword.setText("");
