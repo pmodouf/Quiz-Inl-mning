@@ -13,7 +13,6 @@ public class GamePackage implements Serializable {
     String imageID;
     int ID;
     String name;
-    String message;
     int wins;
     int categoryID = 0;
 
@@ -69,14 +68,6 @@ public class GamePackage implements Serializable {
 
     public String getName() {
         return name;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public void setName(String name) {
@@ -145,29 +136,19 @@ public class GamePackage implements Serializable {
 
     @Override
     public String toString() {
-
-        return "{" +
+        return "GamePackage{" +
+                "opponent=" + opponent +
+                //", image=" + imageID +
                 ", ID=" + ID +
+                ", name='" + name + '\'' +
                 ", categoryID=" + categoryID +
                 ", QA=" + QA +
+                //", answers=" + Arrays.toString(AnswersMap) +
                 ", gameState=" + gameState +
-                ", choseCategory=" + choseCategory +
-                ", waiting=" + waiting +
+                //", totalScore=" + totalScore +
+                //", choseCategory=" + choseCategory +
+                //", waiting=" + waiting +
+                //", lastRound=" + lastRound +
                 '}';
-//        return "GamePackage{" +
-//                "opponent=" + opponent +
-//                ", image=" + imageID +
-//                ", ID=" + ID +
-//                ", name='" + name + '\'' +
-//                ", message='" + message + '\'' +
-//                ", categoryID=" + categoryID +
-//                ", QA=" + QA +
-//                ", answers=" + Arrays.toString(AnswersMap) +
-//                ", gameState=" + gameState +
-//                ", totalScore=" + totalScore +
-//                ", choseCategory=" + choseCategory +
-//                ", waiting=" + waiting +
-//                ", lastRound=" + lastRound +
-//                '}';
     }
 }

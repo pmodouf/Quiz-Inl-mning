@@ -169,7 +169,6 @@ public class GameFrame extends JFrame {
         int opponentScoreID = 0;
         for (int i = 0; i < answersMap.length; i++) {
             if(answersMap[i] != 0){
-
                 scoreID = scoreID * 10 + answersMap[i];
                 opponentScoreID = opponentScoreID * 10 + scoreMap[i];
 
@@ -234,7 +233,7 @@ public class GameFrame extends JFrame {
     public void setUpOpponentInfo(String name, String imageID, int wins) {
         lbInfoBarOpponentWins.setText("Wins: " + wins);
         lbInfoBarOpponentPic.setIcon(StaticImageHandler.getIcon(imageID));
-        lbInfoBarName.setText(name);
+        lbInfoBarOpponentName.setText(name);
     }
 
     public void setCategories(String s, String s1, String s2) {
@@ -248,13 +247,12 @@ public class GameFrame extends JFrame {
 
     private String getCategoryName(String s) {
         switch (s){
-            case "1" -> {return "Historia";}
-            case "2" -> {return "Sport";}
-            case "3" -> {return "Musik";}
-            case "4" -> {return "Samhälle";}
-            case "5" -> {return "Vetenskap";}
-            case "6" -> {return "Geografi";}
-            default -> {return "Science";}
+            case "0" -> {return "History";}
+            case "1" -> {return "Sport";}
+            case "2" -> {return "Music";}
+            case "3" -> {return "Civics";}
+            case "4" -> {return "Science";}
+            default -> {return "Geography";}
         }
     }
 

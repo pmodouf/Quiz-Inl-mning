@@ -26,17 +26,17 @@ public class ServerProtocol {
 
     int rounds = 0;
 
-    ArrayList<String[]> category;
+    volatile ArrayList<String[]> category;
 
     GameProperties properties = new GameProperties();
 
     QA qa = new QA();
 
     public synchronized GamePackage update(GamePackage gp) {
-        if(id != 0) {
-            setGamePackage(gp);
-            setOpponent(gp);
-        }
+
+        setGamePackage(gp);
+        setOpponent(gp);
+
 
         switch (gp.getGameState()) {
             case FIRST_INIT -> {
@@ -57,7 +57,7 @@ public class ServerProtocol {
             }
             case SET_CATEGORY_STATE -> {
                 qa.loadQA(gp.getCategoryID());
-                category = qa.getList();
+                category = qa.getQA();
                 gp.setQA(category);
                 gp.setWaiting(true);
                 gp.setGameState(ROUND_STATE);
@@ -87,9 +87,18 @@ public class ServerProtocol {
                 }
             }
         }
-        if(rounds == properties.getRounds()){
-            gp.lastRound = true;
+        if(category != null){
+            for (String[] s: category
+            ) {
+                for (String s1: s
+                     ) {
+                    System.out.println(s1);
+                }
+            }
         }
+//        if(rounds == properties.getRounds() + 1){
+//            gp.lastRound = true;
+//        }
         setGamePackage(gp);
         setOpponent(gp);
         return gp;
@@ -98,7 +107,7 @@ public class ServerProtocol {
     private void setOpponent(GamePackage gp){
         if (gp.getID() == 1){
             gp.getOpponent().setAll(player2.getName(), player2.getAnswersMap(), player2.getImageID(), player2.getTotalScore(), player2.getWins());
-        } else {
+        } else if (gp.getID() == 2)  {
             gp.getOpponent().setAll(player1.getName(), player1.getAnswersMap(), player1.getImageID(), player1.getTotalScore(), player1.getWins());
         }
     }
@@ -106,7 +115,7 @@ public class ServerProtocol {
     private void setGamePackage(GamePackage gp){
         if (gp.getID() == 1){
             player1 = gp;
-        } else {
+        } else if (gp.getID() == 2) {
             player2 = gp;
         }
     }

@@ -43,8 +43,7 @@ public class ClientProtocol {
             } case WAIT_STATE ->{
                 client.gp.setGameState(GET_CATEGORY_STATE);
                 client.sendAndReceive();
-            }
-            case ROUND_STATE ->{
+            } case ROUND_STATE ->{
                 client.gp.setCategoryID(0);
                 nextQuestion();
             } case RESULT_STATE ->{
@@ -55,7 +54,7 @@ public class ClientProtocol {
     }
 
     private void getRandomCategory() {
-        List<String> categoryList = new ArrayList<>(List.of("1", "2", "3", "4", "5", "6"));
+        List<String> categoryList = new ArrayList<>(List.of("0", "1", "2", "3", "4", "5"));
         Collections.shuffle(categoryList);
         client.gf.setCategories(categoryList.get(0), categoryList.get(1), categoryList.get(2));
     }
@@ -68,13 +67,13 @@ public class ClientProtocol {
         } else if(questionCount == client.gp.getQA().size()){
             questionCount = 0;
             nextCategory();
-        } else{
+        } else {
             client.currentQuestion = client.gp.getQA().get(questionCount);
             client.gf.setUpQA(client.currentQuestion);
             client.gf.GUIState(4);
             client.gf.toggleTimer();
+            questionCount++;
         }
-        questionCount++;
     }
     private void nextCategory() {
         if (client.gp.choseCategory){
@@ -86,7 +85,7 @@ public class ClientProtocol {
         } else {
             client.gp.setGameState(GET_CATEGORY_STATE);
             client.gf.GUIState(5);
-            client.gp.setWaiting(true);
+            //client.gp.setWaiting(true);
             client.sendAndReceive();
         }
     }
