@@ -4,12 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*
-TODO use ints to add to score map as id
-    look at the score picture and have one id for each possible combination
-    leave the grayed out image at the top.
- */
-
 public class ClientProtocol {
 
     Client client;
@@ -23,6 +17,8 @@ public class ClientProtocol {
     private static final int WAIT_STATE = 3;
     private static final int RESULT_STATE = 4;
     private static final int ROUND_STATE = 5;
+    private static final int AUTO_WIN_STATE = 6;
+    private static final int GIVE_UP_STATE = 7;
 
     public ClientProtocol(Client client){
         this.client = client;
@@ -49,6 +45,12 @@ public class ClientProtocol {
             } case RESULT_STATE ->{
                 client.gf.setScore(client.gp.getAnswersMap(), client.gp.getOpponent().getScoreMap());
                 client.gf.GUIState(7);
+            } case AUTO_WIN_STATE -> {
+                client.gf.lbWaitMessage.setText("Opponent gave up");
+                client.gf.btBack.setVisible(true);
+                client.gf.GUIState(5);
+            } case GIVE_UP_STATE -> {
+                client.gf.GUIState(3);
             }
         }
     }
@@ -85,7 +87,6 @@ public class ClientProtocol {
         } else {
             client.gp.setGameState(GET_CATEGORY_STATE);
             client.gf.GUIState(5);
-            //client.gp.setWaiting(true);
             client.sendAndReceive();
         }
     }

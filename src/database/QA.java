@@ -38,10 +38,5 @@ public class QA {
         }
         return QA;
     }
-
-//    public static void main(String[] args) {
-//        QA a = new QA();
-//        a.loadQA(1);
-//    }
 }
 

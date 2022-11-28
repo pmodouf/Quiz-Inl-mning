@@ -17,10 +17,14 @@ public class ServerProtocol {
     private static final int WAIT_STATE = 3;
     private static final int RESULT_STATE = 4;
     private static final int ROUND_STATE = 5;
+    private static final int AUTO_WIN_STATE = 6;
+    private static final int GIVE_UP_STATE = 7;
 
     volatile public boolean waitForCategory = false;
 
     volatile public boolean waitForResult = false;
+
+    boolean playerGivenUp = false;
 
     int id = 0;
 
@@ -36,6 +40,10 @@ public class ServerProtocol {
 
         setGamePackage(gp);
         setOpponent(gp);
+
+        if(playerGivenUp){
+            gp.setGameState(AUTO_WIN_STATE);
+        }
 
 
         switch (gp.getGameState()) {
@@ -85,6 +93,12 @@ public class ServerProtocol {
                     }
                     waitForResult = true;
                 }
+            } case AUTO_WIN_STATE ->{
+                gp.setIWon(1);
+                waitForResult = false;
+            } case GIVE_UP_STATE ->{
+                waitForCategory = false;
+                playerGivenUp = true;
             }
         }
         if(category != null){
@@ -96,9 +110,7 @@ public class ServerProtocol {
                 }
             }
         }
-//        if(rounds == properties.getRounds() + 1){
-//            gp.lastRound = true;
-//        }
+
         setGamePackage(gp);
         setOpponent(gp);
         return gp;

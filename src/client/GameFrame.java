@@ -232,7 +232,9 @@ public class GameFrame extends JFrame {
 
     public void setUpOpponentInfo(String name, String imageID, int wins) {
         lbInfoBarOpponentWins.setText("Wins: " + wins);
+        lbInfoBarOpponentWins.setVisible(true);
         lbInfoBarOpponentPic.setIcon(StaticImageHandler.getIcon(imageID));
+        lbInfoBarOpponentPic.setVisible(true);
         lbInfoBarOpponentName.setText(name);
     }
 
@@ -461,6 +463,9 @@ public class GameFrame extends JFrame {
                 changeAvatar.setVisible(false);
                 btBack.setVisible(false);
                 btGiveUp.setVisible(false);
+                lbInfoBarOpponentName.setVisible(false);
+                lbInfoBarOpponentPic.setVisible(false);
+                lbInfoBarOpponentWins.setVisible(false);
             }case gameScreenState -> {
                 timer.setVisible(true);
                 chatScreen.setVisible(true);
@@ -619,6 +624,11 @@ public class GameFrame extends JFrame {
 
         btGiveUp = new JButton("Give up");
         btGiveUp.setBounds( 25, height - 50, 75, 25);
+        btGiveUp.addActionListener(e->{
+            client.gp.setWaiting(false);
+            client.gp.setGameState(7);
+            client.sendAndReceive();
+        });
         btGiveUp.setVisible(false);
         mainScreen.add(btGiveUp);
 
@@ -700,38 +710,29 @@ public class GameFrame extends JFrame {
         playerInfoBar.setLayout(null);
         mainScreen.add(playerInfoBar);
 
-        BufferedImage image = StaticImageHandler.loadImage("old1");
-        Icon icon = new ImageIcon(image);
-
-        lbInfoBarPic = new JLabel(icon);
+        lbInfoBarPic = new JLabel();
         lbInfoBarPic.setBounds(20, square / 4, square, square);
         playerInfoBar.add(lbInfoBarPic);
 
-        lbInfoBarName = new JLabel("Player 1");
+        lbInfoBarName = new JLabel();
         lbInfoBarName.setBounds(square / 2, 5, square, 25);
         playerInfoBar.add(lbInfoBarName);
 
-        lbInfoBarWins = new JLabel("Wins: 1");
+        lbInfoBarWins = new JLabel();
         lbInfoBarWins.setBounds(square / 2, square - square / 6, square, square);
         playerInfoBar.add(lbInfoBarWins);
 
-        BufferedImage image2 = StaticImageHandler.loadImage("old2");
-        Icon icon2 = new ImageIcon(image2);
-
-        lbInfoBarOpponentPic = new JLabel(icon2);
+        lbInfoBarOpponentPic = new JLabel();
         lbInfoBarOpponentPic.setBounds(width - square - 20, square / 4, square, square);
         playerInfoBar.add(lbInfoBarOpponentPic);
-        lbInfoBarOpponentPic.setVisible(true);
 
-        lbInfoBarOpponentName = new JLabel("Player 2");
+        lbInfoBarOpponentName = new JLabel();
         lbInfoBarOpponentName.setBounds(width - square, 5,  square, 25);
         playerInfoBar.add(lbInfoBarOpponentName);
-        lbInfoBarOpponentName.setVisible(true);
 
-        lbInfoBarOpponentWins = new JLabel("Wins: 9000");
+        lbInfoBarOpponentWins = new JLabel();
         lbInfoBarOpponentWins.setBounds(width - square, square - square / 6, square, square);
         playerInfoBar.add(lbInfoBarOpponentWins);
-        lbInfoBarOpponentWins.setVisible(true);
 
         playerInfoBar.setVisible(true);
     }
@@ -1047,10 +1048,6 @@ public class GameFrame extends JFrame {
         lbRound6.setVisible(false);
         scoreScreen.add(lbRound6);
 
-//        btOK = new JButton("OK");
-//        btOK.setBounds(width / 2 - 50, square + 450, 100, 30);
-//        scoreScreen.add(btOK);
-
         scoreScreen.setVisible(false);
     }
 
@@ -1062,12 +1059,8 @@ public class GameFrame extends JFrame {
         optionScreen.setLayout(null);
         mainScreen.add(optionScreen);
 
-        btUpload = new JButton("Upload Profile Image");
-        btUpload.setBounds(width / 2 - (square / 2) * 2, square, square * 2, square / 2);
-        optionScreen.add(btUpload);
-
         btChangeAvatar = new JButton("Change Avatar");
-        btChangeAvatar.setBounds(width / 2 - (square / 2) * 2, square * 3, square * 2, square / 2);
+        btChangeAvatar.setBounds(width / 2 - (square / 2) * 2, square, square * 2, square / 2);
         btChangeAvatar.addActionListener(e->{
             GUIState(10);
         });
