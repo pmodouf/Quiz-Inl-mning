@@ -50,7 +50,11 @@ public class ClientHandler extends Thread {
         if (!gp.isWaiting()) {
             return protocol.update(gp);
         }
-        while (protocol.waitForCategory){}
+        while (protocol.waitForCategory){
+            if (protocol.playerGivenUp){
+                break;
+            }
+        }
         return protocol.update(gp);
     }
 }

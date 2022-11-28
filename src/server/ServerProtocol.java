@@ -24,7 +24,7 @@ public class ServerProtocol {
 
     volatile public boolean waitForResult = false;
 
-    boolean playerGivenUp = false;
+    volatile boolean playerGivenUp = false;
 
     int id = 0;
 

@@ -612,7 +612,7 @@ public class GameFrame extends JFrame {
         mainScreen.add(btToggleSound);
 
         btGiveUp = new JButton("Give up");
-        btGiveUp.setBounds( 25, height - 50, 75, 25);
+        btGiveUp.setBounds( 25, height - 50, 85, 25);
         btGiveUp.addActionListener(e->{
             client.gp.setWaiting(false);
             client.gp.setGameState(7);

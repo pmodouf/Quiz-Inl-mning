@@ -64,9 +64,9 @@ public class ClientProtocol {
                 resetGamePackage();
             } case AUTO_WIN_STATE -> {
                 client.gf.lbWaitMessage.setText("Opponent gave up");
+                client.gf.GUIState(5);
                 client.gf.btGiveUp.setVisible(false);
                 client.gf.btBack.setVisible(true);
-                client.gf.GUIState(5);
                 if(client.isUser){
                     client.user.setWins(1);
                     client.connectToLoginServer(client.user);
