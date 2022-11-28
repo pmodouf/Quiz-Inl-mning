@@ -156,6 +156,14 @@ public class GameFrame extends JFrame {
         setUpAvatarSelection();
 
     }
+    public void paintAndSleep(int millis ){
+        paint(getGraphics());
+        try{
+            Thread.sleep(millis);
+        }catch (InterruptedException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
     public void setScoreIcon(int countRounds, int scoreID, int opponentScoreID) {
 
         switch (countRounds){
@@ -327,12 +335,7 @@ public class GameFrame extends JFrame {
                 client.gp.getAnswersMap()[client.rounds] = 2;
             }
             client.rounds++;
-            paint(getGraphics());
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            }
+            paintAndSleep(2000);
             bt.setBackground(new JButton().getBackground());
             client.protocol.nextQuestion();
         };

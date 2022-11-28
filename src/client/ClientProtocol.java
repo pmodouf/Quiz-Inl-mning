@@ -64,9 +64,9 @@ public class ClientProtocol {
                 resetGamePackage();
             } case AUTO_WIN_STATE -> {
                 client.gf.lbWaitMessage.setText("Opponent gave up");
-                client.gf.GUIState(5);
                 client.gf.btGiveUp.setVisible(false);
                 client.gf.btBack.setVisible(true);
+                showScore();
                 if(client.isUser){
                     client.user.setWins(1);
                     client.connectToLoginServer(client.user);
@@ -89,7 +89,7 @@ public class ClientProtocol {
         if(questionCount == client.gp.getQA().size() && client.gp.lastRound){
             client.gp.setGameState(RESULT_STATE);
             client.gp.setWaiting(false);
-            client.gf.GUIState(5);
+            showScore();
             client.sendAndReceive();
         } else if(questionCount == client.gp.getQA().size()){
             questionCount = 0;
@@ -108,12 +108,15 @@ public class ClientProtocol {
             client.gp.setGameState(SET_CATEGORY_STATE);
             client.gp.setWaiting(false);
             getRandomCategory();
+            showScore();
+            client.gf.paintAndSleep(4000);
+
             client.gf.GUIState(6);
             client.gf.toggleTimer();
             categoryTimeOut = true;
         } else {
             client.gp.setGameState(GET_CATEGORY_STATE);
-            client.gf.GUIState(5);
+            showScore();
             client.sendAndReceive();
         }
     }
@@ -159,5 +162,10 @@ public class ClientProtocol {
         List<String> random = new ArrayList<>(List.of(client.gf.btCategory1.getName(), client.gf.btCategory2.getName(), client.gf.btCategory3.getName()));
         Collections.shuffle(random);
         return Integer.parseInt(random.get(1));
+    }
+    private void showScore(){
+        setScore(client.gp.getAnswersMap(), client.gp.getOpponent().getScoreMap());
+        client.gf.lbScore.setText("Score: " + client.gp.getTotalScore());
+        client.gf.GUIState(7);
     }
 }
