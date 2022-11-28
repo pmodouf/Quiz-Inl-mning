@@ -94,7 +94,7 @@ public class Client {
         }else{
             gp.setName(guest.getName());
             gp.setWins(0);
-            gp.setImageID("Guest");
+            gp.setImageID("guest");
         }
     }
 
