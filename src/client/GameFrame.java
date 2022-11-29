@@ -8,6 +8,12 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class GameFrame extends JFrame {
 
@@ -40,12 +46,14 @@ public class GameFrame extends JFrame {
     JTextField tfLogin, tfChat, tfSearchLeader, tfNewLogin;
     JPasswordField tfPassword, tfNewPassword, tfRepeatPassword;
 
-    JTextPane tpQuestion, tpScoreboard, tpChat;
+    JTextPane tpQuestion, tpScoreboard;
+    JTextArea tpChat;
 
-    JPanel mainScreen, chatScreen, loginScreen, createAccountScreen,
+    JPanel mainScreen, loginScreen, createAccountScreen,
             homeScreen, playerInfoBar, gameScreen, waitScreen,
             categoryScreen, scoreScreen, optionScreen, leaderboard,
             changeAvatar;
+    Chat chatScreen;
 
     Client client;
 
@@ -103,6 +111,55 @@ public class GameFrame extends JFrame {
             }
             g2.fillRect(63, 0, pixel, 10);
             g2.dispose();
+        }
+    }
+
+    public class Chat extends JPanel implements Runnable{
+        public Thread thread;
+        private PrintWriter out;
+        volatile private BufferedReader in;
+
+        public boolean chatNow = false;
+
+        public Chat(){
+            this.thread = new Thread(this);
+        }
+        public void chatNow(){
+            try {
+                Socket socket = new Socket("localhost", 55544);
+                out = new PrintWriter(socket.getOutputStream(), true);
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        public void sendChat(String message){
+            try{
+                out.println(message);
+            }
+            catch (Exception e1){
+                e1.printStackTrace();
+            }
+        }
+        @Override
+        public void run() {
+            while(true) {
+                if (chatNow) {
+                    try {
+                        String fromServer;
+                        while ((fromServer = in.readLine()) != null) {
+                            tpChat.append(fromServer + "\n");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 
@@ -892,16 +949,17 @@ public class GameFrame extends JFrame {
     }
 
     private void setUpChatScreen() {
-        chatScreen = new JPanel();
+        chatScreen = new Chat();
         chatScreen.setBounds(0, width / 2 + square * 2 + 20, width, square * 2 + square / 4);
         chatScreen.setFocusable(true);
         chatScreen.setBackground(new Color(0x5B9CFF));
         chatScreen.setLayout(null);
+        chatScreen.thread.start();
         mainScreen.add(chatScreen);
 
         ScrollPane sp = new ScrollPane();
         sp.setBounds(square / 4, 10, width - square / 2, height / 5);
-        tpChat = new JTextPane();
+        tpChat = new JTextArea();
         tpChat.setEditable(false);
         sp.add(tpChat);
         chatScreen.add(sp);
@@ -912,6 +970,12 @@ public class GameFrame extends JFrame {
 
         btSend = new JButton("Send");
         btSend.setBounds(width - square - 3 ,height / 5 + 20, 75, 25);
+        btSend.addActionListener(e->{
+            if(tfChat.getText() != null){
+                chatScreen.sendChat(tfChat.getText());
+                tfChat.setText(null);
+            }
+        });
         chatScreen.add(btSend);
 
         chatScreen.setVisible(true);

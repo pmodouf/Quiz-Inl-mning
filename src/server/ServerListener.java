@@ -9,9 +9,13 @@ public class ServerListener {
     ServerProtocol spHolder;
     LoginServer loginServer;
 
+    ChatServer chatServer;
+
     ServerListener() {
         loginServer = new LoginServer();
         loginServer.start();
+        chatServer = new ChatServer();
+        chatServer.start();
         try (ServerSocket server = new ServerSocket(port)) {
             while (true) {
                 connectClient(server);

@@ -29,7 +29,14 @@ public class ClientHandler extends Thread {
                 if (clientRequest instanceof GamePackage g) {
                     if (g.isLastRound()) {
                         protocol.update(g);
-                        while (protocol.waitForResult) {}
+                        while (protocol.waitForResult) {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                        }
                         send.writeObject(waitCheck(g));
                         send.flush();
                     } else {
@@ -53,6 +60,11 @@ public class ClientHandler extends Thread {
         while (protocol.waitForCategory){
             if (protocol.playerGivenUp){
                 break;
+            }
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
         return protocol.update(gp);

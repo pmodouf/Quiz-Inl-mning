@@ -47,6 +47,7 @@ public class ClientProtocol {
                 nextQuestion();
                 answerTimeOut = true;
             } case RESULT_STATE ->{
+                client.gf.chatScreen.chatNow = false;
                 setScore(client.gp.getAnswersMap(), client.gp.getOpponent().getScoreMap());
                 client.gf.lbScore.setText("Score: " + client.gp.getTotalScore());
                 client.gf.GUIState(7);
@@ -63,6 +64,7 @@ public class ClientProtocol {
                 }
                 resetGamePackage();
             } case AUTO_WIN_STATE -> {
+                client.gf.chatScreen.chatNow = false;
                 client.gf.lbWaitMessage.setText("Opponent gave up");
                 client.gf.btGiveUp.setVisible(false);
                 client.gf.btBack.setVisible(true);
@@ -73,6 +75,7 @@ public class ClientProtocol {
                 }
                 resetGamePackage();
             } case GIVE_UP_STATE -> {
+                client.gf.chatScreen.chatNow = false;
                 client.gf.GUIState(3);
                 resetGamePackage();
             }
@@ -121,6 +124,11 @@ public class ClientProtocol {
         }
     }
     private void resetGamePackage(){
+        client.rounds = 0;
+        questionCount = 0;
+        opponentIsNotSet = true;
+        categoryTimeOut = false;
+        answerTimeOut = false;
         client.gp = null;
         client.setUpGP();
     }

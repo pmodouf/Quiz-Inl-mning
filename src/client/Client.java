@@ -34,7 +34,8 @@ public class Client {
     }
 
     public void connect() {
-
+        gf.chatScreen.chatNow();
+        gf.chatScreen.chatNow = true;
         try {
             socket = new Socket(ip, port);
             this.output = new ObjectOutputStream(socket.getOutputStream());
