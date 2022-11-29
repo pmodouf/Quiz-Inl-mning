@@ -88,7 +88,7 @@ public class ClientProtocol {
     public void nextQuestion(){
         if(questionCount == client.gp.getQA().size() && client.gp.lastRound){
             client.gp.setGameState(RESULT_STATE);
-            client.gp.setWaiting(false);
+            //client.gp.setWaiting(false);
             showScore();
             client.sendAndReceive();
         } else if(questionCount == client.gp.getQA().size()){
@@ -106,7 +106,7 @@ public class ClientProtocol {
     private void nextCategory() {
         if (client.gp.choseCategory){
             client.gp.setGameState(SET_CATEGORY_STATE);
-            client.gp.setWaiting(false);
+            //client.gp.setWaiting(false);
             getRandomCategory();
             showScore();
             client.gf.paintAndSleep(4000);
