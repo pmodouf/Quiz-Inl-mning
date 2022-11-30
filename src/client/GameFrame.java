@@ -677,6 +677,7 @@ public class GameFrame extends JFrame {
             client.gp.setWaiting(false);
             client.gp.setGameState(7);
             client.sendAndReceive();
+            client.protocol.resetGamePackage();
         });
         btGiveUp.setVisible(false);
         mainScreen.add(btGiveUp);
