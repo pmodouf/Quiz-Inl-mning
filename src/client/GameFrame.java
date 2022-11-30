@@ -70,6 +70,10 @@ public class GameFrame extends JFrame {
         int indicator = 0;
         int pixel = 450;
 
+        JTextArea tpChat;
+        JTextField tfChat;
+        JButton btSend;
+
         public Timer(){
             thread = new Thread(this);
         }
@@ -121,9 +125,8 @@ public class GameFrame extends JFrame {
 
         public boolean chatNow = false;
 
-        public Chat(){
-            this.thread = new Thread(this);
-        }
+
+        public Chat(){this.thread = new Thread(this);}
         public void chatNow(){
             try {
                 Socket socket = new Socket("localhost", 55544);
