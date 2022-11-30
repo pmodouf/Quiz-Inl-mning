@@ -1,3 +1,5 @@
 Hur många länder finns det i världen?/505/195/150/300/195
 Vilket år kom den första Iphonen?/2011/2001/2003/2007/2007
-Vad heter Sveriges vice statsminister/Ann Linde/Jimmy Åkesson/Per Bolund/Andreas Persson/Per Bolund
+Vad heter Sveriges vice statsminister?/Ann Linde/Jimmy Åkesson/Per Bolund/Andreas Persson/Per Bolund
+Vilket statsskick har Sverige?/Monarki/Republik/Oligarki/Autarki/Monarki
+Hur många nationer ingår i försvarspakten Nato?/26/28/30/34/30
