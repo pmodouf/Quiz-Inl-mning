@@ -54,6 +54,7 @@ public class ClientHandler extends Thread {
         }
     }
     private GamePackage waitCheck(GamePackage gp) {
+        protocol.updateOpponent(gp);
         if (!gp.isWaiting()) {
             return protocol.update(gp);
         }

@@ -38,10 +38,6 @@ public class ServerProtocol {
 
     public synchronized GamePackage update(GamePackage gp) {
 
-
-        setGamePackage(gp);
-        setOpponent(gp);
-
         if(playerGivenUp){
             gp.setGameState(AUTO_WIN_STATE);
         }
@@ -127,5 +123,9 @@ public class ServerProtocol {
         } else if (gp.getID() == 2) {
             player2 = gp;
         }
+    }
+    public synchronized void updateOpponent(GamePackage gp) {
+        setOpponent(gp);
+        setGamePackage(gp);
     }
 }

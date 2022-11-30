@@ -11,7 +11,6 @@ import java.net.Socket;
 public class Client {
 
     private static final String ip = "localhost";
-    private static final int port = 12345;
 
     public GamePackage gp;
     public int rounds = 0;
@@ -37,7 +36,7 @@ public class Client {
         gf.chatScreen.chatNow();
         gf.chatScreen.chatNow = true;
         try {
-            socket = new Socket(ip, port);
+            socket = new Socket(ip, 12345);
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
             writeAndRead();
@@ -61,7 +60,7 @@ public class Client {
 // Method to return an object for the user depending on existing user or "guest". Also sends information about user options.
     public void connectToLoginServer(Object obj){
 
-        try(Socket ss = new Socket("localhost", 55555);
+        try(Socket ss = new Socket(ip, 55555);
             ObjectOutputStream send = new ObjectOutputStream(ss.getOutputStream());
             ObjectInputStream receive = new ObjectInputStream(ss.getInputStream())) {
 
