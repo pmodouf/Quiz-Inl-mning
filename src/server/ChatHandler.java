@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ChatHandler extends Thread{
 
@@ -28,7 +29,9 @@ public class ChatHandler extends Thread{
                     writer.println(input);
                 }
             }
-        } catch (IOException e) {
+        } catch (SocketException e){
+            System.out.println("Chat-Client Disconnected");
+        }catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
