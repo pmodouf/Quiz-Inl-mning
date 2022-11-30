@@ -128,4 +128,8 @@ public class ServerProtocol {
             player2 = gp;
         }
     }
+    public synchronized void updateOpponent(GamePackage gp) {
+        setOpponent(gp);
+        setGamePackage(gp);
+    }
 }
