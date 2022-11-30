@@ -38,10 +38,6 @@ public class ServerProtocol {
 
     public synchronized GamePackage update(GamePackage gp) {
 
-
-        setGamePackage(gp);
-        setOpponent(gp);
-
         if(playerGivenUp){
             gp.setGameState(AUTO_WIN_STATE);
         }
