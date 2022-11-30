@@ -32,7 +32,7 @@ public class Client {
     public Client() {
 
     }
-
+//Method to start the chat and initiate the game server (both inout and output streams)
     public void connect() {
         gf.chatScreen.chatNow();
         gf.chatScreen.chatNow = true;
@@ -45,7 +45,7 @@ public class Client {
             e.printStackTrace();
         }
     }
-
+// Method to send an object to the connection and then wait for an answer. Main point of communication.
     private void writeAndRead() throws IOException, ClassNotFoundException {
         output.writeObject(gp);
         output.flush();
@@ -58,7 +58,7 @@ public class Client {
             }
         }
     }
-
+// Method to return an object for the user depending on existing user or "guest". Also sends information about user options.
     public void connectToLoginServer(Object obj){
 
         try(Socket ss = new Socket("localhost", 55555);
@@ -85,7 +85,7 @@ public class Client {
             throw new RuntimeException(e);
         }
     }
-
+// Method to initiate game package.
     public void setUpGP() {
         gp = new GamePackage();
         if (isUser){
@@ -98,7 +98,7 @@ public class Client {
             gp.setImageID("guest");
         }
     }
-
+// Refer to method writeAndRead
     public void sendAndReceive() {
         try {
             writeAndRead();
